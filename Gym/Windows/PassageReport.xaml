@@ -1,0 +1,145 @@
+﻿<Window x:Class="Gym.Windows.PassageReport"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Gym.Windows"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:Controls="clr-namespace:Gym.Controls"
+        WindowStartupLocation="CenterScreen"  Icon="/Resources/Muscle.ico"
+        mc:Ignorable="d"
+        Loaded="Window_Loaded"
+        Title="گزارش تردد اعضا" Height="600" Width="450">
+    <materialDesign:DialogHost x:Name="PaymentDialogHost" DialogClosing="UserDialog_Closing">
+        <materialDesign:DialogHost.DialogContent>
+            <StackPanel  Margin="16" FlowDirection="RightToLeft">
+                <StackPanel x:Name="PaymentStack">
+                    <TextBlock Margin="0,0,0,30" HorizontalAlignment="Center">تنظیم فیلتر گزارش</TextBlock>
+                    <TextBox x:Name="txtName"
+                                            IsTabStop="True"  IsReadOnly="False"
+                                            MinWidth="200"  HorizontalAlignment="Left"
+                                            Margin="10,4,0,0" Grid.Row="0" Grid.Column="1"
+                                            materialDesign:HintAssist.Hint="نام"
+                                            materialDesign:HintAssist.HintOpacity=".26"
+	                                        Style="{StaticResource MaterialDesignFloatingHintTextBox}"/>
+                    <StackPanel Orientation="Horizontal">
+                        <Controls:PersianDate Grid.Row="1" Grid.Column="1" VerticalAlignment="Bottom"
+                                              Margin="8,12,0,0" x:Name="Date1" Width="130"
+                                              Label="از تاریخ" IsTabStop="True"/>
+                        <materialDesign:TimePicker
+	                                        Width="70"
+	                                        Margin="8,0" x:Name="Time1"
+	                                        HorizontalAlignment="Left"
+	                                        VerticalAlignment="Bottom" FlowDirection="LeftToRight"
+	                                        materialDesign:HintAssist.Hint="از ساعت" Is24Hours="True"
+	                                        Style="{StaticResource MaterialDesignFloatingHintTimePicker}" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Controls:PersianDate Grid.Row="1" Grid.Column="1" VerticalAlignment="Bottom"
+                                              Margin="8,12,0,0" x:Name="Date2" Width="130"
+                                              Label="تا تاریخ" IsTabStop="True"/>
+                        <materialDesign:TimePicker
+	                                        Width="70"
+	                                        Margin="8,0" x:Name="Time2"
+	                                        HorizontalAlignment="Left" FlowDirection="LeftToRight"
+	                                        VerticalAlignment="Bottom"
+	                                        materialDesign:HintAssist.Hint="تا ساعت" Is24Hours="True"
+	                                        Style="{StaticResource MaterialDesignFloatingHintTimePicker}" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <CheckBox IsThreeState="True" x:Name="InRadioButton" Margin="8,8,8,4">ورود</CheckBox>
+                        <CheckBox IsThreeState="True" x:Name="OutRadioButton" Margin="8,4,8,4">خروج</CheckBox>
+                    </StackPanel>
+                    <StackPanel HorizontalAlignment="Right" Orientation="Horizontal" Margin="0,10">
+                        <Button
+					Margin="0,8,8,0"
+					Command="materialDesign:DialogHost.CloseDialogCommand"
+					Style="{StaticResource MaterialDesignFlatButton}">
+                            <Button.CommandParameter>
+                                <system:String xmlns:system="clr-namespace:System;assembly=mscorlib">reset</system:String>
+                            </Button.CommandParameter>
+                            ریست
+                        </Button>
+                        <Button
+					Margin="0,8,8,0"
+					Command="materialDesign:DialogHost.CloseDialogCommand"
+					Style="{StaticResource MaterialDesignFlatButton}">
+                            <Button.CommandParameter>
+                                <system:String xmlns:system="clr-namespace:System;assembly=mscorlib">confirm</system:String>
+                            </Button.CommandParameter>
+                            اعمال فیلتر
+                        </Button>
+                        <Button
+					Margin="0,8,8,0"
+					Command="materialDesign:DialogHost.CloseDialogCommand"
+					IsCancel="True"
+					Style="{StaticResource MaterialDesignFlatButton}">
+                            <Button.CommandParameter>
+                                <system:String xmlns:system="clr-namespace:System;assembly=mscorlib">cancel</system:String>
+                            </Button.CommandParameter>
+                            بازگشت
+                        </Button>
+                    </StackPanel>
+                </StackPanel>
+            </StackPanel>
+        </materialDesign:DialogHost.DialogContent>
+        <Grid>
+            <DataGrid
+                IsReadOnly="True"
+                ItemsSource="{Binding}"
+                FlowDirection="RightToLeft"
+                x:Name="CostsGrid"
+	            Margin="0,8,0,0"
+	            materialDesign:DataGridAssist.CellPadding="13 8 8 8"
+	            materialDesign:DataGridAssist.ColumnHeaderPadding="8"
+	            AutoGenerateColumns="False"
+	            CanUserAddRows="False"
+	            CanUserSortColumns="True">
+                <DataGrid.Columns>
+                    <materialDesign:MaterialDataGridTextColumn
+			            Binding="{Binding Id}" CanUserResize="False" CanUserReorder="False" CanUserSort="False"
+			            EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnPopupEditingStyle}"
+			            Header="" Width="40"/>
+                    <materialDesign:MaterialDataGridTextColumn
+			            Binding="{Binding Time}"
+			            EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnPopupEditingStyle}"
+			            Header="تاریخ و ساعت" Width="150"/>
+                    <materialDesign:MaterialDataGridTextColumn
+			            Binding="{Binding Name}"
+			            EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnPopupEditingStyle}"
+			            Header="نام"
+			            Width="150" />
+                    <materialDesign:MaterialDataGridTextColumn
+			            Binding="{Binding Type}"
+			            EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnPopupEditingStyle}"
+			            Header="تردد" Width="70"/>
+                </DataGrid.Columns>
+            </DataGrid>
+            <Button x:Name="SetFilter"
+				Grid.Row="0"
+				Margin="0,10,10,0"
+				HorizontalAlignment="Right"
+				VerticalAlignment="Top"
+				Command="{x:Static materialDesign:DialogHost.OpenDialogCommand}"
+				Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}">
+                <materialDesign:PackIcon Foreground="White" Kind="FilterVariant" Width="24" Height="24"/>
+                <!--<Viewbox Width="22" Height="22">
+                    <Canvas Width="24" Height="24">
+                        <Path Data="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z" Fill="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Button}, Path=Foreground}" />
+                    </Canvas>
+                </Viewbox>-->
+            </Button>
+            <materialDesign:Snackbar x:Name="DuplicateUsernameSnackBar"
+			HorizontalAlignment="Stretch"
+                                     ActionButtonStyle="{StaticResource MaterialDesignRaisedAccentButton}"
+                Margin="5,5,5,5" 
+			    FlowDirection="RightToLeft">
+                <materialDesign:SnackbarMessage 
+                    ActionContent="خب" 
+                    Content="نام کاربری تکراری است، نام دیگری انتخاب کنید" 
+                                         ActionCommand=""       />
+            </materialDesign:Snackbar>
+        </Grid>
+
+    </materialDesign:DialogHost>
+</Window>

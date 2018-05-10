@@ -1,0 +1,173 @@
+﻿<Window x:Class="Gym.Windows.IrregularEnter"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Gym.Windows"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:domain="clr-namespace:Gym.Domain"
+        xmlns:Controls="clr-namespace:Gym.Controls" AllowsTransparency="True"
+        mc:Ignorable="d" 
+        Title="IrregularEnter" Height="50" Width="50" WindowStyle="None" Background="Transparent"
+        Loaded="Window_Loaded"
+        WindowStartupLocation="CenterScreen"  Icon="/Resources/Muscle.ico">
+    <Window.Resources>
+        <domain:MultiValueConverter x:Key="MultiValueConverter" />
+
+    </Window.Resources>
+    <materialDesign:DialogHost x:Name="DialogHost" DialogClosing="Dialog_Closing">
+        <materialDesign:DialogHost.DialogContent>
+            <StackPanel  Margin="16" FlowDirection="RightToLeft" >
+                <TextBlock Margin="0,0,0,30">ثبت ورود تک جلسه</TextBlock>
+                <StackPanel Orientation="Horizontal">
+                    <TextBox x:Name="txtMobile"
+	                Margin="8" TextChanged="txtMobile_TextChanged"
+                             Width="150"
+	                Style="{StaticResource MaterialDesignFloatingHintTextBox}">
+                        <materialDesign:HintAssist.Hint >
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="Key" Margin="0,0,3,0" />
+                                <TextBlock>شماره همراه</TextBlock>
+                            </StackPanel>
+                        </materialDesign:HintAssist.Hint>
+                        <TextBox.Text>
+                            <Binding Path="Mobile" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" >
+                                <Binding.ValidationRules>
+                                    <domain:NotEmptyValidationRule ValidatesOnTargetUpdated="True" />
+                                </Binding.ValidationRules>
+                            </Binding>
+                        </TextBox.Text>
+                    </TextBox>
+                    <TextBox x:Name="txtNationalCode"
+	                Margin="8"
+                             Width="150"
+	                Style="{StaticResource MaterialDesignFloatingHintTextBox}">
+                        <materialDesign:HintAssist.Hint >
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="Key" Margin="0,0,3,0" />
+                                <TextBlock>کد ملی</TextBlock>
+                            </StackPanel>
+                        </materialDesign:HintAssist.Hint>
+                        <TextBox.Text>
+                            <Binding Path="NationalCode" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" >
+                            </Binding>
+                        </TextBox.Text>
+                    </TextBox>
+
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBox x:Name="txtFirstName"
+	                Margin="8"
+                             Width="150"
+	                Style="{StaticResource MaterialDesignFloatingHintTextBox}">
+                        <materialDesign:HintAssist.Hint>
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="Account" Margin="0,0,3,0" />
+                                <TextBlock>نام</TextBlock>
+                            </StackPanel>
+                        </materialDesign:HintAssist.Hint>
+
+                        <TextBox.Text>
+                            <Binding Path="Firstname" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
+                                <Binding.ValidationRules>
+                                    <domain:NotEmptyValidationRule ValidatesOnTargetUpdated="True" />
+                                </Binding.ValidationRules>
+                            </Binding>
+                        </TextBox.Text>
+                    </TextBox>
+                    <TextBox x:Name="txtLastName"
+	                Margin="8"
+                             Width="150"
+	                Style="{StaticResource MaterialDesignFloatingHintTextBox}">
+                        <materialDesign:HintAssist.Hint >
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="Key" Margin="0,0,3,0" />
+                                <TextBlock>نام خانوادگی</TextBlock>
+                            </StackPanel>
+                        </materialDesign:HintAssist.Hint>
+                        <TextBox.Text>
+                            <Binding Path="Lastname" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" >
+                                <Binding.ValidationRules>
+                                    <domain:NotEmptyValidationRule ValidatesOnTargetUpdated="True" />
+                                </Binding.ValidationRules>
+                            </Binding>
+                        </TextBox.Text>
+                    </TextBox>
+                </StackPanel>
+
+                <Controls:FacilitySelector x:Name="FacilitySelector" Margin="8,12" Width="300">
+                </Controls:FacilitySelector>
+
+                <StackPanel Orientation="Horizontal" Margin="0,12,0,0">
+
+                    <RadioButton IsThreeState="False" IsTabStop="False" x:Name="rdCash" Margin="8,4,8,4" IsChecked="True" TabIndex="2">نقد</RadioButton>
+                    <RadioButton IsThreeState="False" IsTabStop="False" x:Name="rdPos" Margin="8,4,8,4" TabIndex="3">پوز</RadioButton>
+                    <RadioButton IsThreeState="False" IsTabStop="False" x:Name="rdCard" Margin="8,4,8,4" TabIndex="4">کارت به کارت</RadioButton>
+                    <RadioButton IsThreeState="False" IsTabStop="False" x:Name="rdCheque" Margin="8,4,8,8" TabIndex="5">چک</RadioButton>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="8">
+
+                    <Controls:NumberBox x:Name="txtSingleSessionPrice" TabIndex="0"
+                                            IsTabStop="False"  IsReadOnly="True"
+                                            MinWidth="140" HorizontalAlignment="Left"
+                                            ThousandSeparate="True" 
+                                            Margin="2,4,0,0" Grid.Row="0" Grid.Column="1"
+                                            materialDesign:HintAssist.Hint="هزینه تک جلسه"
+                                            materialDesign:HintAssist.HintOpacity=".26"
+	                                        Style="{StaticResource MaterialDesignFloatingHintTextBox}"/>
+                    <CheckBox Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked" IsChecked="True"></CheckBox>
+                </StackPanel> 
+                <Controls:NumberBox x:Name="txtFacilityCost" materialDesign:HintAssist.Hint="هزینه امکانات انتخابی"
+                                                IsTabStop="False"
+                                                MinWidth="140"  MaxWidth="200" HorizontalAlignment="Left"
+                                                ThousandSeparate="True" IsReadOnly="True"
+                                                Margin="10,4,0,0" Grid.Row="1" Grid.Column="0"
+	                                            Style="{StaticResource MaterialDesignFloatingHintTextBox}">
+                    <Controls:NumberBox.Text>
+                        <Binding ElementName="FacilitySelector" Path="Total" UpdateSourceTrigger="PropertyChanged"/>
+                    </Controls:NumberBox.Text>
+                </Controls:NumberBox>
+                <Controls:NumberBox x:Name="txtPayable" materialDesign:HintAssist.Hint="قابل پرداخت"
+                                                IsTabStop="False"
+                                                MinWidth="140"  MaxWidth="200" HorizontalAlignment="Left"
+                                                ThousandSeparate="True" IsReadOnly="True"
+                                                Margin="10,4,0,0" Grid.Row="1" Grid.Column="0"
+	                                            Style="{StaticResource MaterialDesignFloatingHintTextBox}">
+                    <Controls:NumberBox.Text>
+                        <MultiBinding Converter="{StaticResource MultiValueConverter}">
+                            <Binding ElementName="txtSingleSessionPrice" Path="Value" UpdateSourceTrigger="PropertyChanged"/>
+                            <Binding ElementName="FacilitySelector" Path="Total" UpdateSourceTrigger="PropertyChanged"/>
+
+                        </MultiBinding>
+                    </Controls:NumberBox.Text>
+                </Controls:NumberBox>
+
+                <StackPanel HorizontalAlignment="Right" Orientation="Horizontal" Margin="0,10">
+                    <Button
+					Margin="0,8,8,0"
+					Command="materialDesign:DialogHost.CloseDialogCommand"
+					IsDefault="True"
+					Style="{StaticResource MaterialDesignFlatButton}">
+                        <Button.CommandParameter>
+                            <system:Boolean xmlns:system="clr-namespace:System;assembly=mscorlib">True</system:Boolean>
+                        </Button.CommandParameter>
+                        تایید
+                    </Button>
+                    <Button
+					Margin="0,8,8,0"
+					Command="materialDesign:DialogHost.CloseDialogCommand"
+					IsCancel="True"
+					Style="{StaticResource MaterialDesignFlatButton}">
+                        <Button.CommandParameter>
+                            <system:Boolean xmlns:system="clr-namespace:System;assembly=mscorlib">False</system:Boolean>
+                        </Button.CommandParameter>
+                        انصراف
+                    </Button>
+                </StackPanel>
+            </StackPanel>
+        </materialDesign:DialogHost.DialogContent>
+        <Grid>
+
+        </Grid>
+    </materialDesign:DialogHost>
+</Window>

@@ -1,0 +1,60 @@
+﻿<UserControl x:Class="Gym.Controls.MemberReportCard"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Gym.Controls"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             mc:Ignorable="d" 
+             d:DesignHeight="500" d:DesignWidth="300">
+    <materialDesign:Card FlowDirection="LeftToRight"
+	Width="200" Height="280"
+	Margin="4,4,0,0">
+        <Grid >
+            <Grid.RowDefinitions>
+                <RowDefinition Height="140" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Image x:Name="Image"
+			Width="196"
+			Height="140"
+			Source="/Images/body.png"
+			Stretch="UniformToFill" />
+            <Button x:Name="btnFinancial"
+			Grid.Row="0"
+			Margin="0,0,133,67"
+			HorizontalAlignment="Center"
+			VerticalAlignment="Bottom"
+			Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" Grid.RowSpan="2" Click="btnFinancial_Click">
+                <materialDesign:PackIcon Kind="CurrencyUsd" />
+            </Button>
+            <StackPanel Grid.Row="1" Margin="8,24,8,0">
+                <TextBlock x:Name="txtName" FontWeight="Bold" TextAlignment="Right">مهدی تحصیلداری</TextBlock>
+                <TextBlock x:Name="txtDesc" VerticalAlignment="Center" TextWrapping="Wrap" TextAlignment="Right" Height="60" Text="مشهد، احمدآباد، قائم 3، پلاک 104 - 09156606004"></TextBlock>
+            </StackPanel>
+            <StackPanel
+			Grid.Row="2"
+			Margin="8"
+			HorizontalAlignment="Left"
+			Orientation="Horizontal">
+                <Button x:Name="btnDeleted"
+				Width="30"
+				Padding="2,0,2,0"
+				materialDesign:RippleAssist.IsCentered="True"
+				Style="{StaticResource MaterialDesignToolButton}">
+                    <materialDesign:PackIcon Kind="Delete" IsEnabled="False" />
+                </Button>
+                <Button x:Name="btnInfo"
+				    Width="30"
+				    Padding="2,0,2,0"
+				    materialDesign:RippleAssist.IsCentered="True"
+                        ToolTip="مشاهده اطلاعات عضو"
+				    Style="{StaticResource MaterialDesignToolButton}" Click="btnInfo_Click">
+                    <materialDesign:PackIcon Kind="AccountCircle" />
+                </Button>
+                <TextBlock x:Name="txtOperator" ToolTip="اپراتور" TextAlignment="Right" VerticalAlignment="Center" TextDecorations="{x:Null}" FontStyle="Italic" Margin="0" Width="120" FontSize="9" Foreground="#FF939393">اپراتور: رضا شیری</TextBlock>
+            </StackPanel>
+        </Grid>
+    </materialDesign:Card>
+</UserControl>

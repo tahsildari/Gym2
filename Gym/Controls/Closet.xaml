@@ -1,0 +1,64 @@
+﻿<UserControl x:Class="Gym.Controls.Closet"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Gym.Controls"
+             mc:Ignorable="d"  xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             MouseDoubleClick="UserControl_MouseDoubleClick"
+              Loaded="UserControl_Loaded" Margin="-2,0">
+    <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+        <Grid.Resources>
+            <BooleanToVisibilityConverter x:Key="BoolToVis" />
+        </Grid.Resources>
+        <Grid.ContextMenu>
+            <ContextMenu x:Name="BrokenContextMenu">
+                <MenuItem Header="ثبت خرابی" x:Name="SetBroken" IsEnabled="{Binding IsBroken}" Click="SetBroken_Click"/>
+                <MenuItem Header="رفع خرابی" x:Name="SetFixed" IsEnabled="{Binding NotBroken}" Click="SetFixed_Click"/>
+            </ContextMenu>
+        </Grid.ContextMenu>
+        <materialDesign:PackIcon x:Name="Icon" 
+                                 Kind="FridgeFilled" 
+                                 Width="Auto" 
+                                 Height="Auto"
+                                 Background="#01FFFFFF"  
+                                 HorizontalAlignment="Center"
+                                 HorizontalContentAlignment="Center" 
+                                 VerticalContentAlignment="Center" 
+                                 VerticalAlignment="Center" 
+                                 ToolTip="{Binding Hint, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
+            <!--<materialDesign:PackIcon.ContextMenu>
+                
+            </materialDesign:PackIcon.ContextMenu>-->
+        </materialDesign:PackIcon>
+        <!--<materialDesign:PackIcon x:Name="vipBadge" Kind="Star"
+                                 Width="5" Height="5"
+                                 Opacity="1"
+                                 Foreground="Gold" 
+                                 Margin="0,10.5,0,0"
+                                 HorizontalAlignment="Center" 
+                                 VerticalAlignment="Top" />-->
+        <TextBlock x:Name="numberBadge"
+                                 Width="20" Height="20"
+                                 Opacity="1" 
+                                 Foreground="White" 
+                                 Margin="0,0,0,0" 
+                                 FontSize="10" FontWeight="Bold"
+                                 TextAlignment="Center"
+                                 HorizontalAlignment="Center" 
+                                 VerticalAlignment="Bottom" />
+        <materialDesign:PackIcon x:Name="brokenBadge"
+                                 Kind="Wrench"  
+                                 Visibility="{Binding Path=IsBroken, Converter={StaticResource BoolToVis}}"
+                                 Width="15" Height="15"
+                                 Opacity=".8"
+                                 Foreground="Red" 
+                                 Margin="0,0,7,0"
+                                 HorizontalAlignment="Right" 
+                                 VerticalAlignment="Top" d:IsHidden="True" />
+        <!--<ContextMenu x:Name="BrokenContextMenu2">
+            <MenuItem Header="ثبت خرابی"  IsEnabled="{Binding IsBroken}" Click="SetBroken_Click"/>
+            <MenuItem Header="رفع خرابی" IsEnabled="{Binding NotBroken}" Click="SetFixed_Click"/>
+        </ContextMenu>-->
+    </Grid>
+</UserControl>

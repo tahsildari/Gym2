@@ -1,0 +1,57 @@
+﻿<UserControl x:Class="Gym.Controls.TrasnactionsList"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Gym.Controls"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             mc:Ignorable="d" Loaded="UserControl_Loaded" Background="Purple"
+             d:DesignHeight="300" d:DesignWidth="600">
+    <Grid>
+        <DataGrid
+                IsReadOnly="True"
+            ItemsSource="{Binding}"
+            FlowDirection="RightToLeft"
+            x:Name="DataGrid"
+	Margin="0,8,0,0"
+	materialDesign:DataGridAssist.CellPadding="13 8 8 8"
+	materialDesign:DataGridAssist.ColumnHeaderPadding="8"
+	AutoGenerateColumns="False"
+	CanUserAddRows="False"
+	CanUserSortColumns="True">
+            <DataGrid.Columns>
+                <materialDesign:MaterialDataGridTextColumn
+			        Binding="{Binding Datetime}"
+			        EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnPopupEditingStyle}"
+			        Header="تاریخ" MinWidth="50"
+                    MaxLength="50"/>
+                <materialDesign:MaterialDataGridTextColumn
+			        Binding="{Binding Amount}"
+			        EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnPopupEditingStyle}"
+			        Header="مبلغ (تومان)" MinWidth="50"
+			        MaxLength="50" />
+                <materialDesign:MaterialDataGridTextColumn
+			        Binding="{Binding Member}"
+			        EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnPopupEditingStyle}"
+			        Header="عضو" MinWidth="50"
+			        MaxLength="50" />
+                <materialDesign:MaterialDataGridTextColumn
+			        Binding="{Binding Type}"
+			        EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnPopupEditingStyle}"
+			        Header="تراکنش" MinWidth="50"
+			        MaxLength="50" />
+                <materialDesign:MaterialDataGridTextColumn
+			        Binding="{Binding Method}"
+			        EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnPopupEditingStyle}"
+			        Header="روش پرداخت" MinWidth="50"
+			        MaxLength="50" />
+                <materialDesign:MaterialDataGridTextColumn
+			        Binding="{Binding Info}"
+			        EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnPopupEditingStyle}"
+			        Header="توضیحات" MinWidth="150"
+			        MaxLength="50" />
+            </DataGrid.Columns>
+        </DataGrid>
+
+    </Grid>
+</UserControl>

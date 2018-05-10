@@ -1,0 +1,536 @@
+﻿<Window x:Class="Gym.Windows.Courses"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Gym.Windows"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:domain="clr-namespace:Gym.Domain"
+        xmlns:controls="clr-namespace:Gym.Controls"
+        WindowStartupLocation="CenterScreen"  Icon="/Resources/Muscle.ico"
+        mc:Ignorable="d"
+        Loaded="Window_Loaded"
+        Title="دوره ها" Height="300" Width="350">
+    <Window.Resources>
+        <!--<BooleanToVisibilityConverter x:Key="BoolToVis" />
+        <domain:MultiValueConverter x:Key="MultiValueConverter" />
+        <domain:NegativeConverter x:Key="NegativeConverter" />-->
+        <domain:NotConverter x:Key="NotConverter" />
+    </Window.Resources>
+    <materialDesign:DialogHost x:Name="DialogHost" DialogClosing="Dialog_Closing">
+        <materialDesign:DialogHost.DialogContent>
+            <StackPanel  Margin="16" FlowDirection="RightToLeft">
+                <TextBlock Margin="0,0,0,30">ثبت دوره</TextBlock>
+
+                <StackPanel Orientation="Vertical">
+                    <ComboBox x:Name="cmbSport"
+                            ItemsSource="{Binding}"
+                            FlowDirection="LeftToRight" HorizontalContentAlignment="Right" HorizontalAlignment="Stretch"
+                            DisplayMemberPath="Name"
+                            SelectedValuePath="Id"
+                            SelectedValue="{Binding Path=Sport, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            SelectionChanged="cmbSport_SelectionChanged"
+                            materialDesign:HintAssist.Hint="رشته ورزشی" MinWidth="45"
+		                    materialDesign:HintAssist.HintOpacity=".26"
+                            Margin="4" Grid.Row="1" Grid.Column="0"
+                            Style="{StaticResource MaterialDesignFloatingHintComboBox}"
+		                    IsEditable="False">
+                        <!--ItemsSource="{Binding Path=Sports, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"-->
+                    </ComboBox>
+                    <TextBox x:Name="NameTextBox"
+	                Margin="0,3,8,3"
+	                Style="{StaticResource MaterialDesignFloatingHintTextBox}">
+                        <materialDesign:HintAssist.Hint>
+                            <StackPanel Orientation="Horizontal">
+                                
+                                <TextBlock>نام دوره</TextBlock>
+                            </StackPanel>
+                        </materialDesign:HintAssist.Hint>
+
+                        <TextBox.Text>
+                            <Binding Path="Name" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
+                                <Binding.ValidationRules>
+                                    <domain:NotEmptyValidationRule ValidatesOnTargetUpdated="True" />
+                                </Binding.ValidationRules>
+                            </Binding>
+                        </TextBox.Text>
+                    </TextBox>
+                    <ToggleButton x:Name="IsVIPSwitch"
+                        IsEnabled="{Binding IsReadonly, Converter={StaticResource NotConverter}, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"          
+	                    VerticalAlignment="Bottom" IsChecked="{Binding IsVIP}" FlowDirection="LeftToRight"
+	                    Style="{StaticResource MaterialDesignSwitchToggleButton}"
+	                    ToolTip="VIP" Margin="10,4,4,2" HorizontalAlignment="Right">
+                        <materialDesign:ToggleButtonAssist.OnContent >
+                            <materialDesign:PackIcon
+		                Kind="Star"
+                        Foreground="White"
+		                RenderTransformOrigin=".5,.5">
+                            </materialDesign:PackIcon>
+                        </materialDesign:ToggleButtonAssist.OnContent>
+
+                        <materialDesign:PackIcon Kind="StarOutline" />
+                    </ToggleButton>
+                </StackPanel>
+
+                <StackPanel Margin="8,8,8,8" Orientation="Horizontal">
+                    <TextBlock VerticalAlignment="Bottom" Margin="0,0,4,0">هزینه جلسه ای</TextBlock>
+                    <controls:NumberBox Width="70" x:Name="SessionPriceNumber"
+	                Margin="0,3,8,3" ThousandSeparate="True"
+	                Style="{StaticResource MaterialDesignFloatingHintTextBox}">
+                        <materialDesign:HintAssist.Hint>
+                            <StackPanel Orientation="Horizontal">
+                                
+                                <TextBlock>هزینه جلسه ای</TextBlock>
+                            </StackPanel>
+                        </materialDesign:HintAssist.Hint>
+
+                        <controls:NumberBox.Value>
+                            <Binding Path="SessionPrice" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
+                                <Binding.ValidationRules>
+                                    <domain:NotEmptyValidationRule ValidatesOnTargetUpdated="True" />
+                                </Binding.ValidationRules>
+                            </Binding>
+                        </controls:NumberBox.Value>
+                    </controls:NumberBox>
+                </StackPanel>
+                <StackPanel  Margin="8,8,8,8" Orientation="Horizontal">
+                    <StackPanel Margin="8,4,8,4" Orientation="Horizontal">
+                        <TextBlock VerticalAlignment="Bottom" Margin="0,0,4,0">هزینه یک ماه</TextBlock>
+                        <controls:NumberBox Width="70" x:Name="MonthPriceNumber"
+	                Margin="0,3,8,3"  ThousandSeparate="True" LostFocus="MonthPriceNumber_LostFocus"
+	                Style="{StaticResource MaterialDesignFloatingHintTextBox}">
+                            <materialDesign:HintAssist.Hint>
+                                <StackPanel Orientation="Horizontal">
+                                    
+                                    <TextBlock>هر روز</TextBlock>
+                                </StackPanel>
+                            </materialDesign:HintAssist.Hint>
+
+                            <controls:NumberBox.Value>
+                                <Binding Path="MonthPrice" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
+                                    <Binding.ValidationRules>
+                                        <domain:NotEmptyValidationRule ValidatesOnTargetUpdated="True" />
+                                    </Binding.ValidationRules>
+                                </Binding>
+                            </controls:NumberBox.Value>
+                        </controls:NumberBox>
+                        <controls:NumberBox Width="70" x:Name="MonthPrice2Number"
+	                Margin="0,3,8,3"  ThousandSeparate="True" LostFocus="MonthPrice2Number_LostFocus"
+	                Style="{StaticResource MaterialDesignFloatingHintTextBox}">
+                            <materialDesign:HintAssist.Hint>
+                                <StackPanel Orientation="Horizontal">
+                                    
+                                    <TextBlock>یکروز در میان</TextBlock>
+                                </StackPanel>
+                            </materialDesign:HintAssist.Hint>
+
+                            <controls:NumberBox.Value>
+                                <Binding Path="MonthPrice2" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
+                                    <Binding.ValidationRules>
+                                        <domain:NotEmptyValidationRule ValidatesOnTargetUpdated="True" />
+                                    </Binding.ValidationRules>
+                                </Binding>
+                            </controls:NumberBox.Value>
+                        </controls:NumberBox>
+
+                        <controls:NumberBox Width="15" x:Name="FreezeNumber"
+	                Margin="0,3,8,3" LostFocus="FreezeNumber_LostFocus"
+	                Style="{StaticResource MaterialDesignFloatingHintTextBox}">
+                            <materialDesign:HintAssist.Hint>
+                                <StackPanel Orientation="Horizontal">
+                                    <materialDesign:PackIcon Kind="TimerSand" Margin="0,0,3,0" />
+                                    <TextBlock>فریز</TextBlock>
+                                </StackPanel>
+                            </materialDesign:HintAssist.Hint>
+
+                            <controls:NumberBox.Value>
+                                <Binding Path="Freeze" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
+                                    <Binding.ValidationRules>
+                                        <domain:NotEmptyValidationRule ValidatesOnTargetUpdated="True" />
+                                    </Binding.ValidationRules>
+                                </Binding>
+                            </controls:NumberBox.Value>
+                        </controls:NumberBox>
+                    </StackPanel>
+                    <StackPanel Margin="8,4,8,4" Orientation="Horizontal">
+                        <TextBlock VerticalAlignment="Bottom" Margin="0,0,4,0">هزینه دو ماه</TextBlock>
+                        <controls:NumberBox Width="70" x:Name="TwoMonthPriceNumber"
+	                Margin="0,3,8,3"  ThousandSeparate="True"
+	                Style="{StaticResource MaterialDesignFloatingHintTextBox}">
+                            <materialDesign:HintAssist.Hint>
+                                <StackPanel Orientation="Horizontal">
+                                    
+                                    <TextBlock>هر روز</TextBlock>
+                                </StackPanel>
+                            </materialDesign:HintAssist.Hint>
+
+                            <controls:NumberBox.Value>
+                                <Binding Path="TwoMonthPrice" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
+                                    <Binding.ValidationRules>
+                                        <domain:NotEmptyValidationRule ValidatesOnTargetUpdated="True" />
+                                    </Binding.ValidationRules>
+                                </Binding>
+                            </controls:NumberBox.Value>
+                        </controls:NumberBox>
+                        <controls:NumberBox Width="70" x:Name="TwoMonthPrice2Number"
+	                Margin="0,3,8,3"  ThousandSeparate="True"
+	                Style="{StaticResource MaterialDesignFloatingHintTextBox}">
+                            <materialDesign:HintAssist.Hint>
+                                <StackPanel Orientation="Horizontal">
+                                    
+                                    <TextBlock>روز در میان</TextBlock>
+                                </StackPanel>
+                            </materialDesign:HintAssist.Hint>
+
+                            <controls:NumberBox.Value>
+                                <Binding Path="TwoMonthPrice2" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
+                                    <Binding.ValidationRules>
+                                        <domain:NotEmptyValidationRule ValidatesOnTargetUpdated="True" />
+                                    </Binding.ValidationRules>
+                                </Binding>
+                            </controls:NumberBox.Value>
+                        </controls:NumberBox>
+                        <controls:NumberBox Width="15" x:Name="FreezeNumber2"
+	                Margin="0,3,8,3"
+	                Style="{StaticResource MaterialDesignFloatingHintTextBox}">
+                            <materialDesign:HintAssist.Hint>
+                                <StackPanel Orientation="Horizontal">
+                                    <materialDesign:PackIcon Kind="TimerSand" Margin="0,0,3,0" />
+                                    <TextBlock>فریز</TextBlock>
+                                </StackPanel>
+                            </materialDesign:HintAssist.Hint>
+
+                            <controls:NumberBox.Value>
+                                <Binding Path="Freeze2" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
+                                    <Binding.ValidationRules>
+                                        <domain:NotEmptyValidationRule ValidatesOnTargetUpdated="True" />
+                                    </Binding.ValidationRules>
+                                </Binding>
+                            </controls:NumberBox.Value>
+                        </controls:NumberBox>
+
+                    </StackPanel>
+                    <StackPanel Margin="8,4,8,4" Orientation="Horizontal">
+                        <TextBlock VerticalAlignment="Bottom" Margin="0,0,4,0">هزینه سه ماه</TextBlock>
+                        <controls:NumberBox Width="70" x:Name="SeasonPriceNumber"
+	                Margin="0,3,8,3" ThousandSeparate="True"
+	                Style="{StaticResource MaterialDesignFloatingHintTextBox}">
+                            <materialDesign:HintAssist.Hint>
+                                <StackPanel Orientation="Horizontal">
+                                    
+                                    <TextBlock>هر روز</TextBlock>
+                                </StackPanel>
+                            </materialDesign:HintAssist.Hint>
+
+                            <controls:NumberBox.Value>
+                                <Binding Path="SeasonPrice" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
+                                    <Binding.ValidationRules>
+                                        <domain:NotEmptyValidationRule ValidatesOnTargetUpdated="True" />
+                                    </Binding.ValidationRules>
+                                </Binding>
+                            </controls:NumberBox.Value>
+                        </controls:NumberBox>
+                        <controls:NumberBox Width="70" x:Name="SeasonPrice2Number"
+	                Margin="0,3,8,3" ThousandSeparate="True"
+	                Style="{StaticResource MaterialDesignFloatingHintTextBox}">
+                            <materialDesign:HintAssist.Hint>
+                                <StackPanel Orientation="Horizontal">
+                                    
+                                    <TextBlock>روز در میان</TextBlock>
+                                </StackPanel>
+                            </materialDesign:HintAssist.Hint>
+
+                            <controls:NumberBox.Value>
+                                <Binding Path="SeasonPrice2" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
+                                    <Binding.ValidationRules>
+                                        <domain:NotEmptyValidationRule ValidatesOnTargetUpdated="True" />
+                                    </Binding.ValidationRules>
+                                </Binding>
+                            </controls:NumberBox.Value>
+                        </controls:NumberBox>
+                        <controls:NumberBox Width="15" x:Name="FreezeNumber3"
+	                Margin="0,3,8,3"
+	                Style="{StaticResource MaterialDesignFloatingHintTextBox}">
+                            <materialDesign:HintAssist.Hint>
+                                <StackPanel Orientation="Horizontal">
+                                    <materialDesign:PackIcon Kind="TimerSand" Margin="0,0,3,0" />
+                                    <TextBlock>فریز</TextBlock>
+                                </StackPanel>
+                            </materialDesign:HintAssist.Hint>
+
+                            <controls:NumberBox.Value>
+                                <Binding Path="Freeze3" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
+                                    <Binding.ValidationRules>
+                                        <domain:NotEmptyValidationRule ValidatesOnTargetUpdated="True" />
+                                    </Binding.ValidationRules>
+                                </Binding>
+                            </controls:NumberBox.Value>
+                        </controls:NumberBox>
+                    </StackPanel>
+                </StackPanel>
+                <StackPanel  Margin="8,8,8,8" Orientation="Horizontal">
+                    <StackPanel Margin="8,4,8,4" Orientation="Horizontal">
+                        <TextBlock VerticalAlignment="Bottom" Margin="0,0,4,0">هزینه شش ماه</TextBlock>
+                        <controls:NumberBox Width="70" x:Name="HalfYearPriceNumber"
+	                Margin="0,3,8,3" ThousandSeparate="True"
+	                Style="{StaticResource MaterialDesignFloatingHintTextBox}">
+                            <materialDesign:HintAssist.Hint>
+                                <StackPanel Orientation="Horizontal">
+                                    
+                                    <TextBlock>هر روز</TextBlock>
+                                </StackPanel>
+                            </materialDesign:HintAssist.Hint>
+
+                            <controls:NumberBox.Value>
+                                <Binding Path="HalfYearPrice" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
+                                    <Binding.ValidationRules>
+                                        <domain:NotEmptyValidationRule ValidatesOnTargetUpdated="True" />
+                                    </Binding.ValidationRules>
+                                </Binding>
+                            </controls:NumberBox.Value>
+                        </controls:NumberBox>
+                        <controls:NumberBox Width="70" x:Name="HalfYearPrice2Number"
+	                Margin="0,3,8,3" ThousandSeparate="True"
+	                Style="{StaticResource MaterialDesignFloatingHintTextBox}">
+                            <materialDesign:HintAssist.Hint>
+                                <StackPanel Orientation="Horizontal">
+                                    
+                                    <TextBlock>روز در میان</TextBlock>
+                                </StackPanel>
+                            </materialDesign:HintAssist.Hint>
+
+                            <controls:NumberBox.Value>
+                                <Binding Path="HalfYearPrice2" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
+                                    <Binding.ValidationRules>
+                                        <domain:NotEmptyValidationRule ValidatesOnTargetUpdated="True" />
+                                    </Binding.ValidationRules>
+                                </Binding>
+                            </controls:NumberBox.Value>
+                        </controls:NumberBox>
+                        <controls:NumberBox Width="15" x:Name="FreezeNumber6"
+	                Margin="0,3,8,3"
+	                Style="{StaticResource MaterialDesignFloatingHintTextBox}">
+                            <materialDesign:HintAssist.Hint>
+                                <StackPanel Orientation="Horizontal">
+                                    <materialDesign:PackIcon Kind="TimerSand" Margin="0,0,3,0" />
+                                    <TextBlock>فریز</TextBlock>
+                                </StackPanel>
+                            </materialDesign:HintAssist.Hint>
+
+                            <controls:NumberBox.Value>
+                                <Binding Path="Freeze6" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
+                                    <Binding.ValidationRules>
+                                        <domain:NotEmptyValidationRule ValidatesOnTargetUpdated="True" />
+                                    </Binding.ValidationRules>
+                                </Binding>
+                            </controls:NumberBox.Value>
+                        </controls:NumberBox>
+                    </StackPanel>
+                    <StackPanel Margin="8,4,8,4" Orientation="Horizontal">
+                        <TextBlock VerticalAlignment="Bottom" Margin="0,0,4,0">هزینه نه ماه</TextBlock>
+                        <controls:NumberBox Width="70" x:Name="NineMonthPriceNumber"
+	                Margin="0,3,8,3" ThousandSeparate="True"
+	                Style="{StaticResource MaterialDesignFloatingHintTextBox}">
+                            <materialDesign:HintAssist.Hint>
+                                <StackPanel Orientation="Horizontal">
+                                    
+                                    <TextBlock>هر روز</TextBlock>
+                                </StackPanel>
+                            </materialDesign:HintAssist.Hint>
+
+                            <controls:NumberBox.Value>
+                                <Binding Path="NineMonthPrice" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
+                                    <Binding.ValidationRules>
+                                        <domain:NotEmptyValidationRule ValidatesOnTargetUpdated="True" />
+                                    </Binding.ValidationRules>
+                                </Binding>
+                            </controls:NumberBox.Value>
+                        </controls:NumberBox>
+                        <controls:NumberBox Width="70" x:Name="NineMonthPrice2Number"
+	                Margin="0,3,8,3" ThousandSeparate="True"
+	                Style="{StaticResource MaterialDesignFloatingHintTextBox}">
+                            <materialDesign:HintAssist.Hint>
+                                <StackPanel Orientation="Horizontal">
+                                    
+                                    <TextBlock>روز در میان</TextBlock>
+                                </StackPanel>
+                            </materialDesign:HintAssist.Hint>
+
+                            <controls:NumberBox.Value>
+                                <Binding Path="NineMonthPrice2" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
+                                    <Binding.ValidationRules>
+                                        <domain:NotEmptyValidationRule ValidatesOnTargetUpdated="True" />
+                                    </Binding.ValidationRules>
+                                </Binding>
+                            </controls:NumberBox.Value>
+                        </controls:NumberBox>
+                    </StackPanel>
+                    <controls:NumberBox Width="15" x:Name="FreezeNumber9"
+	                Margin="0,3,8,3"
+	                Style="{StaticResource MaterialDesignFloatingHintTextBox}">
+                        <materialDesign:HintAssist.Hint>
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="TimerSand" Margin="0,0,3,0" />
+                                <TextBlock>فریز</TextBlock>
+                            </StackPanel>
+                        </materialDesign:HintAssist.Hint>
+
+                        <controls:NumberBox.Value>
+                            <Binding Path="Freeze9" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
+                                <Binding.ValidationRules>
+                                    <domain:NotEmptyValidationRule ValidatesOnTargetUpdated="True" />
+                                </Binding.ValidationRules>
+                            </Binding>
+                        </controls:NumberBox.Value>
+                    </controls:NumberBox>
+
+                    <StackPanel Margin="8,4,8,4" Orientation="Horizontal">
+                        <TextBlock VerticalAlignment="Bottom" Margin="0,0,4,0">هزینه یک سال</TextBlock>
+                        <controls:NumberBox Width="70" x:Name="YearPriceNumber"
+	                Margin="0,3,8,3" ThousandSeparate="True"
+	                Style="{StaticResource MaterialDesignFloatingHintTextBox}">
+                            <materialDesign:HintAssist.Hint>
+                                <StackPanel Orientation="Horizontal">
+                                    
+                                    <TextBlock>هر روز</TextBlock>
+                                </StackPanel>
+                            </materialDesign:HintAssist.Hint>
+
+                            <controls:NumberBox.Value>
+                                <Binding Path="YearPrice" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
+                                    <Binding.ValidationRules>
+                                        <domain:NotEmptyValidationRule ValidatesOnTargetUpdated="True" />
+                                    </Binding.ValidationRules>
+                                </Binding>
+                            </controls:NumberBox.Value>
+                        </controls:NumberBox>
+                        <controls:NumberBox Width="70" x:Name="YearPrice2Number"
+	                Margin="0,3,8,3" ThousandSeparate="True"
+	                Style="{StaticResource MaterialDesignFloatingHintTextBox}">
+                            <materialDesign:HintAssist.Hint>
+                                <StackPanel Orientation="Horizontal">
+                                    
+                                    <TextBlock>روز در میان</TextBlock>
+                                </StackPanel>
+                            </materialDesign:HintAssist.Hint>
+
+                            <controls:NumberBox.Value>
+                                <Binding Path="YearPrice2" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
+                                    <Binding.ValidationRules>
+                                        <domain:NotEmptyValidationRule ValidatesOnTargetUpdated="True" />
+                                    </Binding.ValidationRules>
+                                </Binding>
+                            </controls:NumberBox.Value>
+                        </controls:NumberBox>
+                        <controls:NumberBox Width="15" x:Name="FreezeNumber12"
+	                Margin="0,3,8,3"
+	                Style="{StaticResource MaterialDesignFloatingHintTextBox}">
+                            <materialDesign:HintAssist.Hint>
+                                <StackPanel Orientation="Horizontal">
+                                    <materialDesign:PackIcon Kind="TimerSand" Margin="0,0,3,0" />
+                                    <TextBlock>فریز</TextBlock>
+                                </StackPanel>
+                            </materialDesign:HintAssist.Hint>
+
+                            <controls:NumberBox.Value>
+                                <Binding Path="Freeze12" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
+                                    <Binding.ValidationRules>
+                                        <domain:NotEmptyValidationRule ValidatesOnTargetUpdated="True" />
+                                    </Binding.ValidationRules>
+                                </Binding>
+                            </controls:NumberBox.Value>
+                        </controls:NumberBox>
+                    </StackPanel>
+                </StackPanel>
+
+                <StackPanel HorizontalAlignment="Right" Orientation="Horizontal" Margin="0,10">
+                    <Button
+					    Margin="0,8,8,0"
+					    Command="materialDesign:DialogHost.CloseDialogCommand"
+					    IsDefault="True"
+					    Style="{StaticResource MaterialDesignFlatButton}">
+                        <Button.CommandParameter>
+                            <system:Boolean xmlns:system="clr-namespace:System;assembly=mscorlib">True</system:Boolean>
+                        </Button.CommandParameter>
+                        تایید
+                    </Button>
+                    <Button
+					Margin="0,8,8,0"
+					Command="materialDesign:DialogHost.CloseDialogCommand"
+					IsCancel="True"
+					Style="{StaticResource MaterialDesignFlatButton}">
+                        <Button.CommandParameter>
+                            <system:Boolean xmlns:system="clr-namespace:System;assembly=mscorlib">False</system:Boolean>
+                        </Button.CommandParameter>
+                        انصراف
+                    </Button>
+                </StackPanel>
+            </StackPanel>
+        </materialDesign:DialogHost.DialogContent>
+        <Grid>
+            <DataGrid
+                IsReadOnly="True"
+            ItemsSource="{Binding}"
+            FlowDirection="RightToLeft"
+            x:Name="CoursesGrid"
+	Margin="0,8,0,0"
+	materialDesign:DataGridAssist.CellPadding="13 8 8 8"
+	materialDesign:DataGridAssist.ColumnHeaderPadding="8"
+	AutoGenerateColumns="False"
+	CanUserAddRows="False"
+	CanUserSortColumns="True">
+                <DataGrid.Columns>
+                    <materialDesign:MaterialDataGridTextColumn
+			Binding="{Binding Id}" CanUserResize="False" CanUserReorder="False" CanUserSort="False"
+			EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnPopupEditingStyle}"
+			Header="" Width="50"/>
+                    <!--if you want to use the pop up style (MaterialDesignDataGridTextColumnPopupEditingStyle), you must use MaterialDataGridTextColumn-->
+                    <materialDesign:MaterialDataGridTextColumn
+			Binding="{Binding Name}"
+			EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnPopupEditingStyle}"
+			Header="نام دوره" MinWidth="150"
+                    MaxLength="50"/>
+                    <!--set a max length to get an indicator in the editor-->
+                    <DataGridTemplateColumn>
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+
+                                <Button
+	                        Content="{materialDesign:PackIcon Kind=TableEdit}"
+                            Command=""
+                            Click="EditCourse_Click"
+	                        ToolTip="Icon" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+            <Button x:Name="AddNewCourse"
+				Grid.Row="0"
+				Margin="0,10,10,0"
+				HorizontalAlignment="Right"
+				VerticalAlignment="Top"
+                Click="AddNewCourse_Click"
+				Command="{x:Static materialDesign:DialogHost.OpenDialogCommand}"
+				Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}">
+                <Viewbox Width="22" Height="22">
+                    <Canvas Width="24" Height="24">
+                        <Path Data="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z" Fill="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Button}, Path=Foreground}" />
+                    </Canvas>
+                </Viewbox>
+            </Button>
+            <materialDesign:Snackbar x:Name="DuplicateUsernameSnackBar"
+			HorizontalAlignment="Stretch"
+                                     ActionButtonStyle="{StaticResource MaterialDesignRaisedAccentButton}"
+                Margin="5,5,5,5" 
+			    FlowDirection="RightToLeft">
+                <materialDesign:SnackbarMessage 
+                    ActionContent="خب" 
+                    ActionClick="HideSnackbar_Click"
+                    Content="نام دوره تکراری است، نام دیگری انتخاب کنید" 
+                                         ActionCommand=""       />
+            </materialDesign:Snackbar>
+        </Grid>
+
+    </materialDesign:DialogHost>
+</Window>

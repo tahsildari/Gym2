@@ -1,0 +1,40 @@
+﻿<UserControl x:Class="Gym.Controls.QuestionDialog"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="500"
+             MaxWidth="500">
+    <Grid Margin="16">
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <TextBlock x:Name="Message" 
+                   Margin="0 6 0 0"
+                   FontSize="18" Grid.Row="0" FlowDirection="RightToLeft"/>
+        <Button Grid.Row="1" 
+                IsDefault="True" Style="{DynamicResource MaterialDesignFlatButton}"
+                HorizontalAlignment="Right"
+                Margin="0,56,163,46"
+                Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}">
+            خوبه
+        </Button>
+        <Button Grid.Row="1" 
+                IsDefault="True" Style="{DynamicResource MaterialDesignFlatButton}"
+                HorizontalAlignment="Right"
+                Margin="0,56,241,46"
+                Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}">
+            عالیه
+        </Button>
+        <Button Grid.Row="1" 
+                IsDefault="True" Style="{DynamicResource MaterialDesignFlatButton}"
+                HorizontalAlignment="Right"
+                Margin="0,56,318,46"
+                Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}">
+            بهتر از این نمیشه
+        </Button>
+    </Grid>
+</UserControl>

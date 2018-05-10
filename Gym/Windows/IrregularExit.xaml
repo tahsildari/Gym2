@@ -1,0 +1,16 @@
+﻿<Window x:Class="Gym.Windows.IrregularExit"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        WindowStartupLocation="CenterScreen"  Icon="/Resources/Muscle.ico"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Gym.Windows"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        mc:Ignorable="d" Loaded="Window_Loaded"
+        Title="خروج تک جلسه ای" Height="600" Width="300">
+    <materialDesign:ColorZone Mode="Dark" VerticalAlignment="Stretch">
+    <ScrollViewer FlowDirection="RightToLeft" VerticalScrollBarVisibility="Hidden" Margin="20">
+        <StackPanel Orientation="Vertical" x:Name="List" HorizontalAlignment="Center"/>
+    </ScrollViewer>
+    </materialDesign:ColorZone>
+</Window>

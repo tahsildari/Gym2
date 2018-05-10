@@ -1,0 +1,83 @@
+﻿<Window x:Class="Gym.Windows.GoodsSold"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        WindowStartupLocation="CenterScreen"  Icon="/Resources/Muscle.ico"
+        xmlns:local="clr-namespace:Gym.Windows"
+        mc:Ignorable="d"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:domain="clr-namespace:Gym.Domain"
+        xmlns:controls="clr-namespace:Gym.Controls"
+        Title="GoodsSold" Height="300" Width="300">
+    <Grid>
+        <DataGrid
+                IsReadOnly="True"
+            ItemsSource="{Binding}"
+            FlowDirection="RightToLeft"
+            x:Name="UsersGrid"
+	Margin="0,8,0,0"
+	materialDesign:DataGridAssist.CellPadding="13 8 8 8"
+	materialDesign:DataGridAssist.ColumnHeaderPadding="8"
+	AutoGenerateColumns="False"
+	CanUserAddRows="False"
+	CanUserSortColumns="True">
+            <DataGrid.Columns>
+                <materialDesign:MaterialDataGridTextColumn
+			Binding="{Binding Id}" CanUserResize="False" CanUserReorder="False" CanUserSort="False"
+			EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnPopupEditingStyle}"
+			Header="" Width="50"/>
+                <!--if you want to use the pop up style (MaterialDesignDataGridTextColumnPopupEditingStyle), you must use MaterialDataGridTextColumn-->
+                <materialDesign:MaterialDataGridTextColumn
+			Binding="{Binding Username}"
+			EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnPopupEditingStyle}"
+			Header="نام کاربری" MinWidth="150"
+                    MaxLength="50"/>
+                <!--set a max length to get an indicator in the editor-->
+                <materialDesign:MaterialDataGridTextColumn
+			Binding="{Binding Password}"
+			EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnPopupEditingStyle}"
+			Header="رمز عبور"
+			MaxLength="50" />
+                <DataGridTemplateColumn>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+
+                            <Button
+	                        Content="{materialDesign:PackIcon Kind=AccountBox}"
+                            Command=""
+                            Click="EditGood_Click"
+	                        ToolTip="Icon" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+        <Button x:Name="AddNewGoods"
+				Grid.Row="0"
+				Margin="0,10,10,0"
+				HorizontalAlignment="Right"
+				VerticalAlignment="Top"
+                Click="NewGood_Click"
+				Command="{x:Static materialDesign:DialogHost.OpenDialogCommand}"
+				Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}">
+            <Viewbox Width="22" Height="22">
+                <Canvas Width="24" Height="24">
+                    <Path Data="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z" Fill="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Button}, Path=Foreground}" />
+                </Canvas>
+            </Viewbox>
+        </Button>
+        <materialDesign:Snackbar x:Name="DuplicateUsernameSnackBar"
+			HorizontalAlignment="Stretch"
+                                     ActionButtonStyle="{StaticResource MaterialDesignRaisedAccentButton}"
+                Margin="5,5,5,5" 
+			    FlowDirection="RightToLeft">
+            <materialDesign:SnackbarMessage 
+                    ActionContent="خب" 
+                    ActionClick="HideSnackbar_Click"
+                    Content="نام کاربری تکراری است، نام دیگری انتخاب کنید" 
+                                         ActionCommand=""       />
+        </materialDesign:Snackbar>
+    </Grid>
+
+</Window>

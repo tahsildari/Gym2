@@ -1,0 +1,13 @@
+﻿<Window x:Class="Gym.Windows.MemberInformation"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        WindowStartupLocation="CenterScreen"  Icon="/Resources/Muscle.ico"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Gym.Windows"
+        xmlns:local1="clr-namespace:Gym.Controls"
+        mc:Ignorable="d"
+        Title="اطلاعات عضو" Height="330" Width="430" KeyUp="Window_KeyUp">
+    <local1:MemberInfo x:Name="Info"/>
+
+</Window>

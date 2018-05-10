@@ -1,0 +1,45 @@
+﻿<UserControl x:Class="Gym.Controls.Closets"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Gym.Controls"
+             mc:Ignorable="d" 
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             d:DesignHeight="300" d:DesignWidth="300" Loaded="UserControl_Loaded">
+    <!--<UserControl.Style>
+       
+        <Style x:Key="FadeOutButton" TargetType="{x:Type Button}">
+            <Style.Triggers>
+                <EventTrigger RoutedEvent="Control.MouseEnter">
+                    <BeginStoryboard>
+                        <Storyboard >
+                            <DoubleAnimation Duration="0:0:1" To="1" Storyboard.TargetProperty="Opacity"/>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </EventTrigger>
+                <EventTrigger RoutedEvent="Control.MouseLeave">
+                    <BeginStoryboard>
+                        <Storyboard >
+                            <DoubleAnimation Duration="0:0:1" To="0.2" Storyboard.TargetProperty="Opacity"/>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </EventTrigger>
+            </Style.Triggers>
+        </Style>
+    </UserControl.Style>-->
+    <WrapPanel x:Name="closetsStackPanel" FlowDirection="LeftToRight" Orientation="Horizontal">
+        <WrapPanel.Style>
+            <Style x:Name="FocusOpacityStyle">
+                <Style.Triggers>
+                <Trigger Property="StackPanel.IsMouseOver" Value="true">
+                    <Setter Property="StackPanel.Opacity" Value="1" />
+                </Trigger>
+                    <Trigger Property="StackPanel.IsMouseOver" Value="false">
+                        <Setter Property="StackPanel.Opacity" Value=".4" />
+                    </Trigger>
+                </Style.Triggers>
+        </Style>
+        </WrapPanel.Style>
+    </WrapPanel>
+</UserControl>

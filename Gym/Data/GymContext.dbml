@@ -1,0 +1,270 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="GymDb" Class="GymContextDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="AppSettings" ConnectionString="Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\Database\GymDb.mdf;Integrated Security=True" SettingsObjectName="Gym.Properties.Settings" SettingsPropertyName="GymDbConnectionString" Provider="System.Data.SqlClient" />
+  <Table Name="dbo.Cost" Member="Costs">
+    <Type Name="Cost">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Category" Type="System.String" DbType="NVarChar(100) NOT NULL" CanBeNull="false" />
+      <Association Name="Cost_Transaction" Member="Transactions" ThisKey="Id" OtherKey="CostId" Type="Transaction" />
+    </Type>
+  </Table>
+  <Table Name="dbo.CostCategory" Member="CostCategories">
+    <Type Name="CostCategory">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Category" Type="System.String" DbType="NVarChar(100) NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.CourseFacility" Member="CourseFacilities">
+    <Type Name="CourseFacility">
+      <Column Name="CourseId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="FacilityId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Association Name="Facility_CourseFacility" Member="Facility" ThisKey="FacilityId" OtherKey="Id" Type="Facility" IsForeignKey="true" />
+      <Association Name="Course_CourseFacility" Member="Course" ThisKey="CourseId" OtherKey="Id" Type="Course" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Goods" Member="Goods">
+    <Type Name="Good">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(200) NOT NULL" CanBeNull="false" />
+      <Column Name="Count" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="OrderPoint" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Association Name="Good_Trade" Member="Trades" ThisKey="Id" OtherKey="GoodId" Type="Trade" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Passage" Member="Passages">
+    <Type Name="Passage">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="MemberId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Time" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="IsEntrance" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Association Name="Member_Passage" Member="Member" ThisKey="MemberId" OtherKey="Id" Type="Member" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Setting" Member="Settings">
+    <Type Name="Setting">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="[Key]" Member="Key" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Value" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Sport" Member="Sports">
+    <Type Name="Sport">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(100) NOT NULL" CanBeNull="false" />
+      <Association Name="Sport_SportMentor" Member="SportMentors" ThisKey="Id" OtherKey="SportId" Type="SportMentor" />
+      <Association Name="Sport_Course" Member="Courses" ThisKey="Id" OtherKey="SportId" Type="Course" />
+    </Type>
+  </Table>
+  <Table Name="dbo.SportMentors" Member="SportMentors">
+    <Type Name="SportMentor">
+      <Column Name="MentorId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="SportId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Price" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Association Name="Sport_SportMentor" Member="Sport" ThisKey="SportId" OtherKey="Id" Type="Sport" IsForeignKey="true" />
+      <Association Name="Member_SportMentor" Member="Member" ThisKey="MentorId" OtherKey="Id" Type="Member" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.ClosetUsages" Member="ClosetUsages">
+    <Type Name="ClosetUsage">
+      <Column Name="ClosetId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="MemberId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="FromTime" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="ToTime" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Association Name="Closet_ClosetUsage" Member="Closet" ThisKey="ClosetId" OtherKey="Id" Type="Closet" IsForeignKey="true" />
+      <Association Name="Member_ClosetUsage" Member="Member" ThisKey="MemberId" OtherKey="Id" Type="Member" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Closets" Member="Closets">
+    <Type Name="Closet">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="IsVip" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="IsBroken" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="UserId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="IsFree" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="RentorId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="Closet_ClosetUsage" Member="ClosetUsages" ThisKey="Id" OtherKey="ClosetId" Type="ClosetUsage" />
+      <Association Name="Member_Closet" Member="Rentor" Storage="_Member" ThisKey="RentorId" OtherKey="Id" Type="Member" IsForeignKey="true" />
+      <Association Name="Member_Closet1" Member="User" Storage="_Member1" ThisKey="UserId" OtherKey="Id" Type="Member" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.EnrollPayments" Member="EnrollPayments">
+    <Type Name="EnrollPayment">
+      <Column Name="EnrollId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="PaymentId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Association Name="Transaction_EnrollPayment" Member="Transaction" ThisKey="PaymentId" OtherKey="Id" Type="Transaction" IsForeignKey="true" />
+      <Association Name="Enroll_EnrollPayment" Member="Enroll" ThisKey="EnrollId" OtherKey="Id" Type="Enroll" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Facility" Member="Facilities">
+    <Type Name="Facility">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(100) NOT NULL" CanBeNull="false" />
+      <Column Name="Price" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Sessions" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Association Name="Facility_CourseFacility" Member="CourseFacilities" ThisKey="Id" OtherKey="FacilityId" Type="CourseFacility" />
+      <Association Name="Facility_EnrollFacility" Member="EnrollFacilities" ThisKey="Id" OtherKey="FacilityId" Type="EnrollFacility" />
+    </Type>
+  </Table>
+  <Table Name="dbo.EnrollCourses" Member="EnrollCourses">
+    <Type Name="EnrollCourse">
+      <Column Name="EnrollId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="CourseId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="MentorId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="SessionsLeft" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Association Name="Member_EnrollCourse" Member="Member" ThisKey="MentorId" OtherKey="Id" Type="Member" IsForeignKey="true" />
+      <Association Name="Enroll_EnrollCourse" Member="Enroll" ThisKey="EnrollId" OtherKey="Id" Type="Enroll" IsForeignKey="true" />
+      <Association Name="Course_EnrollCourse" Member="Course" ThisKey="CourseId" OtherKey="Id" Type="Course" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.EnrollFacility" Member="EnrollFacilities">
+    <Type Name="EnrollFacility">
+      <Column Name="EnrollId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="FacilityId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="SessionsLeft" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Association Name="Facility_EnrollFacility" Member="Facility" ThisKey="FacilityId" OtherKey="Id" Type="Facility" IsForeignKey="true" />
+      <Association Name="Enroll_EnrollFacility" Member="Enroll" ThisKey="EnrollId" OtherKey="Id" Type="Enroll" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.[Transaction]" Member="Transactions">
+    <Type Name="Transaction">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Datetime" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="Amount" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="MemberId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Type" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="Method" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="Info" Type="System.String" DbType="NVarChar(500)" CanBeNull="true" />
+      <Column Name="CostId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="UserId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Association Name="Transaction_EnrollPayment" Member="EnrollPayments" ThisKey="Id" OtherKey="PaymentId" Type="EnrollPayment" />
+      <Association Name="Transaction_Enroll" Member="Enrolls" ThisKey="Id" OtherKey="PaymentId" Type="Enroll" />
+      <Association Name="Cost_Transaction" Member="Cost" ThisKey="CostId" OtherKey="Id" Type="Cost" IsForeignKey="true" />
+      <Association Name="Member_Transaction" Member="Member" ThisKey="MemberId" OtherKey="Id" Type="Member" IsForeignKey="true" />
+      <Association Name="User_Transaction" Member="User" ThisKey="UserId" OtherKey="Id" Type="User" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Members" Member="Members">
+    <Type Name="Member">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Firstname" Type="System.String" DbType="NVarChar(100) NOT NULL" CanBeNull="false" />
+      <Column Name="Lastname" Type="System.String" DbType="NVarChar(100) NOT NULL" CanBeNull="false" />
+      <Column Name="Dadsname" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
+      <Column Name="Birthdate" Type="System.String" DbType="Char(10)" CanBeNull="true" />
+      <Column Name="NationalCode" Type="System.String" DbType="Char(10)" CanBeNull="true" />
+      <Column Name="Mobile" Type="System.String" DbType="Char(11) NOT NULL" CanBeNull="false" />
+      <Column Name="Address" Type="System.String" DbType="NVarChar(200)" CanBeNull="true" />
+      <Column Name="Description" Type="System.String" DbType="NVarChar(500)" CanBeNull="true" />
+      <Column Name="IsActive" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="IsDeleted" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="IsStaff" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="Credit" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="InsuranceExpiry" Type="System.String" DbType="Char(10)" CanBeNull="true" />
+      <Column Name="IsMentor" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="Referrer" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
+      <Column Name="ReferrerMobile" Type="System.String" DbType="Char(11)" CanBeNull="true" />
+      <Column Name="Debtor" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="InsuranceNo" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="IsRegular" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="UserId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Date" Type="System.DateTime" DbType="Date NOT NULL" CanBeNull="false" />
+      <Association Name="Member_Passage" Member="Passages" ThisKey="Id" OtherKey="MemberId" Type="Passage" />
+      <Association Name="Member_SportMentor" Member="SportMentors" ThisKey="Id" OtherKey="MentorId" Type="SportMentor" />
+      <Association Name="Member_ClosetUsage" Member="ClosetUsages" ThisKey="Id" OtherKey="MemberId" Type="ClosetUsage" />
+      <Association Name="Member_Closet" Member="Closets" ThisKey="Id" OtherKey="RentorId" Type="Closet" />
+      <Association Name="Member_Closet1" Member="Closets1" ThisKey="Id" OtherKey="UserId" Type="Closet" />
+      <Association Name="Member_EnrollCourse" Member="EnrollCourses" ThisKey="Id" OtherKey="MentorId" Type="EnrollCourse" />
+      <Association Name="Member_Transaction" Member="Transactions" ThisKey="Id" OtherKey="MemberId" Type="Transaction" />
+      <Association Name="Member_Enroll" Member="Enrolls" ThisKey="Id" OtherKey="MemberId" Type="Enroll" />
+      <Association Name="Member_Trade" Member="Trades" ThisKey="Id" OtherKey="MemberId" Type="Trade" />
+      <Association Name="User_Member" Member="User" ThisKey="UserId" OtherKey="Id" Type="User" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Enroll" Member="Enrolls">
+    <Type Name="Enroll">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="MemberId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="EnrollDate" Type="System.DateTime" DbType="Date NOT NULL" CanBeNull="false" />
+      <Column Name="StartDate" Type="System.DateTime" DbType="Date" CanBeNull="true" />
+      <Column Name="ExpireDate" Type="System.DateTime" DbType="Date" CanBeNull="true" />
+      <Column Name="IsActive" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="Frequency" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="Duration" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="Sessions" Type="System.Byte" DbType="TinyInt" CanBeNull="true" />
+      <Column Name="Price" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Discount" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="PaymentId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="InsuranceFee" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="UserId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Freeze" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Association Name="Enroll_EnrollPayment" Member="EnrollPayments" ThisKey="Id" OtherKey="EnrollId" Type="EnrollPayment" />
+      <Association Name="Enroll_EnrollCourse" Member="EnrollCourses" ThisKey="Id" OtherKey="EnrollId" Type="EnrollCourse" />
+      <Association Name="Enroll_EnrollFacility" Member="EnrollFacilities" ThisKey="Id" OtherKey="EnrollId" Type="EnrollFacility" />
+      <Association Name="Member_Enroll" Member="Member" ThisKey="MemberId" OtherKey="Id" Type="Member" IsForeignKey="true" />
+      <Association Name="Transaction_Enroll" Member="Transaction" ThisKey="PaymentId" OtherKey="Id" Type="Transaction" IsForeignKey="true" />
+      <Association Name="User_Enroll" Member="User" ThisKey="UserId" OtherKey="Id" Type="User" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Course" Member="Courses">
+    <Type Name="Course">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(200) NOT NULL" CanBeNull="false" />
+      <Column Name="IsVIP" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="SessionPrice" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="MonthPrice" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="TwoMonthPrice" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="SeasonPrice" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="HalfYearPrice" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="NineMonthPrice" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="YearPrice" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="MonthPrice2" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="TwoMonthPrice2" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="SeasonPrice2" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="HalfYearPrice2" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="NineMonthPrice2" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="YearPrice2" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Freeze" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="SportId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Freeze2" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Freeze3" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Freeze6" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Freeze9" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Freeze12" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Association Name="Course_CourseFacility" Member="CourseFacilities" ThisKey="Id" OtherKey="CourseId" Type="CourseFacility" />
+      <Association Name="Course_EnrollCourse" Member="EnrollCourses" ThisKey="Id" OtherKey="CourseId" Type="EnrollCourse" />
+      <Association Name="Sport_Course" Member="Sport" ThisKey="SportId" OtherKey="Id" Type="Sport" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Trades" Member="Trades">
+    <Type Name="Trade">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="GoodId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Count" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Price" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="IsSold" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="MemberId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Time" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Association Name="Good_Trade" Member="Good" ThisKey="GoodId" OtherKey="Id" Type="Good" IsForeignKey="true" />
+      <Association Name="Member_Trade" Member="Member" ThisKey="MemberId" OtherKey="Id" Type="Member" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Users" Member="Users">
+    <Type Name="User">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Username" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Password" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="RoleId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Association Name="User_Transaction" Member="Transactions" ThisKey="Id" OtherKey="UserId" Type="Transaction" />
+      <Association Name="User_Member" Member="Members" ThisKey="Id" OtherKey="UserId" Type="Member" />
+      <Association Name="User_Enroll" Member="Enrolls" ThisKey="Id" OtherKey="UserId" Type="Enroll" />
+      <Association Name="Role_User" Member="Role" ThisKey="RoleId" OtherKey="Id" Type="Role" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Roles" Member="Roles">
+    <Type Name="Role">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Access" Type="System.String" DbType="VarChar(200) NOT NULL" CanBeNull="false" />
+      <Association Name="Role_User" Member="Users" ThisKey="Id" OtherKey="RoleId" Type="User" />
+    </Type>
+  </Table>
+</Database>
