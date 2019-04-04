@@ -36,7 +36,11 @@ namespace Gym.Windows
         private void Window_PreviewKeyUp(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Escape)
-                this.Close();
+            {
+                var escTime = (DateTime)(Dynamics.LastEscapeTime ?? DateTime.Now.AddDays(-1));
+                if ((DateTime.Now - escTime) > TimeSpan.FromMilliseconds(100))
+                    this.Close();
+            }
         }
 
         ObservableCollection<dynamic> PassageList;
@@ -107,6 +111,7 @@ namespace Gym.Windows
                     RefreshGrid();
                     break;
                 case "cancel":
+                Dynamics.LastEscapeTime = DateTime.Now;
                     break;
                 default:
                     break;
@@ -116,6 +121,10 @@ namespace Gym.Windows
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            Date1.SetToday();
+            Date2.SetToday();
+            Time1.SelectedTime = DateTime.Today;
+            Time2.SelectedTime = DateTime.Today.AddDays(1).AddSeconds(-1);
             RefreshGrid();
         }
     }

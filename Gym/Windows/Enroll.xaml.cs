@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -48,6 +49,7 @@ namespace Gym.Windows
         public Visibility CourseVisible { get { return Section == 1 ? Visibility.Visible : Visibility.Collapsed; } }
         public Visibility FinancialVisible { get { return Section == 2 ? Visibility.Visible : Visibility.Collapsed; } }
         public Visibility TransactionsVisible { get { return Section == 3 ? Visibility.Visible : Visibility.Collapsed; } }
+        public Visibility HistoryVisible { get { return Section == 4 ? Visibility.Visible : Visibility.Collapsed; } }
 
         bool IsClosing { get; set; }
         bool NotClosing { get { return !IsClosing; } }
@@ -112,7 +114,8 @@ namespace Gym.Windows
                 Debtor = m.Debtor,
                 InsuranceNo = m.InsuranceNo,
                 InsuranceExpireDate = m.InsuranceExpiry.ToEn(),
-                ClosetId = db.Closets.Where(c => c.RentorId == m.Id).FirstOrDefault()?.Id
+                ClosetId = db.Closets.Where(c => c.RentorId == m.Id).FirstOrDefault()?.Id,
+                FingerId = m.FingerId
             };
             Mems_MemberSelected(member);
         }
@@ -136,6 +139,7 @@ namespace Gym.Windows
                 OnPropertyChanged("CourseVisible");
                 OnPropertyChanged("FinancialVisible");
                 OnPropertyChanged("TransactionsVisible");
+                OnPropertyChanged("HistoryVisible");
             }
         }
 
@@ -189,7 +193,15 @@ namespace Gym.Windows
         private void Window_PreviewKeyUp(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Escape)
-                this.Close();
+            {
+                if (DebtorWarningtStack.Visibility == Visibility.Visible) {
+                    DebtorWarningtStack.Visibility = Visibility.Collapsed;
+                    return;
+                }
+                var escTime = (DateTime)(Dynamics.LastEscapeTime ?? DateTime.Now.AddDays(-1));
+                if ((DateTime.Now - escTime) > TimeSpan.FromMilliseconds(100))
+                    this.Close();
+            }
             if (e.Key == Key.Enter)
             {
 
@@ -227,6 +239,7 @@ namespace Gym.Windows
             {
                 _Member = value; OnPropertyChanged("Member");
                 LoadMembersTransactions();
+                LoadMembersHistory();
                 //SetCoursesData();
             }
         }
@@ -251,24 +264,55 @@ namespace Gym.Windows
                 TransactionsGrid.DataContext = transactions;
             }
         }
+        dynamic userHistory;
+        public void LoadMembersHistory()
+        {
+            if (Member.Id > 0)
+            {
+                var history = db.Enrolls
+                    .Where(n => n.MemberId == Member.Id).ToList()
+                    .Select(n => new HistoryVM
+                    {
+                        Type = "تمدید",
+                        EnrollDate = n.EnrollDate.ToFa(),
+                        StartDate = n.StartDate.HasValue ? n.StartDate.Value.ToFa() : "",
+                        ExpireDate = n.ExpireDate.HasValue ? n.ExpireDate.Value.ToFa() : "",
+                        Price = n.Price.ToString("#,##0"),
+                        Discount = n.Discount.ToString("#,##0"),
+                        Debtor = (n.Price - (n.Transaction != null ? n.Transaction.Amount : 0) - n.Discount).ToString("#,##0"),
+                        Info = String.Join(",",n.EnrollCourses.Select(c => c.Course.Name).Distinct().
+                        ToList())
+                    }).ToList();
+                if (history.Count > 0)
+                    history.OrderBy(h=>h.EnrollDate).FirstOrDefault().Type = "ثبت نام";
+                userHistory = history.OrderByDescending(h=>h.EnrollDate);
+                HistoryGrid.DataContext = history;
+            }
+        }
 
         public MemberVM MemberShadow = null;
         public Data.Enroll CurrentEnroll;
 
         public ObservableCollection<string> MemberEnrolls { get; set; }
 
-
-
+        ObservableCollection<Data.POS> PosList;
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             btnNewEnroll.IsEnabled = btnNewPerson.IsEnabled = btnEditPerson.IsEnabled = btnSaveEnroll.IsEnabled = btnCancelEnroll.IsEnabled =
                btnPay.IsEnabled = btnChargeCredit.IsEnabled = Main.CurrentUser.Role.Access[0] == '1';
 
 
+            PosList = new ObservableCollection<Data.POS>(db.POS.ToList());
+            cmbPos.DataContext = PosList;
+
             pdStartDate.Date = DateTime.Now.ToFa();
-            var VideoDevices = EncoderDevices.FindDevices(EncoderDeviceType.Video);
-            WebcamViewer.VideoDevice = VideoDevices[0];
-            WebcamViewer.AudioDevice = EncoderDevices.FindDevices(EncoderDeviceType.Audio)[0];
+            try
+            {
+                var VideoDevices = EncoderDevices.FindDevices(EncoderDeviceType.Video);
+                WebcamViewer.VideoDevice = VideoDevices[0];
+                WebcamViewer.AudioDevice = EncoderDevices.FindDevices(EncoderDeviceType.Audio)[0];
+            }
+            catch { }
             CourseSelector.Checked += CourseSelector_Checked;
             cmbFrequency.SelectionChanged += (z, x) =>
             {
@@ -345,30 +389,40 @@ namespace Gym.Windows
             {
                 switch (section.SelectedIndex)
                 {
-                    case 0:
+                    case 0: //Member
                         MemberSection.Visibility = Visibility.Visible;
                         CourseSection.Visibility = Visibility.Collapsed;
                         FinancialSection.Visibility = Visibility.Collapsed;
                         TransactionsSection.Visibility = Visibility.Collapsed;
-
+                        HistorySection.Visibility = Visibility.Collapsed;
                         break;
-                    case 1:
+                    case 1: //Enroll
                         MemberSection.Visibility = Visibility.Collapsed;
                         CourseSection.Visibility = Visibility.Visible;
                         FinancialSection.Visibility = Visibility.Collapsed;
                         TransactionsSection.Visibility = Visibility.Collapsed;
+                        HistorySection.Visibility = Visibility.Collapsed;
                         break;
-                    case 2:
+                    case 2: //Financial
                         MemberSection.Visibility = Visibility.Collapsed;
                         CourseSection.Visibility = Visibility.Collapsed;
                         TransactionsSection.Visibility = Visibility.Collapsed;
                         FinancialSection.Visibility = Visibility.Visible;
+                        HistorySection.Visibility = Visibility.Collapsed;
                         break;
-                    case 3:
+                    case 3: //Transaction
                         MemberSection.Visibility = Visibility.Collapsed;
                         CourseSection.Visibility = Visibility.Collapsed;
                         FinancialSection.Visibility = Visibility.Collapsed;
                         TransactionsSection.Visibility = Visibility.Visible;
+                        HistorySection.Visibility = Visibility.Collapsed;
+                        break;
+                    case 4: //History
+                        MemberSection.Visibility = Visibility.Collapsed;
+                        CourseSection.Visibility = Visibility.Collapsed;
+                        FinancialSection.Visibility = Visibility.Collapsed;
+                        TransactionsSection.Visibility = Visibility.Collapsed;
+                        HistorySection.Visibility = Visibility.Visible;
                         break;
                     default:
                         break;
@@ -413,7 +467,7 @@ namespace Gym.Windows
             }
             CourseSelector.SetDuration(i);
         }
-
+        bool ImageChanged = false;
         private void btnSetImage_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog ofd = new OpenFileDialog();
@@ -430,6 +484,7 @@ namespace Gym.Windows
                         _Image.EndInit();
                         ImageBrush.ImageSource = _Image;
                         Member.Image = _Image;
+                        ImageChanged = true;
                     }
                 }
             }
@@ -444,6 +499,7 @@ namespace Gym.Windows
         {
             State = Actions.Inserting;
             Member = new MemberVM();
+            ImageChanged = false;
             ImageBrush.ImageSource = Member.Image;
 
             ClearEnroll();
@@ -498,7 +554,10 @@ namespace Gym.Windows
             else
                 State = Actions.Selected;
             if (mems != null)
+            {
                 mems.Close();
+                mems = null;
+            }
             Birthdate.Date = member.BirthDateFa;
 
             var enrolls = db.Enrolls.Where(e => e.MemberId == member.Id);
@@ -516,8 +575,10 @@ namespace Gym.Windows
             if (MemberEnrolls.Count == 1)
                 cmbEnrolls.SelectedIndex = 0;
 
-            btnNewEnroll.Content = MemberEnrolls.Count > 0 ? "تمدید دوره" : "جدید";
+            btnNewEnroll.Content = MemberEnrolls.Count > 0 ? "تمدید دوره" : "دوره جدید";
             pdStartDate.Date = DateTime.Now.ToFa();
+
+            ImageChanged = false;
         }
 
         private void btnCancelMember_Click(object sender, RoutedEventArgs e)
@@ -529,6 +590,7 @@ namespace Gym.Windows
 
         private void btnSaveMember_Click(object sender, RoutedEventArgs e)
         {
+            string imagePath = "";
             if (IsNew)
             {
                 Member.Id = Member.Insert() ?? 0;
@@ -539,14 +601,21 @@ namespace Gym.Windows
                     btnNewEnroll_Click(null, null);
                 }
                 else
+                {
                     ShowToastMessage("ثبت عضو جدید با خطا مواجه شد", TimeSpan.FromSeconds(10));
+                    System.Windows.Forms.MessageBox.Show("Test");
+                    return;
+                }
 
             }
             if (IsEditing)
             {
+                imagePath = Guid.NewGuid().ToString();
+                Member.ImagePath = imagePath;
                 var res = Member.Update();
                 ShowToastMessage("اطلاعات عضو به روز شد", TimeSpan.FromSeconds(3));
             }
+            SaveImageToFile(Member.ImagePath);
             State = Actions.Selected;
             Main.Home.Closets.LoadClosets();
         }
@@ -570,6 +639,33 @@ namespace Gym.Windows
                 if (!CourseSelector.Courses.Items.Cast<CourseVM>().ToList().Any(c => c.IsSelected))
                 {
                     var message = "هیچ دوره ای برای ثبت نام انتخاب نشده است";
+
+                    Alert.Content = message;
+                    MessageSnackBar.IsActive = true;
+                    return;
+                }
+
+                if (cmbFrequency.SelectedIndex == -1 ||
+                    (cmbMonthCount.SelectedIndex == -1 && cmbDaysCount.SelectedIndex == -1) ||
+                    string.IsNullOrEmpty(pdStartDate.Date) ||
+                    string.IsNullOrEmpty(pdFinishDate.Date)) {
+
+                    var message = "شروع دوره، پایان دوره، نوع ثبت نام، تعداد ماه/جلسات ثبت نام اجباری هستند";
+
+                    Alert.Content = message;
+                    MessageSnackBar.IsActive = true;
+                    return;
+                }
+
+                var courseIds = CourseSelector.Courses.Items.Where(c => c.IsSelected).Select(c => c.Id).ToList();
+                var startDate = pdStartDate.Date.ToEn();
+                if (db.Enrolls.Any(en => en.MemberId == Member.Id &&
+                 en.ExpireDate > DateTime.Today && en.EnrollCourses.Any(
+                    c => courseIds.Contains(c.CourseId) && c.SessionsLeft > 0)))
+                //en.EnrollCourses.Any(c =>
+                //    en.StartDate == startDate)))
+                {
+                    var message = "دوره تکراری می باشد";
 
                     Alert.Content = message;
                     MessageSnackBar.IsActive = true;
@@ -604,6 +700,7 @@ namespace Gym.Windows
                 enroll.Sessions = 0;
                 enroll.InsuranceFee = chkExtendInsurance.IsChecked.Value ? Domain.Dynamics.InsuranceFee : 0;
                 enroll.UserId = Main.CurrentUser.Id;
+                enroll.DailyPasses = txtDailyPasses.Value;
 
                 Member.Debtor += enroll.Price;
                 var member = db.Members.SingleOrDefault(m => m.Id == enroll.MemberId);
@@ -657,17 +754,32 @@ namespace Gym.Windows
                 ShowToastMessage("ثبت نام دوره با موفقیت انجام شد", TimeSpan.FromSeconds(3));
 
                 CurrentEnroll = enroll;
-
+                //SaveImageToFile();
                 UpdateEnrollDebtor();
-
+                LoadMembersHistory();
+                LoadMembersTransactions();
                 var memenrolls = db.Enrolls.Where(en => en.MemberId == Member.Id).ToList().OrderByDescending(en => en.Id).Select(en => $"{en.EnrollDate.ToFa()} ({en.Id})").ToList();
                 MemberEnrolls = new ObservableCollection<string>(memenrolls);
                 OnPropertyChanged("MemberEnrolls");
                 if (memenrolls.Count > 0) cmbEnrolls.SelectedIndex = 0;
+                Section = 2;
             }
             catch (Exception ex)
             {
                 ;
+            }
+        }
+
+        private void SaveImageToFile(string fileName)
+        {
+            if (Member.Image != null) {
+                if (ImageChanged) {
+                    var address = $@".\Images\{fileName}.jpg";
+                    //if (System.IO.File.Exists(address))
+                        //System.IO.File.Delete(address);
+                    Member.Image.Save(address);
+                    
+                }
             }
         }
 
@@ -742,15 +854,23 @@ namespace Gym.Windows
                         eventArgs.Cancel();
                         return;
                     }
-                    if (PaymentItem == PayingItems.GrantDiscount && txtDiscountToGrant.Value == 0)
-                    {
-                        ShowToastMessage("مبلغ تخفیف را وارد نمایید", TimeSpan.FromSeconds(10));
-                        eventArgs.Cancel();
-                        return;
-                    }
+                    //if (PaymentItem == PayingItems.GrantDiscount && txtDiscountToGrant.Value == 0)
+                    //{
+                    //    ShowToastMessage("مبلغ تخفیف را وارد نمایید", TimeSpan.FromSeconds(10));
+                    //    eventArgs.Cancel();
+                    //    return;
+                    //}
                     if (PaymentItem == PayingItems.GrantDiscount && (CurrentEnroll?.Id ?? 0) == 0)
                     {
                         ShowToastMessage("دوره ای جهت تخفیف انتخاب نشده است", TimeSpan.FromSeconds(10));
+                        eventArgs.Cancel();
+                        return;
+                    }
+
+                    if (method == 1 && cmbPos.SelectedIndex == -1)
+                    {
+
+                        ShowToastMessage("دستگاه کارتخوان انتخاب نشده است", TimeSpan.FromSeconds(10));
                         eventArgs.Cancel();
                         return;
                     }
@@ -762,17 +882,19 @@ namespace Gym.Windows
                     transaction.MemberId = Member.Id;
                     transaction.Method = method;
                     transaction.UserId = Main.CurrentUser.Id;
+                    transaction.PosId = method == 1 ? (int)cmbPos.SelectedValue : default(int?);
 
                     switch (PaymentItem)
                     {
                         case PayingItems.GrantDiscount:
 
-                            if (txtDiscountToGrant.Value > 0)
+                            if (txtDiscountToGrant.Value >= 0)
                             {
                                 var en = db.Enrolls.Where(e => e.Id == CurrentEnroll.Id).FirstOrDefault();
-                                en.Discount += txtDiscountToGrant.Value;
+                                var diff = en.Discount - txtDiscountToGrant.Value;
+                                en.Discount = txtDiscountToGrant.Value;
                                 var mem = db.Members.Where(m => m.Id == Member.Id).FirstOrDefault();
-                                mem.Debtor -= txtDiscountToGrant.Value;
+                                mem.Debtor += diff;
                                 Member.Debtor = mem.Debtor;
                                 db.SubmitChanges();
 
@@ -822,6 +944,10 @@ namespace Gym.Windows
                     //}
                 }
             }
+            else
+            {
+                Dynamics.LastEscapeTime = DateTime.Now;
+            }
         }
 
         private void btnPay_Click(object sender, RoutedEventArgs e)
@@ -856,6 +982,7 @@ namespace Gym.Windows
             EnrollState = Actions.Inserting;
             pdStartDate.Date = DateTime.Now.ToFa();
             txtFreezeLeft.Value = 0;
+            txtDailyPasses.Value = 1;
             CurrentEnroll = new Data.Enroll();
             if (CourseSelector.CourseList.Items.Cast<CourseVM>().ToList().Any(c => c.IsVIP && c.IsSelected))
             {
@@ -921,6 +1048,7 @@ namespace Gym.Windows
 
                 txtFreezeLeft.Value = enroll.Freeze;
                 txtFreeze.Value = 0;
+                txtDailyPasses.Value = enroll.DailyPasses;
 
 
                 if (CourseSelector.CourseList.Items.Cast<CourseVM>().ToList().Any(c => c.IsVIP && c.IsSelected))
@@ -978,6 +1106,7 @@ namespace Gym.Windows
 
         private void btnReserveCloset_Click(object sender, RoutedEventArgs e)
         {
+            //System.Windows.Forms.MessageBox.Show(txtFirstname.FontFamily.ToString());return;
             InitializeClosets closetSelector = new InitializeClosets { Owner = this, Type = ClosetFormType.Selection };
             closetSelector.Show();
             closetSelector.ClosetSelected += (id) =>
@@ -1014,6 +1143,8 @@ namespace Gym.Windows
                      }
                      catch (Exception x) { }
                  });
+
+                Application.Current.MainWindow.Activate();
             }
         }
 
@@ -1082,25 +1213,28 @@ namespace Gym.Windows
         List<string> tempImages = new List<string>();
         private void btnWebcamSnaphot_Click(object sender, RoutedEventArgs e)
         {
-            var x = WebcamViewer.TakeSnapshot();
-            WebcamViewer.StopPreview();
-            tempImages.Add(x);
-
-            if (System.IO.File.Exists(x))
+            try
             {
-                var _Image = new BitmapImage();
-                _Image.BeginInit();
-                _Image.StreamSource = System.IO.File.OpenRead(x);
-                _Image.EndInit();
-                //ImageBrush.ImageSource = _Image;
-                Member.Image = _Image;
-                ImageBrush.ImageSource = Member.Image;
+                var x = WebcamViewer.TakeSnapshot();
+                WebcamViewer.StopPreview();
+                tempImages.Add(x);
+
+                if (System.IO.File.Exists(x))
+                {
+                    var _Image = new BitmapImage();
+                    _Image.BeginInit();
+                    _Image.StreamSource = System.IO.File.OpenRead(x);
+                    _Image.EndInit();
+                    //ImageBrush.ImageSource = _Image;
+                    Member.Image = _Image;
+                    ImageBrush.ImageSource = Member.Image;
+                }
+
+                MemberGrid.Visibility = Visibility.Visible;
+                WebcamStack.Visibility = Visibility.Collapsed;
+                PersonButtonBar.IsEnabled = true;
             }
-
-            MemberGrid.Visibility = Visibility.Visible;
-            WebcamStack.Visibility = Visibility.Collapsed;
-            PersonButtonBar.IsEnabled = true;
-
+            catch { }
         }
 
         private void btnWebcamSnaphotCancel_Click(object sender, RoutedEventArgs e)
@@ -1192,7 +1326,7 @@ namespace Gym.Windows
 
         private void btnGrantDiscount_Click(object sender, RoutedEventArgs e)
         {
-            txtDiscountToGrant.Value = 0;
+            txtDiscountToGrant.Value = txtDiscount.Value;
             DiscountStack.Visibility = Visibility.Visible;
             DebtorWarningtStack.Visibility = Visibility.Collapsed;
             PaymentStack.Visibility = Visibility.Collapsed;
@@ -1267,5 +1401,39 @@ namespace Gym.Windows
                 return;
             }
         }
+
+        private void rdPosChecked(object sender, RoutedEventArgs e)
+        {
+            cmbPos.Visibility = Visibility.Visible;
+        }
+
+        private void rdPosUnchecked(object sender, RoutedEventArgs e)
+        {
+            cmbPos.Visibility = Visibility.Collapsed;
+
+        }
+        
+
+        private void EditHistoryItem_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void TxtFreeze_GotFocus(object sender, RoutedEventArgs e)
+        {
+            txtFreeze.SelectAll();
+        }
+    }
+
+    internal class HistoryVM
+    {
+        public string Type { get; set; }
+        public string EnrollDate { get; set; }
+        public string StartDate { get; set; }
+        public string ExpireDate { get; set; }
+        public string Price { get; set; }
+        public string Discount { get; set; }
+        public string Debtor { get; set; }
+        public string Info { get; set; }
     }
 }

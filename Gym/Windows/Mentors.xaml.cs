@@ -31,7 +31,11 @@ namespace Gym.Windows
         private void Window_PreviewKeyUp(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Escape)
-                this.Close();
+            {
+                var escTime = (DateTime)(Dynamics.LastEscapeTime ?? DateTime.Now.AddDays(-1));
+                if ((DateTime.Now - escTime) > TimeSpan.FromMilliseconds(100))
+                    this.Close();
+            }
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -102,8 +106,9 @@ namespace Gym.Windows
         {
             var confirmed = (bool)eventArgs.Parameter;
             if (confirmed)
+            {
                 if (!string.IsNullOrEmpty(MentorModel.Firstname) && !string.IsNullOrEmpty(MentorModel.Lastname)
-                     && !string.IsNullOrEmpty(MentorModel.Mobile))
+                  && !string.IsNullOrEmpty(MentorModel.Mobile))
                 {
                     var sports = SportsList.Where(s => s.IsSelected).ToList();
                     switch (action)
@@ -185,6 +190,12 @@ namespace Gym.Windows
                             break;
                     }
                 }
+            }
+
+            else
+            {
+                Dynamics.LastEscapeTime = DateTime.Now;
+            }
         }
 
         private void NewMentor_Click(object sender, RoutedEventArgs e)

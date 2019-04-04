@@ -1,4 +1,5 @@
 ﻿using Gym.Data;
+using Gym.Domain;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -29,7 +30,11 @@ namespace Gym.Windows
         private void Window_PreviewKeyUp(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Escape)
-                this.Close();
+            {
+                var escTime = (DateTime)(Dynamics.LastEscapeTime ?? DateTime.Now.AddDays(-1));
+                if ((DateTime.Now - escTime) > TimeSpan.FromMilliseconds(100))
+                    this.Close();
+            }
         }
 
         Data.GymContextDataContext db = new GymContextDataContext();
@@ -131,6 +136,7 @@ namespace Gym.Windows
             AddBox("امکانات باشگاه", i++);
             AddBox("کمدها", i++);
             AddBox("حساب های هزینه", i++);
+            AddBox("کارتخوان", i++);
             AddBox("کاربران", i++);
             AddBox("نقش ها", i++);
             AddBox("تلگرام", i++);
@@ -190,6 +196,10 @@ namespace Gym.Windows
                 RefreshGrid();
 
             }
+            else
+            {
+                Dynamics.LastEscapeTime = DateTime.Now;
+            }
         }
 
         private string CalculateAccess()
@@ -207,6 +217,7 @@ namespace Gym.Windows
 
         private void FormsList_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
+            if (FormsList.SelectedItem == null) return;
             //var i = FormsList.SelectedIndex;
             //if (FormsList.Items[i].ToString() != "")
             //{
@@ -220,6 +231,7 @@ namespace Gym.Windows
 
         private void AddedForms_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
+            if (AddedForms.SelectedItem == null) return;
             var a = AddedForms.SelectedItem.ToString();
             AddedForms.Items.RemoveAt(AddedForms.SelectedIndex);
             FormsList.Items.Add(a);

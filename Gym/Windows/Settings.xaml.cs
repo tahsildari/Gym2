@@ -29,7 +29,18 @@ namespace Gym.Windows
             if (e.Key == Key.Escape)
                 this.Close();
         }
-
+        private void ChangeBackground_Click(object sender, RoutedEventArgs e)
+        {
+            (Application.Current.MainWindow as Main).ChangeBackground_Click(null, null);
+        }
+        private void ResetBackground_Click(object sender, RoutedEventArgs e)
+        {
+            (Application.Current.MainWindow as Main).ResetBackground();
+        }
+        private void Close_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             var db = new Data.GymContextDataContext();
@@ -50,7 +61,13 @@ namespace Gym.Windows
             title.Value = txtTitle.Text;
 
             Data.Setting closetwidth = db.Settings.Where(s => s.Key == "closets_width").FirstOrDefault();
-            closetwidth.Value = (txtClosetsWidth.Value > 0 ? txtClosetsWidth.Value.ToString() : closetwidth.Value);
+            closetwidth.Value = (txtClosetsWidth.Value > 0 ? (txtClosetsWidth.Value).ToString() : "70");
+
+            Data.Setting infotimeout = db.Settings.Where(s => s.Key == "info_timeout").FirstOrDefault();
+            infotimeout.Value = (txtInfoTimeout.Value > 0 ? (txtInfoTimeout.Value).ToString() : "30");
+
+            Data.Setting guestfinger = db.Settings.Where(s => s.Key == "guest_finger_id").FirstOrDefault();
+            guestfinger.Value = (txtGuestFinger.Value > 0 ? (txtGuestFinger.Value).ToString() : "0");
 
             db.SubmitChanges();
 
@@ -59,7 +76,7 @@ namespace Gym.Windows
             Main.Home.CheckupExtenders();
             Main.Home.LoadTitle();
             Main.Home.ResizeClosets();
-
+            Main.Home.ShowMessage("تنظیمات با موفقیت ذخیره شد",10);
             this.Close();
         }
 
@@ -84,6 +101,13 @@ namespace Gym.Windows
 
             Data.Setting closetwidth = db.Settings.Where(s => s.Key == "closets_width").FirstOrDefault();
             txtClosetsWidth.Value = int.Parse(closetwidth.Value);
+
+            Data.Setting infotimeout = db.Settings.Where(s => s.Key == "info_timeout").FirstOrDefault();
+            txtInfoTimeout.Value = int.Parse(infotimeout.Value);
+
+            Data.Setting guestfinger = db.Settings.Where(s => s.Key == "guest_finger_id").FirstOrDefault();
+            txtGuestFinger.Value = int.Parse(guestfinger.Value);
+
 
         }
     }

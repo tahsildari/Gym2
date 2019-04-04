@@ -26,7 +26,8 @@ namespace Gym.Windows
         {
             InitializeComponent();
             this.PreviewKeyUp += Window_PreviewKeyUp;
-            this.KeyDown += (s, e) => {
+            this.KeyDown += (s, e) =>
+            {
                 if (e.Key == Key.Enter && !PaymentDialogHost.IsOpen)
                 {
                     PaymentDialogHost.IsOpen = true;
@@ -36,7 +37,11 @@ namespace Gym.Windows
         private void Window_PreviewKeyUp(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Escape)
-                this.Close();
+            {
+                var escTime = (DateTime)(Dynamics.LastEscapeTime ?? DateTime.Now.AddDays(-1));
+                if ((DateTime.Now - escTime) > TimeSpan.FromMilliseconds(100))
+                    this.Close();
+            }
         }
 
         ObservableCollection<PassageItem> PassageList;
@@ -146,6 +151,7 @@ namespace Gym.Windows
                     RefreshGrid();
                     break;
                 case "cancel":
+                    Dynamics.LastEscapeTime = DateTime.Now;
                     break;
                 default:
                     break;

@@ -10,7 +10,7 @@
         xmlns:controls="clr-namespace:Gym.Controls"
         mc:Ignorable="d"
         Loaded="Window_Loaded"
-        Title="امکانات باشگاه" Height="500" Width="500">
+        Title="امکانات باشگاه" Height="500" Width="600">
     <materialDesign:DialogHost x:Name="MainDialogHost" DialogClosing="MainDialog_Closing">
         <materialDesign:DialogHost.DialogContent>
             <StackPanel  Margin="16" FlowDirection="RightToLeft">
@@ -119,12 +119,12 @@
                     MaxLength="50"/>
                     <!--set a max length to get an indicator in the editor-->
                     <materialDesign:MaterialDataGridTextColumn
-			Binding="{Binding Price}"
+			Binding="{Binding Sessions}"
 			EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnPopupEditingStyle}"
 			Header="دفعات"
 			MaxLength="50" />
                     <materialDesign:MaterialDataGridTextColumn
-			Binding="{Binding Sessions}"
+			Binding="{Binding Price}"
 			EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnPopupEditingStyle}"
 			Header="هزینه استفاده"
 			MaxLength="50" />
@@ -136,7 +136,7 @@
 	                        Content="{materialDesign:PackIcon Kind=Football}"
                             Command=""
                             Click="EditItem_Click"
-	                        ToolTip="Icon" />
+	                        ToolTip="ویرایش" />
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>

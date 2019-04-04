@@ -294,9 +294,7 @@ namespace Gym.Controls
         {
             if (e.Key == Key.Enter)
             {
-
-                PersianCalendar pc = new PersianCalendar();
-                Date = $"{pc.GetYear(DateTime.Today)}/{pc.GetMonth(DateTime.Today)}/{pc.GetDayOfMonth(DateTime.Today)}";
+                SetToday();
             }
             else if (e.Key == Key.Delete)
             {
@@ -307,6 +305,11 @@ namespace Gym.Controls
                 cmbYear.SelectedIndex = Years.IndexOf(year.ToString());
 
             }
+        }
+
+        public void SetToday() {
+            PersianCalendar pc = new PersianCalendar();
+            Date = $"{pc.GetYear(DateTime.Today)}/{pc.GetMonth(DateTime.Today)}/{pc.GetDayOfMonth(DateTime.Today)}";
         }
 
         //public delegate void MyEvent();

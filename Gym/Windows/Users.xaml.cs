@@ -1,4 +1,5 @@
 ﻿using Gym.Data;
+using Gym.Domain;
 using Gym.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -31,7 +32,11 @@ namespace Gym.Windows
         private void Window_PreviewKeyUp(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Escape)
-                this.Close();
+            {
+                var escTime = (DateTime)(Dynamics.LastEscapeTime ?? DateTime.Now.AddDays(-1));
+                if ((DateTime.Now - escTime) > TimeSpan.FromMilliseconds(100))
+                    this.Close();
+            }
         }
 
         ObservableCollection<Data.User> UsersList;
@@ -82,8 +87,9 @@ namespace Gym.Windows
         {
             var confirmed = (bool)eventArgs.Parameter;
             if (confirmed)
+            {
                 if (!string.IsNullOrEmpty(UserModel.Username) && !string.IsNullOrEmpty(UserModel.Password)
-                    && cmbRoles.SelectedIndex > -1)
+                     && cmbRoles.SelectedIndex > -1)
                 {
                     switch (action)
                     {
@@ -127,6 +133,11 @@ namespace Gym.Windows
                             break;
                     }
                 }
+            }
+            else
+            {
+                Dynamics.LastEscapeTime = DateTime.Now;
+            }
         }
 
         private void RefreshGrid()

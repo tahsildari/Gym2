@@ -94,8 +94,8 @@
                                     Grid.Column="1" IsTabStop="False"
                                     Padding="0,0,0,3"
                                     IsReadOnly="True"/>
-                                <TextBox Text="{Binding Price, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
-                                    Padding="8,0,0,3" IsTabStop="False"
+                                <local:NumberBox Text="{Binding Price, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                                    Padding="8,0,0,3" IsTabStop="False" ThousandSeparate="True"
                                   Style="{StaticResource MaterialDesignTextBox}"
                                                  Grid.Column="2"
                                     IsReadOnly="True"/>

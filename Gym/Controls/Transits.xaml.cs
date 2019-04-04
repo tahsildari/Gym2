@@ -146,7 +146,14 @@ namespace Gym.Controls
                 panel.ContextMenu.Items.Add(infoitem);
 
                 var financial = new MenuItem { Header = "لیست تراکنش های عضو" };
-                financial.IsEnabled = false;
+                financial.Click += (s, ce) =>
+                {
+                    Enroll member = new Enroll();
+                    member.Owner = Main.Home;
+                    member.Show();
+                    member.LoadMember(pass.MemberId);
+                    member.Section = 3;
+                };
                 panel.ContextMenu.Items.Add(financial);
 
                 MaterialDesignThemes.Wpf.PackIcon icon = new MaterialDesignThemes.Wpf.PackIcon
@@ -163,8 +170,45 @@ namespace Gym.Controls
                     //FontWeight = pass.IsRegular ? FontWeights.Bold : FontWeights.Normal
                 };
 
+                var mem = db.Members.First(m => m.Id == pass.MemberId);
+
+                var validUntill = DateTime.Now.AddDays(4);
+                var needsExtension = db.Enrolls.Where(n =>
+                n.MemberId == mem.Id
+                && (n.ExpireDate <= validUntill && n.ExpireDate >= DateTime.Now)).Any();
+
                 panel.Children.Add(icon);
                 panel.Children.Add(time);
+                if (needsExtension)
+                {
+                    MaterialDesignThemes.Wpf.PackIcon ext = new MaterialDesignThemes.Wpf.PackIcon
+                    {
+                        Kind = MaterialDesignThemes.Wpf.PackIconKind.ClockEnd,
+                        Foreground = new SolidColorBrush(pass.IsEntrance ? Colors.DodgerBlue : Colors.DarkRed),
+                        Margin = new Thickness(0, 6, 0, 0),
+                        ToolTip = "نیازمند تمدید"
+                    };
+                    panel.Children.Add(ext);
+                }
+                if (mem.Debtor > 0) {
+                    panel.Children.Add(new MaterialDesignThemes.Wpf.PackIcon
+                    {
+                        Kind = MaterialDesignThemes.Wpf.PackIconKind.CurrencyUsd,
+                        Foreground = new SolidColorBrush(pass.IsEntrance ? Colors.DodgerBlue : Colors.DarkRed),
+                        Margin = new Thickness(0, 6, 0, 0),
+                        ToolTip = "بدهکار شهریه"
+                    });
+                }
+                if (mem.Debtor > 0)
+                {
+                    panel.Children.Add(new MaterialDesignThemes.Wpf.PackIcon
+                    {
+                        Kind = MaterialDesignThemes.Wpf.PackIconKind.Carrot,
+                        Foreground = new SolidColorBrush(pass.IsEntrance ? Colors.DodgerBlue : Colors.DarkRed),
+                        Margin = new Thickness(0, 6, 0, 0),
+                        ToolTip = "بدهکار بوفه"
+                    });
+                }
                 List.Children.Add(panel);
 
                 if (List.Children.Count > 100)

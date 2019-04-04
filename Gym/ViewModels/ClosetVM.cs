@@ -65,6 +65,16 @@ namespace Gym.ViewModels
             }
         }
 
+        bool _IsCoach;
+        public bool IsCoach
+        {
+            get { return _IsCoach; }
+            set
+            {
+                _IsCoach = value;
+                RaisePropertyChanged("IsCoach");
+            }
+        }
         public Data.Member User;
 
         public Data.Member Rentor;
@@ -75,7 +85,9 @@ namespace Gym.ViewModels
             {
                 string hint = $"[{Id}]";
                 hint += Environment.NewLine;
-                hint += (IsVIP ? "کمد VIP" : "کمد معمولی");
+                if(IsCoach) hint += "کمد مربی";
+                else if (IsVIP) hint += "کمد VIP";
+                else hint += "کمد معمولی";
                 hint += Environment.NewLine;
                 hint += (IsBroken ? "خراب" : "سالم");
                 hint += Environment.NewLine;

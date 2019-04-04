@@ -47,7 +47,7 @@ namespace Gym.Domain
             BitmapEncoder encoder = new PngBitmapEncoder();
             encoder.Frames.Add(BitmapFrame.Create(image));
 
-            using (var fileStream = new System.IO.FileStream(filePath, System.IO.FileMode.Create))
+            using (var fileStream = new System.IO.FileStream(filePath, System.IO.FileMode.OpenOrCreate))
             {
                 encoder.Save(fileStream);
             }
@@ -63,6 +63,7 @@ namespace Gym.Domain
                 var db = new Data.GymContextDataContext();
                 var obj = db.Members.Where(m => m.Id == memberVM.Id).FirstOrDefault();
                 obj.Address = memberVM.Address;
+                obj.FingerId = memberVM.FingerId;
                 obj.Birthdate = memberVM.BirthDate?.ToFa();
                 obj.Dadsname = memberVM.Fathername;
                 obj.Description = memberVM.Description;
@@ -73,6 +74,7 @@ namespace Gym.Domain
                 obj.Referrer = memberVM.Referrer;
                 obj.ReferrerMobile = memberVM.ReferrerMobile;
                 obj.IsActive = memberVM.IsActive;
+                obj.Image = memberVM.ImagePath;
 
                 var oldCloset = db.Closets.Where(c => c.RentorId == memberVM.Id).FirstOrDefault();
                 if (oldCloset != null)
@@ -100,6 +102,7 @@ namespace Gym.Domain
                 var db = new Data.GymContextDataContext();
                 var obj = new Data.Member(); db.Members.InsertOnSubmit(obj);
                 obj.Address = memberVM.Address;
+                obj.FingerId = memberVM.FingerId;
                 obj.Birthdate = memberVM.BirthDate?.ToFa();
                 obj.Dadsname = memberVM.Fathername;
                 obj.Description = memberVM.Description;
@@ -110,6 +113,8 @@ namespace Gym.Domain
                 obj.IsRegular = memberVM.IsRegular;
                 obj.UserId = Windows.Main.CurrentUser.Id;
                 obj.IsActive = true;
+                obj.Image = Guid.NewGuid().ToString();
+                memberVM.ImagePath = obj.Image;
                 db.SubmitChanges();
 
                 var closet = db.Closets.Where(c => c.Id == memberVM.ClosetId).FirstOrDefault();
@@ -121,7 +126,7 @@ namespace Gym.Domain
                 if (memberVM.Image != null)
                     try
                     {
-                        memberVM.Image.Save(AppDomain.CurrentDomain.BaseDirectory + $"/Images/{obj.Id}.jpg");
+                        memberVM.Image.Save(AppDomain.CurrentDomain.BaseDirectory + $"/Images/{obj.Image}.jpg");
                     }
                     catch
                     {
@@ -168,6 +173,7 @@ namespace Gym.Domain
                     c.IsVip == isVIP
                     && c.IsFree
                     && c.RentorId == null
+                    && !c.IsCoach
                     && !c.IsBroken).FirstOrDefault();
 
                 if (freecloset != null)

@@ -22,7 +22,7 @@ namespace Gym.Data
 	using System;
 	
 	
-	[global::System.Data.Linq.Mapping.DatabaseAttribute(Name="GymDb")]
+	[global::System.Data.Linq.Mapping.DatabaseAttribute(Name="Gym")]
 	public partial class GymContextDataContext : System.Data.Linq.DataContext
 	{
 		
@@ -45,9 +45,6 @@ namespace Gym.Data
     partial void InsertPassage(Passage instance);
     partial void UpdatePassage(Passage instance);
     partial void DeletePassage(Passage instance);
-    partial void InsertSetting(Setting instance);
-    partial void UpdateSetting(Setting instance);
-    partial void DeleteSetting(Setting instance);
     partial void InsertSport(Sport instance);
     partial void UpdateSport(Sport instance);
     partial void DeleteSport(Sport instance);
@@ -72,9 +69,6 @@ namespace Gym.Data
     partial void InsertEnrollFacility(EnrollFacility instance);
     partial void UpdateEnrollFacility(EnrollFacility instance);
     partial void DeleteEnrollFacility(EnrollFacility instance);
-    partial void InsertTransaction(Transaction instance);
-    partial void UpdateTransaction(Transaction instance);
-    partial void DeleteTransaction(Transaction instance);
     partial void InsertMember(Member instance);
     partial void UpdateMember(Member instance);
     partial void DeleteMember(Member instance);
@@ -93,6 +87,15 @@ namespace Gym.Data
     partial void InsertRole(Role instance);
     partial void UpdateRole(Role instance);
     partial void DeleteRole(Role instance);
+    partial void InsertSetting(Setting instance);
+    partial void UpdateSetting(Setting instance);
+    partial void DeleteSetting(Setting instance);
+    partial void InsertPOS(POS instance);
+    partial void UpdatePOS(POS instance);
+    partial void DeletePOS(POS instance);
+    partial void InsertTransaction(Transaction instance);
+    partial void UpdateTransaction(Transaction instance);
+    partial void DeleteTransaction(Transaction instance);
     #endregion
 		
 		public GymContextDataContext() : 
@@ -165,14 +168,6 @@ namespace Gym.Data
 			}
 		}
 		
-		public System.Data.Linq.Table<Setting> Settings
-		{
-			get
-			{
-				return this.GetTable<Setting>();
-			}
-		}
-		
 		public System.Data.Linq.Table<Sport> Sports
 		{
 			get
@@ -237,14 +232,6 @@ namespace Gym.Data
 			}
 		}
 		
-		public System.Data.Linq.Table<Transaction> Transactions
-		{
-			get
-			{
-				return this.GetTable<Transaction>();
-			}
-		}
-		
 		public System.Data.Linq.Table<Member> Members
 		{
 			get
@@ -290,6 +277,30 @@ namespace Gym.Data
 			get
 			{
 				return this.GetTable<Role>();
+			}
+		}
+		
+		public System.Data.Linq.Table<Setting> Settings
+		{
+			get
+			{
+				return this.GetTable<Setting>();
+			}
+		}
+		
+		public System.Data.Linq.Table<POS> POS
+		{
+			get
+			{
+				return this.GetTable<POS>();
+			}
+		}
+		
+		public System.Data.Linq.Table<Transaction> Transactions
+		{
+			get
+			{
+				return this.GetTable<Transaction>();
 			}
 		}
 	}
@@ -408,7 +419,7 @@ namespace Gym.Data
 		}
 	}
 	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.CostCategory")]
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.CostCategoray")]
 	public partial class CostCategory : INotifyPropertyChanging, INotifyPropertyChanged
 	{
 		
@@ -974,116 +985,6 @@ namespace Gym.Data
 						this._MemberId = default(int);
 					}
 					this.SendPropertyChanged("Member");
-				}
-			}
-		}
-		
-		public event PropertyChangingEventHandler PropertyChanging;
-		
-		public event PropertyChangedEventHandler PropertyChanged;
-		
-		protected virtual void SendPropertyChanging()
-		{
-			if ((this.PropertyChanging != null))
-			{
-				this.PropertyChanging(this, emptyChangingEventArgs);
-			}
-		}
-		
-		protected virtual void SendPropertyChanged(String propertyName)
-		{
-			if ((this.PropertyChanged != null))
-			{
-				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-			}
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Setting")]
-	public partial class Setting : INotifyPropertyChanging, INotifyPropertyChanged
-	{
-		
-		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
-		
-		private int _Id;
-		
-		private string _Key;
-		
-		private string _Value;
-		
-    #region Extensibility Method Definitions
-    partial void OnLoaded();
-    partial void OnValidate(System.Data.Linq.ChangeAction action);
-    partial void OnCreated();
-    partial void OnIdChanging(int value);
-    partial void OnIdChanged();
-    partial void OnKeyChanging(string value);
-    partial void OnKeyChanged();
-    partial void OnValueChanging(string value);
-    partial void OnValueChanged();
-    #endregion
-		
-		public Setting()
-		{
-			OnCreated();
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", DbType="Int NOT NULL", IsPrimaryKey=true)]
-		public int Id
-		{
-			get
-			{
-				return this._Id;
-			}
-			set
-			{
-				if ((this._Id != value))
-				{
-					this.OnIdChanging(value);
-					this.SendPropertyChanging();
-					this._Id = value;
-					this.SendPropertyChanged("Id");
-					this.OnIdChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Name="[Key]", Storage="_Key", DbType="NVarChar(50) NOT NULL", CanBeNull=false)]
-		public string Key
-		{
-			get
-			{
-				return this._Key;
-			}
-			set
-			{
-				if ((this._Key != value))
-				{
-					this.OnKeyChanging(value);
-					this.SendPropertyChanging();
-					this._Key = value;
-					this.SendPropertyChanged("Key");
-					this.OnKeyChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Value", DbType="NVarChar(50) NOT NULL", CanBeNull=false)]
-		public string Value
-		{
-			get
-			{
-				return this._Value;
-			}
-			set
-			{
-				if ((this._Value != value))
-				{
-					this.OnValueChanging(value);
-					this.SendPropertyChanging();
-					this._Value = value;
-					this.SendPropertyChanged("Value");
-					this.OnValueChanged();
 				}
 			}
 		}
@@ -1701,6 +1602,8 @@ namespace Gym.Data
 		
 		private System.Nullable<int> _RentorId;
 		
+		private bool _IsCoach;
+		
 		private EntitySet<ClosetUsage> _ClosetUsages;
 		
 		private EntityRef<Member> _Member;
@@ -1723,6 +1626,8 @@ namespace Gym.Data
     partial void OnIsFreeChanged();
     partial void OnRentorIdChanging(System.Nullable<int> value);
     partial void OnRentorIdChanged();
+    partial void OnIsCoachChanging(bool value);
+    partial void OnIsCoachChanged();
     #endregion
 		
 		public Closet()
@@ -1861,6 +1766,26 @@ namespace Gym.Data
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_IsCoach", DbType="Bit NOT NULL")]
+		public bool IsCoach
+		{
+			get
+			{
+				return this._IsCoach;
+			}
+			set
+			{
+				if ((this._IsCoach != value))
+				{
+					this.OnIsCoachChanging(value);
+					this.SendPropertyChanging();
+					this._IsCoach = value;
+					this.SendPropertyChanged("IsCoach");
+					this.OnIsCoachChanged();
+				}
+			}
+		}
+		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Closet_ClosetUsage", Storage="_ClosetUsages", ThisKey="Id", OtherKey="ClosetId")]
 		public EntitySet<ClosetUsage> ClosetUsages
 		{
@@ -1985,9 +1910,9 @@ namespace Gym.Data
 		
 		private int _PaymentId;
 		
-		private EntityRef<Transaction> _Transaction;
-		
 		private EntityRef<Enroll> _Enroll;
+		
+		private EntityRef<Transaction> _Transaction;
 		
     #region Extensibility Method Definitions
     partial void OnLoaded();
@@ -2001,8 +1926,8 @@ namespace Gym.Data
 		
 		public EnrollPayment()
 		{
-			this._Transaction = default(EntityRef<Transaction>);
 			this._Enroll = default(EntityRef<Enroll>);
+			this._Transaction = default(EntityRef<Transaction>);
 			OnCreated();
 		}
 		
@@ -2054,40 +1979,6 @@ namespace Gym.Data
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Transaction_EnrollPayment", Storage="_Transaction", ThisKey="PaymentId", OtherKey="Id", IsForeignKey=true)]
-		public Transaction Transaction
-		{
-			get
-			{
-				return this._Transaction.Entity;
-			}
-			set
-			{
-				Transaction previousValue = this._Transaction.Entity;
-				if (((previousValue != value) 
-							|| (this._Transaction.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._Transaction.Entity = null;
-						previousValue.EnrollPayments.Remove(this);
-					}
-					this._Transaction.Entity = value;
-					if ((value != null))
-					{
-						value.EnrollPayments.Add(this);
-						this._PaymentId = value.Id;
-					}
-					else
-					{
-						this._PaymentId = default(int);
-					}
-					this.SendPropertyChanged("Transaction");
-				}
-			}
-		}
-		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Enroll_EnrollPayment", Storage="_Enroll", ThisKey="EnrollId", OtherKey="Id", IsForeignKey=true)]
 		public Enroll Enroll
 		{
@@ -2118,6 +2009,40 @@ namespace Gym.Data
 						this._EnrollId = default(int);
 					}
 					this.SendPropertyChanged("Enroll");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Transaction_EnrollPayment", Storage="_Transaction", ThisKey="PaymentId", OtherKey="Id", IsForeignKey=true)]
+		public Transaction Transaction
+		{
+			get
+			{
+				return this._Transaction.Entity;
+			}
+			set
+			{
+				Transaction previousValue = this._Transaction.Entity;
+				if (((previousValue != value) 
+							|| (this._Transaction.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Transaction.Entity = null;
+						previousValue.EnrollPayments.Remove(this);
+					}
+					this._Transaction.Entity = value;
+					if ((value != null))
+					{
+						value.EnrollPayments.Add(this);
+						this._PaymentId = value.Id;
+					}
+					else
+					{
+						this._PaymentId = default(int);
+					}
+					this.SendPropertyChanged("Transaction");
 				}
 			}
 		}
@@ -2782,439 +2707,6 @@ namespace Gym.Data
 		}
 	}
 	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.[Transaction]")]
-	public partial class Transaction : INotifyPropertyChanging, INotifyPropertyChanged
-	{
-		
-		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
-		
-		private int _Id;
-		
-		private System.DateTime _Datetime;
-		
-		private int _Amount;
-		
-		private System.Nullable<int> _MemberId;
-		
-		private byte _Type;
-		
-		private byte _Method;
-		
-		private string _Info;
-		
-		private System.Nullable<int> _CostId;
-		
-		private int _UserId;
-		
-		private EntitySet<EnrollPayment> _EnrollPayments;
-		
-		private EntitySet<Enroll> _Enrolls;
-		
-		private EntityRef<Cost> _Cost;
-		
-		private EntityRef<Member> _Member;
-		
-		private EntityRef<User> _User;
-		
-    #region Extensibility Method Definitions
-    partial void OnLoaded();
-    partial void OnValidate(System.Data.Linq.ChangeAction action);
-    partial void OnCreated();
-    partial void OnIdChanging(int value);
-    partial void OnIdChanged();
-    partial void OnDatetimeChanging(System.DateTime value);
-    partial void OnDatetimeChanged();
-    partial void OnAmountChanging(int value);
-    partial void OnAmountChanged();
-    partial void OnMemberIdChanging(System.Nullable<int> value);
-    partial void OnMemberIdChanged();
-    partial void OnTypeChanging(byte value);
-    partial void OnTypeChanged();
-    partial void OnMethodChanging(byte value);
-    partial void OnMethodChanged();
-    partial void OnInfoChanging(string value);
-    partial void OnInfoChanged();
-    partial void OnCostIdChanging(System.Nullable<int> value);
-    partial void OnCostIdChanged();
-    partial void OnUserIdChanging(int value);
-    partial void OnUserIdChanged();
-    #endregion
-		
-		public Transaction()
-		{
-			this._EnrollPayments = new EntitySet<EnrollPayment>(new Action<EnrollPayment>(this.attach_EnrollPayments), new Action<EnrollPayment>(this.detach_EnrollPayments));
-			this._Enrolls = new EntitySet<Enroll>(new Action<Enroll>(this.attach_Enrolls), new Action<Enroll>(this.detach_Enrolls));
-			this._Cost = default(EntityRef<Cost>);
-			this._Member = default(EntityRef<Member>);
-			this._User = default(EntityRef<User>);
-			OnCreated();
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
-		public int Id
-		{
-			get
-			{
-				return this._Id;
-			}
-			set
-			{
-				if ((this._Id != value))
-				{
-					this.OnIdChanging(value);
-					this.SendPropertyChanging();
-					this._Id = value;
-					this.SendPropertyChanged("Id");
-					this.OnIdChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Datetime", DbType="DateTime NOT NULL")]
-		public System.DateTime Datetime
-		{
-			get
-			{
-				return this._Datetime;
-			}
-			set
-			{
-				if ((this._Datetime != value))
-				{
-					this.OnDatetimeChanging(value);
-					this.SendPropertyChanging();
-					this._Datetime = value;
-					this.SendPropertyChanged("Datetime");
-					this.OnDatetimeChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Amount", DbType="Int NOT NULL")]
-		public int Amount
-		{
-			get
-			{
-				return this._Amount;
-			}
-			set
-			{
-				if ((this._Amount != value))
-				{
-					this.OnAmountChanging(value);
-					this.SendPropertyChanging();
-					this._Amount = value;
-					this.SendPropertyChanged("Amount");
-					this.OnAmountChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_MemberId", DbType="Int")]
-		public System.Nullable<int> MemberId
-		{
-			get
-			{
-				return this._MemberId;
-			}
-			set
-			{
-				if ((this._MemberId != value))
-				{
-					if (this._Member.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.OnMemberIdChanging(value);
-					this.SendPropertyChanging();
-					this._MemberId = value;
-					this.SendPropertyChanged("MemberId");
-					this.OnMemberIdChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Type", DbType="TinyInt NOT NULL")]
-		public byte Type
-		{
-			get
-			{
-				return this._Type;
-			}
-			set
-			{
-				if ((this._Type != value))
-				{
-					this.OnTypeChanging(value);
-					this.SendPropertyChanging();
-					this._Type = value;
-					this.SendPropertyChanged("Type");
-					this.OnTypeChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Method", DbType="TinyInt NOT NULL")]
-		public byte Method
-		{
-			get
-			{
-				return this._Method;
-			}
-			set
-			{
-				if ((this._Method != value))
-				{
-					this.OnMethodChanging(value);
-					this.SendPropertyChanging();
-					this._Method = value;
-					this.SendPropertyChanged("Method");
-					this.OnMethodChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Info", DbType="NVarChar(500)")]
-		public string Info
-		{
-			get
-			{
-				return this._Info;
-			}
-			set
-			{
-				if ((this._Info != value))
-				{
-					this.OnInfoChanging(value);
-					this.SendPropertyChanging();
-					this._Info = value;
-					this.SendPropertyChanged("Info");
-					this.OnInfoChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CostId", DbType="Int")]
-		public System.Nullable<int> CostId
-		{
-			get
-			{
-				return this._CostId;
-			}
-			set
-			{
-				if ((this._CostId != value))
-				{
-					if (this._Cost.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.OnCostIdChanging(value);
-					this.SendPropertyChanging();
-					this._CostId = value;
-					this.SendPropertyChanged("CostId");
-					this.OnCostIdChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_UserId", DbType="Int NOT NULL")]
-		public int UserId
-		{
-			get
-			{
-				return this._UserId;
-			}
-			set
-			{
-				if ((this._UserId != value))
-				{
-					if (this._User.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.OnUserIdChanging(value);
-					this.SendPropertyChanging();
-					this._UserId = value;
-					this.SendPropertyChanged("UserId");
-					this.OnUserIdChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Transaction_EnrollPayment", Storage="_EnrollPayments", ThisKey="Id", OtherKey="PaymentId")]
-		public EntitySet<EnrollPayment> EnrollPayments
-		{
-			get
-			{
-				return this._EnrollPayments;
-			}
-			set
-			{
-				this._EnrollPayments.Assign(value);
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Transaction_Enroll", Storage="_Enrolls", ThisKey="Id", OtherKey="PaymentId")]
-		public EntitySet<Enroll> Enrolls
-		{
-			get
-			{
-				return this._Enrolls;
-			}
-			set
-			{
-				this._Enrolls.Assign(value);
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Cost_Transaction", Storage="_Cost", ThisKey="CostId", OtherKey="Id", IsForeignKey=true)]
-		public Cost Cost
-		{
-			get
-			{
-				return this._Cost.Entity;
-			}
-			set
-			{
-				Cost previousValue = this._Cost.Entity;
-				if (((previousValue != value) 
-							|| (this._Cost.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._Cost.Entity = null;
-						previousValue.Transactions.Remove(this);
-					}
-					this._Cost.Entity = value;
-					if ((value != null))
-					{
-						value.Transactions.Add(this);
-						this._CostId = value.Id;
-					}
-					else
-					{
-						this._CostId = default(Nullable<int>);
-					}
-					this.SendPropertyChanged("Cost");
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Member_Transaction", Storage="_Member", ThisKey="MemberId", OtherKey="Id", IsForeignKey=true)]
-		public Member Member
-		{
-			get
-			{
-				return this._Member.Entity;
-			}
-			set
-			{
-				Member previousValue = this._Member.Entity;
-				if (((previousValue != value) 
-							|| (this._Member.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._Member.Entity = null;
-						previousValue.Transactions.Remove(this);
-					}
-					this._Member.Entity = value;
-					if ((value != null))
-					{
-						value.Transactions.Add(this);
-						this._MemberId = value.Id;
-					}
-					else
-					{
-						this._MemberId = default(Nullable<int>);
-					}
-					this.SendPropertyChanged("Member");
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="User_Transaction", Storage="_User", ThisKey="UserId", OtherKey="Id", IsForeignKey=true)]
-		public User User
-		{
-			get
-			{
-				return this._User.Entity;
-			}
-			set
-			{
-				User previousValue = this._User.Entity;
-				if (((previousValue != value) 
-							|| (this._User.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._User.Entity = null;
-						previousValue.Transactions.Remove(this);
-					}
-					this._User.Entity = value;
-					if ((value != null))
-					{
-						value.Transactions.Add(this);
-						this._UserId = value.Id;
-					}
-					else
-					{
-						this._UserId = default(int);
-					}
-					this.SendPropertyChanged("User");
-				}
-			}
-		}
-		
-		public event PropertyChangingEventHandler PropertyChanging;
-		
-		public event PropertyChangedEventHandler PropertyChanged;
-		
-		protected virtual void SendPropertyChanging()
-		{
-			if ((this.PropertyChanging != null))
-			{
-				this.PropertyChanging(this, emptyChangingEventArgs);
-			}
-		}
-		
-		protected virtual void SendPropertyChanged(String propertyName)
-		{
-			if ((this.PropertyChanged != null))
-			{
-				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-			}
-		}
-		
-		private void attach_EnrollPayments(EnrollPayment entity)
-		{
-			this.SendPropertyChanging();
-			entity.Transaction = this;
-		}
-		
-		private void detach_EnrollPayments(EnrollPayment entity)
-		{
-			this.SendPropertyChanging();
-			entity.Transaction = null;
-		}
-		
-		private void attach_Enrolls(Enroll entity)
-		{
-			this.SendPropertyChanging();
-			entity.Transaction = this;
-		}
-		
-		private void detach_Enrolls(Enroll entity)
-		{
-			this.SendPropertyChanging();
-			entity.Transaction = null;
-		}
-	}
-	
 	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Members")]
 	public partial class Member : INotifyPropertyChanging, INotifyPropertyChanged
 	{
@@ -3265,6 +2757,10 @@ namespace Gym.Data
 		
 		private System.DateTime _Date;
 		
+		private System.Nullable<int> _FingerId;
+		
+		private string _Image;
+		
 		private EntitySet<Passage> _Passages;
 		
 		private EntitySet<SportMentor> _SportMentors;
@@ -3277,11 +2773,11 @@ namespace Gym.Data
 		
 		private EntitySet<EnrollCourse> _EnrollCourses;
 		
-		private EntitySet<Transaction> _Transactions;
-		
 		private EntitySet<Enroll> _Enrolls;
 		
 		private EntitySet<Trade> _Trades;
+		
+		private EntitySet<Transaction> _Transactions;
 		
 		private EntityRef<User> _User;
 		
@@ -3333,6 +2829,10 @@ namespace Gym.Data
     partial void OnUserIdChanged();
     partial void OnDateChanging(System.DateTime value);
     partial void OnDateChanged();
+    partial void OnFingerIdChanging(System.Nullable<int> value);
+    partial void OnFingerIdChanged();
+    partial void OnImageChanging(string value);
+    partial void OnImageChanged();
     #endregion
 		
 		public Member()
@@ -3343,9 +2843,9 @@ namespace Gym.Data
 			this._Closets = new EntitySet<Closet>(new Action<Closet>(this.attach_Closets), new Action<Closet>(this.detach_Closets));
 			this._Closets1 = new EntitySet<Closet>(new Action<Closet>(this.attach_Closets1), new Action<Closet>(this.detach_Closets1));
 			this._EnrollCourses = new EntitySet<EnrollCourse>(new Action<EnrollCourse>(this.attach_EnrollCourses), new Action<EnrollCourse>(this.detach_EnrollCourses));
-			this._Transactions = new EntitySet<Transaction>(new Action<Transaction>(this.attach_Transactions), new Action<Transaction>(this.detach_Transactions));
 			this._Enrolls = new EntitySet<Enroll>(new Action<Enroll>(this.attach_Enrolls), new Action<Enroll>(this.detach_Enrolls));
 			this._Trades = new EntitySet<Trade>(new Action<Trade>(this.attach_Trades), new Action<Trade>(this.detach_Trades));
+			this._Transactions = new EntitySet<Transaction>(new Action<Transaction>(this.attach_Transactions), new Action<Transaction>(this.detach_Transactions));
 			this._User = default(EntityRef<User>);
 			OnCreated();
 		}
@@ -3670,7 +3170,7 @@ namespace Gym.Data
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ReferrerMobile", DbType="Char(11)")]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ReferrerMobile", DbType="NVarChar(11)")]
 		public string ReferrerMobile
 		{
 			get
@@ -3794,6 +3294,46 @@ namespace Gym.Data
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_FingerId", DbType="Int")]
+		public System.Nullable<int> FingerId
+		{
+			get
+			{
+				return this._FingerId;
+			}
+			set
+			{
+				if ((this._FingerId != value))
+				{
+					this.OnFingerIdChanging(value);
+					this.SendPropertyChanging();
+					this._FingerId = value;
+					this.SendPropertyChanged("FingerId");
+					this.OnFingerIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Image", DbType="NVarChar(200)")]
+		public string Image
+		{
+			get
+			{
+				return this._Image;
+			}
+			set
+			{
+				if ((this._Image != value))
+				{
+					this.OnImageChanging(value);
+					this.SendPropertyChanging();
+					this._Image = value;
+					this.SendPropertyChanged("Image");
+					this.OnImageChanged();
+				}
+			}
+		}
+		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Member_Passage", Storage="_Passages", ThisKey="Id", OtherKey="MemberId")]
 		public EntitySet<Passage> Passages
 		{
@@ -3872,19 +3412,6 @@ namespace Gym.Data
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Member_Transaction", Storage="_Transactions", ThisKey="Id", OtherKey="MemberId")]
-		public EntitySet<Transaction> Transactions
-		{
-			get
-			{
-				return this._Transactions;
-			}
-			set
-			{
-				this._Transactions.Assign(value);
-			}
-		}
-		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Member_Enroll", Storage="_Enrolls", ThisKey="Id", OtherKey="MemberId")]
 		public EntitySet<Enroll> Enrolls
 		{
@@ -3908,6 +3435,19 @@ namespace Gym.Data
 			set
 			{
 				this._Trades.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Member_Transaction", Storage="_Transactions", ThisKey="Id", OtherKey="MemberId")]
+		public EntitySet<Transaction> Transactions
+		{
+			get
+			{
+				return this._Transactions;
+			}
+			set
+			{
+				this._Transactions.Assign(value);
 			}
 		}
 		
@@ -4037,18 +3577,6 @@ namespace Gym.Data
 			entity.Member = null;
 		}
 		
-		private void attach_Transactions(Transaction entity)
-		{
-			this.SendPropertyChanging();
-			entity.Member = this;
-		}
-		
-		private void detach_Transactions(Transaction entity)
-		{
-			this.SendPropertyChanging();
-			entity.Member = null;
-		}
-		
 		private void attach_Enrolls(Enroll entity)
 		{
 			this.SendPropertyChanging();
@@ -4068,6 +3596,18 @@ namespace Gym.Data
 		}
 		
 		private void detach_Trades(Trade entity)
+		{
+			this.SendPropertyChanging();
+			entity.Member = null;
+		}
+		
+		private void attach_Transactions(Transaction entity)
+		{
+			this.SendPropertyChanging();
+			entity.Member = this;
+		}
+		
+		private void detach_Transactions(Transaction entity)
 		{
 			this.SendPropertyChanging();
 			entity.Member = null;
@@ -4110,6 +3650,8 @@ namespace Gym.Data
 		
 		private int _Freeze;
 		
+		private int _DailyPasses;
+		
 		private EntitySet<EnrollPayment> _EnrollPayments;
 		
 		private EntitySet<EnrollCourse> _EnrollCourses;
@@ -4118,9 +3660,9 @@ namespace Gym.Data
 		
 		private EntityRef<Member> _Member;
 		
-		private EntityRef<Transaction> _Transaction;
-		
 		private EntityRef<User> _User;
+		
+		private EntityRef<Transaction> _Transaction;
 		
     #region Extensibility Method Definitions
     partial void OnLoaded();
@@ -4156,6 +3698,8 @@ namespace Gym.Data
     partial void OnUserIdChanged();
     partial void OnFreezeChanging(int value);
     partial void OnFreezeChanged();
+    partial void OnDailyPassesChanging(int value);
+    partial void OnDailyPassesChanged();
     #endregion
 		
 		public Enroll()
@@ -4164,8 +3708,8 @@ namespace Gym.Data
 			this._EnrollCourses = new EntitySet<EnrollCourse>(new Action<EnrollCourse>(this.attach_EnrollCourses), new Action<EnrollCourse>(this.detach_EnrollCourses));
 			this._EnrollFacilities = new EntitySet<EnrollFacility>(new Action<EnrollFacility>(this.attach_EnrollFacilities), new Action<EnrollFacility>(this.detach_EnrollFacilities));
 			this._Member = default(EntityRef<Member>);
-			this._Transaction = default(EntityRef<Transaction>);
 			this._User = default(EntityRef<User>);
+			this._Transaction = default(EntityRef<Transaction>);
 			OnCreated();
 		}
 		
@@ -4481,6 +4025,26 @@ namespace Gym.Data
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DailyPasses", DbType="Int NOT NULL")]
+		public int DailyPasses
+		{
+			get
+			{
+				return this._DailyPasses;
+			}
+			set
+			{
+				if ((this._DailyPasses != value))
+				{
+					this.OnDailyPassesChanging(value);
+					this.SendPropertyChanging();
+					this._DailyPasses = value;
+					this.SendPropertyChanged("DailyPasses");
+					this.OnDailyPassesChanged();
+				}
+			}
+		}
+		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Enroll_EnrollPayment", Storage="_EnrollPayments", ThisKey="Id", OtherKey="EnrollId")]
 		public EntitySet<EnrollPayment> EnrollPayments
 		{
@@ -4554,40 +4118,6 @@ namespace Gym.Data
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Transaction_Enroll", Storage="_Transaction", ThisKey="PaymentId", OtherKey="Id", IsForeignKey=true)]
-		public Transaction Transaction
-		{
-			get
-			{
-				return this._Transaction.Entity;
-			}
-			set
-			{
-				Transaction previousValue = this._Transaction.Entity;
-				if (((previousValue != value) 
-							|| (this._Transaction.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._Transaction.Entity = null;
-						previousValue.Enrolls.Remove(this);
-					}
-					this._Transaction.Entity = value;
-					if ((value != null))
-					{
-						value.Enrolls.Add(this);
-						this._PaymentId = value.Id;
-					}
-					else
-					{
-						this._PaymentId = default(Nullable<int>);
-					}
-					this.SendPropertyChanged("Transaction");
-				}
-			}
-		}
-		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="User_Enroll", Storage="_User", ThisKey="UserId", OtherKey="Id", IsForeignKey=true)]
 		public User User
 		{
@@ -4618,6 +4148,40 @@ namespace Gym.Data
 						this._UserId = default(int);
 					}
 					this.SendPropertyChanged("User");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Transaction_Enroll", Storage="_Transaction", ThisKey="PaymentId", OtherKey="Id", IsForeignKey=true)]
+		public Transaction Transaction
+		{
+			get
+			{
+				return this._Transaction.Entity;
+			}
+			set
+			{
+				Transaction previousValue = this._Transaction.Entity;
+				if (((previousValue != value) 
+							|| (this._Transaction.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Transaction.Entity = null;
+						previousValue.Enrolls.Remove(this);
+					}
+					this._Transaction.Entity = value;
+					if ((value != null))
+					{
+						value.Enrolls.Add(this);
+						this._PaymentId = value.Id;
+					}
+					else
+					{
+						this._PaymentId = default(Nullable<int>);
+					}
+					this.SendPropertyChanged("Transaction");
 				}
 			}
 		}
@@ -5668,11 +5232,11 @@ namespace Gym.Data
 		
 		private int _RoleId;
 		
-		private EntitySet<Transaction> _Transactions;
-		
 		private EntitySet<Member> _Members;
 		
 		private EntitySet<Enroll> _Enrolls;
+		
+		private EntitySet<Transaction> _Transactions;
 		
 		private EntityRef<Role> _Role;
 		
@@ -5692,9 +5256,9 @@ namespace Gym.Data
 		
 		public User()
 		{
-			this._Transactions = new EntitySet<Transaction>(new Action<Transaction>(this.attach_Transactions), new Action<Transaction>(this.detach_Transactions));
 			this._Members = new EntitySet<Member>(new Action<Member>(this.attach_Members), new Action<Member>(this.detach_Members));
 			this._Enrolls = new EntitySet<Enroll>(new Action<Enroll>(this.attach_Enrolls), new Action<Enroll>(this.detach_Enrolls));
+			this._Transactions = new EntitySet<Transaction>(new Action<Transaction>(this.attach_Transactions), new Action<Transaction>(this.detach_Transactions));
 			this._Role = default(EntityRef<Role>);
 			OnCreated();
 		}
@@ -5783,19 +5347,6 @@ namespace Gym.Data
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="User_Transaction", Storage="_Transactions", ThisKey="Id", OtherKey="UserId")]
-		public EntitySet<Transaction> Transactions
-		{
-			get
-			{
-				return this._Transactions;
-			}
-			set
-			{
-				this._Transactions.Assign(value);
-			}
-		}
-		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="User_Member", Storage="_Members", ThisKey="Id", OtherKey="UserId")]
 		public EntitySet<Member> Members
 		{
@@ -5819,6 +5370,19 @@ namespace Gym.Data
 			set
 			{
 				this._Enrolls.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="User_Transaction", Storage="_Transactions", ThisKey="Id", OtherKey="UserId")]
+		public EntitySet<Transaction> Transactions
+		{
+			get
+			{
+				return this._Transactions;
+			}
+			set
+			{
+				this._Transactions.Assign(value);
 			}
 		}
 		
@@ -5876,18 +5440,6 @@ namespace Gym.Data
 			}
 		}
 		
-		private void attach_Transactions(Transaction entity)
-		{
-			this.SendPropertyChanging();
-			entity.User = this;
-		}
-		
-		private void detach_Transactions(Transaction entity)
-		{
-			this.SendPropertyChanging();
-			entity.User = null;
-		}
-		
 		private void attach_Members(Member entity)
 		{
 			this.SendPropertyChanging();
@@ -5907,6 +5459,18 @@ namespace Gym.Data
 		}
 		
 		private void detach_Enrolls(Enroll entity)
+		{
+			this.SendPropertyChanging();
+			entity.User = null;
+		}
+		
+		private void attach_Transactions(Transaction entity)
+		{
+			this.SendPropertyChanging();
+			entity.User = this;
+		}
+		
+		private void detach_Transactions(Transaction entity)
 		{
 			this.SendPropertyChanging();
 			entity.User = null;
@@ -6048,6 +5612,728 @@ namespace Gym.Data
 		{
 			this.SendPropertyChanging();
 			entity.Role = null;
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Settings")]
+	public partial class Setting : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _Id;
+		
+		private string _Value;
+		
+		private string _Key;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnIdChanging(int value);
+    partial void OnIdChanged();
+    partial void OnValueChanging(string value);
+    partial void OnValueChanged();
+    partial void OnKeyChanging(string value);
+    partial void OnKeyChanged();
+    #endregion
+		
+		public Setting()
+		{
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int Id
+		{
+			get
+			{
+				return this._Id;
+			}
+			set
+			{
+				if ((this._Id != value))
+				{
+					this.OnIdChanging(value);
+					this.SendPropertyChanging();
+					this._Id = value;
+					this.SendPropertyChanged("Id");
+					this.OnIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Value", DbType="NVarChar(50) NOT NULL", CanBeNull=false)]
+		public string Value
+		{
+			get
+			{
+				return this._Value;
+			}
+			set
+			{
+				if ((this._Value != value))
+				{
+					this.OnValueChanging(value);
+					this.SendPropertyChanging();
+					this._Value = value;
+					this.SendPropertyChanged("Value");
+					this.OnValueChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Name="[Key]", Storage="_Key", DbType="NVarChar(50) NOT NULL", CanBeNull=false)]
+		public string Key
+		{
+			get
+			{
+				return this._Key;
+			}
+			set
+			{
+				if ((this._Key != value))
+				{
+					this.OnKeyChanging(value);
+					this.SendPropertyChanging();
+					this._Key = value;
+					this.SendPropertyChanged("Key");
+					this.OnKeyChanged();
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.POS")]
+	public partial class POS : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _Id;
+		
+		private string _Name;
+		
+		private EntitySet<Transaction> _Transactions;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnIdChanging(int value);
+    partial void OnIdChanged();
+    partial void OnNameChanging(string value);
+    partial void OnNameChanged();
+    #endregion
+		
+		public POS()
+		{
+			this._Transactions = new EntitySet<Transaction>(new Action<Transaction>(this.attach_Transactions), new Action<Transaction>(this.detach_Transactions));
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int Id
+		{
+			get
+			{
+				return this._Id;
+			}
+			set
+			{
+				if ((this._Id != value))
+				{
+					this.OnIdChanging(value);
+					this.SendPropertyChanging();
+					this._Id = value;
+					this.SendPropertyChanged("Id");
+					this.OnIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Name", DbType="NVarChar(50) NOT NULL", CanBeNull=false)]
+		public string Name
+		{
+			get
+			{
+				return this._Name;
+			}
+			set
+			{
+				if ((this._Name != value))
+				{
+					this.OnNameChanging(value);
+					this.SendPropertyChanging();
+					this._Name = value;
+					this.SendPropertyChanged("Name");
+					this.OnNameChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="POS_Transaction", Storage="_Transactions", ThisKey="Id", OtherKey="PosId")]
+		public EntitySet<Transaction> Transactions
+		{
+			get
+			{
+				return this._Transactions;
+			}
+			set
+			{
+				this._Transactions.Assign(value);
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void attach_Transactions(Transaction entity)
+		{
+			this.SendPropertyChanging();
+			entity.POS = this;
+		}
+		
+		private void detach_Transactions(Transaction entity)
+		{
+			this.SendPropertyChanging();
+			entity.POS = null;
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.[Transaction]")]
+	public partial class Transaction : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _Id;
+		
+		private System.DateTime _Datetime;
+		
+		private int _Amount;
+		
+		private System.Nullable<int> _MemberId;
+		
+		private byte _Type;
+		
+		private byte _Method;
+		
+		private string _Info;
+		
+		private System.Nullable<int> _CostId;
+		
+		private int _UserId;
+		
+		private System.Nullable<int> _PosId;
+		
+		private EntitySet<EnrollPayment> _EnrollPayments;
+		
+		private EntitySet<Enroll> _Enrolls;
+		
+		private EntityRef<Cost> _Cost;
+		
+		private EntityRef<Member> _Member;
+		
+		private EntityRef<POS> _POS;
+		
+		private EntityRef<User> _User;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnIdChanging(int value);
+    partial void OnIdChanged();
+    partial void OnDatetimeChanging(System.DateTime value);
+    partial void OnDatetimeChanged();
+    partial void OnAmountChanging(int value);
+    partial void OnAmountChanged();
+    partial void OnMemberIdChanging(System.Nullable<int> value);
+    partial void OnMemberIdChanged();
+    partial void OnTypeChanging(byte value);
+    partial void OnTypeChanged();
+    partial void OnMethodChanging(byte value);
+    partial void OnMethodChanged();
+    partial void OnInfoChanging(string value);
+    partial void OnInfoChanged();
+    partial void OnCostIdChanging(System.Nullable<int> value);
+    partial void OnCostIdChanged();
+    partial void OnUserIdChanging(int value);
+    partial void OnUserIdChanged();
+    partial void OnPosIdChanging(System.Nullable<int> value);
+    partial void OnPosIdChanged();
+    #endregion
+		
+		public Transaction()
+		{
+			this._EnrollPayments = new EntitySet<EnrollPayment>(new Action<EnrollPayment>(this.attach_EnrollPayments), new Action<EnrollPayment>(this.detach_EnrollPayments));
+			this._Enrolls = new EntitySet<Enroll>(new Action<Enroll>(this.attach_Enrolls), new Action<Enroll>(this.detach_Enrolls));
+			this._Cost = default(EntityRef<Cost>);
+			this._Member = default(EntityRef<Member>);
+			this._POS = default(EntityRef<POS>);
+			this._User = default(EntityRef<User>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int Id
+		{
+			get
+			{
+				return this._Id;
+			}
+			set
+			{
+				if ((this._Id != value))
+				{
+					this.OnIdChanging(value);
+					this.SendPropertyChanging();
+					this._Id = value;
+					this.SendPropertyChanged("Id");
+					this.OnIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Datetime", DbType="DateTime NOT NULL")]
+		public System.DateTime Datetime
+		{
+			get
+			{
+				return this._Datetime;
+			}
+			set
+			{
+				if ((this._Datetime != value))
+				{
+					this.OnDatetimeChanging(value);
+					this.SendPropertyChanging();
+					this._Datetime = value;
+					this.SendPropertyChanged("Datetime");
+					this.OnDatetimeChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Amount", DbType="Int NOT NULL")]
+		public int Amount
+		{
+			get
+			{
+				return this._Amount;
+			}
+			set
+			{
+				if ((this._Amount != value))
+				{
+					this.OnAmountChanging(value);
+					this.SendPropertyChanging();
+					this._Amount = value;
+					this.SendPropertyChanged("Amount");
+					this.OnAmountChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_MemberId", DbType="Int")]
+		public System.Nullable<int> MemberId
+		{
+			get
+			{
+				return this._MemberId;
+			}
+			set
+			{
+				if ((this._MemberId != value))
+				{
+					if (this._Member.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnMemberIdChanging(value);
+					this.SendPropertyChanging();
+					this._MemberId = value;
+					this.SendPropertyChanged("MemberId");
+					this.OnMemberIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Type", DbType="TinyInt NOT NULL")]
+		public byte Type
+		{
+			get
+			{
+				return this._Type;
+			}
+			set
+			{
+				if ((this._Type != value))
+				{
+					this.OnTypeChanging(value);
+					this.SendPropertyChanging();
+					this._Type = value;
+					this.SendPropertyChanged("Type");
+					this.OnTypeChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Method", DbType="TinyInt NOT NULL")]
+		public byte Method
+		{
+			get
+			{
+				return this._Method;
+			}
+			set
+			{
+				if ((this._Method != value))
+				{
+					this.OnMethodChanging(value);
+					this.SendPropertyChanging();
+					this._Method = value;
+					this.SendPropertyChanged("Method");
+					this.OnMethodChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Info", DbType="NVarChar(500)")]
+		public string Info
+		{
+			get
+			{
+				return this._Info;
+			}
+			set
+			{
+				if ((this._Info != value))
+				{
+					this.OnInfoChanging(value);
+					this.SendPropertyChanging();
+					this._Info = value;
+					this.SendPropertyChanged("Info");
+					this.OnInfoChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CostId", DbType="Int")]
+		public System.Nullable<int> CostId
+		{
+			get
+			{
+				return this._CostId;
+			}
+			set
+			{
+				if ((this._CostId != value))
+				{
+					if (this._Cost.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnCostIdChanging(value);
+					this.SendPropertyChanging();
+					this._CostId = value;
+					this.SendPropertyChanged("CostId");
+					this.OnCostIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_UserId", DbType="Int NOT NULL")]
+		public int UserId
+		{
+			get
+			{
+				return this._UserId;
+			}
+			set
+			{
+				if ((this._UserId != value))
+				{
+					if (this._User.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnUserIdChanging(value);
+					this.SendPropertyChanging();
+					this._UserId = value;
+					this.SendPropertyChanged("UserId");
+					this.OnUserIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PosId", DbType="Int")]
+		public System.Nullable<int> PosId
+		{
+			get
+			{
+				return this._PosId;
+			}
+			set
+			{
+				if ((this._PosId != value))
+				{
+					if (this._POS.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnPosIdChanging(value);
+					this.SendPropertyChanging();
+					this._PosId = value;
+					this.SendPropertyChanged("PosId");
+					this.OnPosIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Transaction_EnrollPayment", Storage="_EnrollPayments", ThisKey="Id", OtherKey="PaymentId")]
+		public EntitySet<EnrollPayment> EnrollPayments
+		{
+			get
+			{
+				return this._EnrollPayments;
+			}
+			set
+			{
+				this._EnrollPayments.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Transaction_Enroll", Storage="_Enrolls", ThisKey="Id", OtherKey="PaymentId")]
+		public EntitySet<Enroll> Enrolls
+		{
+			get
+			{
+				return this._Enrolls;
+			}
+			set
+			{
+				this._Enrolls.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Cost_Transaction", Storage="_Cost", ThisKey="CostId", OtherKey="Id", IsForeignKey=true)]
+		public Cost Cost
+		{
+			get
+			{
+				return this._Cost.Entity;
+			}
+			set
+			{
+				Cost previousValue = this._Cost.Entity;
+				if (((previousValue != value) 
+							|| (this._Cost.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Cost.Entity = null;
+						previousValue.Transactions.Remove(this);
+					}
+					this._Cost.Entity = value;
+					if ((value != null))
+					{
+						value.Transactions.Add(this);
+						this._CostId = value.Id;
+					}
+					else
+					{
+						this._CostId = default(Nullable<int>);
+					}
+					this.SendPropertyChanged("Cost");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Member_Transaction", Storage="_Member", ThisKey="MemberId", OtherKey="Id", IsForeignKey=true)]
+		public Member Member
+		{
+			get
+			{
+				return this._Member.Entity;
+			}
+			set
+			{
+				Member previousValue = this._Member.Entity;
+				if (((previousValue != value) 
+							|| (this._Member.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Member.Entity = null;
+						previousValue.Transactions.Remove(this);
+					}
+					this._Member.Entity = value;
+					if ((value != null))
+					{
+						value.Transactions.Add(this);
+						this._MemberId = value.Id;
+					}
+					else
+					{
+						this._MemberId = default(Nullable<int>);
+					}
+					this.SendPropertyChanged("Member");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="POS_Transaction", Storage="_POS", ThisKey="PosId", OtherKey="Id", IsForeignKey=true)]
+		public POS POS
+		{
+			get
+			{
+				return this._POS.Entity;
+			}
+			set
+			{
+				POS previousValue = this._POS.Entity;
+				if (((previousValue != value) 
+							|| (this._POS.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._POS.Entity = null;
+						previousValue.Transactions.Remove(this);
+					}
+					this._POS.Entity = value;
+					if ((value != null))
+					{
+						value.Transactions.Add(this);
+						this._PosId = value.Id;
+					}
+					else
+					{
+						this._PosId = default(Nullable<int>);
+					}
+					this.SendPropertyChanged("POS");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="User_Transaction", Storage="_User", ThisKey="UserId", OtherKey="Id", IsForeignKey=true)]
+		public User User
+		{
+			get
+			{
+				return this._User.Entity;
+			}
+			set
+			{
+				User previousValue = this._User.Entity;
+				if (((previousValue != value) 
+							|| (this._User.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._User.Entity = null;
+						previousValue.Transactions.Remove(this);
+					}
+					this._User.Entity = value;
+					if ((value != null))
+					{
+						value.Transactions.Add(this);
+						this._UserId = value.Id;
+					}
+					else
+					{
+						this._UserId = default(int);
+					}
+					this.SendPropertyChanged("User");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void attach_EnrollPayments(EnrollPayment entity)
+		{
+			this.SendPropertyChanging();
+			entity.Transaction = this;
+		}
+		
+		private void detach_EnrollPayments(EnrollPayment entity)
+		{
+			this.SendPropertyChanging();
+			entity.Transaction = null;
+		}
+		
+		private void attach_Enrolls(Enroll entity)
+		{
+			this.SendPropertyChanging();
+			entity.Transaction = this;
+		}
+		
+		private void detach_Enrolls(Enroll entity)
+		{
+			this.SendPropertyChanging();
+			entity.Transaction = null;
 		}
 	}
 }

@@ -253,6 +253,9 @@
                         <ListBoxItem  ToolTip="نمای درشت">
                             <materialDesign:PackIcon  Kind="Face" />
                         </ListBoxItem>
+                        <ListBoxItem  ToolTip="نمای لیستی">
+                            <materialDesign:PackIcon  Kind="FormatListBulleted" />
+                        </ListBoxItem>
                     </ListBox>
                     <TextBlock x:Name="Tip"
                                 Text="" DockPanel.Dock="Right"

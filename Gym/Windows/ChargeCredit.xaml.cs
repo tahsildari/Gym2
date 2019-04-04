@@ -1,4 +1,5 @@
 ﻿using Gym.Controls;
+using Gym.Domain;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -39,7 +40,11 @@ namespace Gym.Windows
         private void Window_PreviewKeyUp(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Escape)
-                this.Close();
+            {
+                var escTime = (DateTime)(Dynamics.LastEscapeTime ?? DateTime.Now.AddDays(-1));
+                if ((DateTime.Now - escTime) > TimeSpan.FromMilliseconds(100))
+                    this.Close();
+            }
         }
 
 
@@ -106,6 +111,10 @@ namespace Gym.Windows
 
                     txtCredit.Text = $"{member.Credit:n0}";
                     Main.Home.CheckupCreditDebtors();
+                }
+                else
+                {
+                    Dynamics.LastEscapeTime = DateTime.Now;
                 }
             }
         }

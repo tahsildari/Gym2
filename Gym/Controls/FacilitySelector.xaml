@@ -43,7 +43,7 @@
 						Style="{StaticResource MaterialDesignActionLightToggleButton}" />
                                 <StackPanel Grid.Column="1" Margin="8,2,0,0" Orientation="Vertical">
                                     <TextBlock FontWeight="Bold" Text="{Binding Name}"/>
-                                    <TextBlock Text="{Binding Price}" Margin="0,2,0,0" />
+                                    <local:NumberBox Text="{Binding Price}" IsEnabled="False" BorderBrush="Transparent" ThousandSeparate="True" Margin="0,2,0,0" />
                                 </StackPanel>
                             </StackPanel>
                         </Border>

@@ -38,15 +38,15 @@
 				HorizontalAlignment="Center"
 				VerticalAlignment="Top">
                 <Grid.RowDefinitions>
+                        <RowDefinition Height="55"/>
+                    <RowDefinition Height="45"/>
                     <RowDefinition />
-                    <RowDefinition />
-                    <RowDefinition />
-                    <RowDefinition />
-                </Grid.RowDefinitions>
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
                 <TextBox
 					Margin="0,12,0,0" x:Name="txtUsername"
 					materialDesign:HintAssist.Hint="نام کاربری"
-					materialDesign:HintAssist.IsFloating="True" Text="Mahdi">
+					materialDesign:HintAssist.IsFloating="True" Text="">
 
                 </TextBox>
                 <!--<TextBox
@@ -61,7 +61,7 @@
                     <PasswordBox x:Name="txtPassword"
 	 MinWidth="190"
 	materialDesign:HintAssist.Hint="رمز عبور"
-	Style="{StaticResource MaterialDesignFloatingHintPasswordBox}" Password="123" />
+	Style="{StaticResource MaterialDesignFloatingHintPasswordBox}" Password="" />
                 </StackPanel>
                 <!--<StackPanel
 					Grid.Row="2"
@@ -73,23 +73,34 @@
                     </StackPanel>-->
 
                 <StackPanel
-					Grid.Row="3"
+					Grid.Row="2"
 					Margin="0,12,0,0"
 					HorizontalAlignment="Right"
 					Orientation="Horizontal">
                         <Button
 	Style="{StaticResource MaterialDesignFlatButton}"
-	ToolTip="MaterialDesignFlatButton" Click="Login_OnClick">
+	 Click="Login_OnClick">
                             ورود
                         </Button>
                         <Button
                         Click="Exit_Click"
 	Style="{StaticResource MaterialDesignFlatButton}"
-	ToolTip="MaterialDesignFlatButton"  Foreground="Gray">
+	  Foreground="Gray">
                         انصراف
                     </Button>
                 </StackPanel>
-            </Grid>
+                    <materialDesign:Snackbar x:Name="MessageSnackBar"
+			HorizontalAlignment="Stretch" Grid.Row="3" VerticalAlignment="Bottom" materialDesign:ColorZoneAssist.Mode="PrimaryMid"
+                                     ActionButtonStyle="{StaticResource MaterialDesignRaisedAccentButton}"
+                Margin="5,5,5,5"
+			    FlowDirection="RightToLeft">
+                        <materialDesign:SnackbarMessage x:Name="Alert" 
+                    ActionContent="خب" 
+                    ActionClick="HideSnackbar_Click"
+                    Content="اطلاعات صحیح نیست!" 
+                                         ActionCommand=""       />
+                    </materialDesign:Snackbar>
+                </Grid>
         </Grid>
         </materialDesign:ColorZone>
         <!--<materialDesign:Flipper

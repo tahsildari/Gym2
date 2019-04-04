@@ -70,7 +70,11 @@ namespace Gym.Windows
         private void Window_PreviewKeyUp(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Escape)
-                this.Close();
+            {
+                var escTime = (DateTime)(Dynamics.LastEscapeTime ?? DateTime.Now.AddDays(-1));
+                if ((DateTime.Now - escTime) > TimeSpan.FromMilliseconds(100))
+                    this.Close();
+            }
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -120,7 +124,7 @@ namespace Gym.Windows
             var pair1 = new List<KeyValuePair<string, int>>();
             //costs.GroupBy(c => c.Cost).ToList().ForEach(c =>
             //{
-            pair1.Add(new KeyValuePair<string, int>("هزینه", costs.ToList().Select(c=>c.Amount).Sum()));
+            pair1.Add(new KeyValuePair<string, int>("هزینه", costs.ToList().Select(c => c.Amount).Sum()));
             //});
 
             var pair2 = new List<KeyValuePair<string, int>>();
@@ -142,13 +146,14 @@ namespace Gym.Windows
             {
                 case "reset":
                     cmbYear.SelectedValue = new PersianCalendar().GetYear(DateTime.Now);
-                    cmbMonth.SelectedIndex = new PersianCalendar().GetMonth(DateTime.Now)-1;
+                    cmbMonth.SelectedIndex = new PersianCalendar().GetMonth(DateTime.Now) - 1;
                     LoadBarChartData();
                     break;
                 case "confirm":
                     LoadBarChartData();
                     break;
                 case "cancel":
+                    Dynamics.LastEscapeTime = DateTime.Now;
                     break;
                 default:
                     break;

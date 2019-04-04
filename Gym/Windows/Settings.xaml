@@ -11,15 +11,15 @@
         WindowStyle="None"  WindowState="Normal" BorderThickness="0"
         WindowStartupLocation="CenterScreen"  Icon="/Resources/Muscle.ico"
         Background="Transparent"  Loaded="Window_Loaded"
-        Title="Settings" Height="400" Width="500">
+        Title="Settings" Height="600" Width="500">
     <Grid Background="Transparent">
         <Grid.RowDefinitions>
             <RowDefinition ></RowDefinition>
         </Grid.RowDefinitions>
         <materialDesign:ColorZone Mode="PrimaryDark" 
-			Width="500" Height="400">
+			Width="500" Height="600">
             <materialDesign:ColorZone Mode="Standard" Margin="2"
-			Width="496" Height="396">
+			Width="496" Height="596">
                 <Grid FlowDirection="RightToLeft">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
@@ -32,113 +32,183 @@
 						Command="{x:Static materialDesign:Flipper.FlipCommand}"
 						Style="{StaticResource MaterialDesignToolForegroundButton}">
                         </Button>-->
-                            <Button
+                            <!--<Button
 						HorizontalAlignment="Left" Click="Button_Click"
 						Style="{StaticResource MaterialDesignToolForegroundButton}">
                                 <materialDesign:PackIcon HorizontalAlignment="Right" Kind="ContentSave" FlowDirection="RightToLeft" Width="24" Height="24" />
-                            </Button>
-                            <TextBlock Margin="8,5,0,0" VerticalAlignment="Center" FontWeight="Bold" TextDecorations="{x:Null}" Height="23" Width="420">تنظیمات</TextBlock>
+                            </Button>-->
+                            <TextBlock Margin="8,5,0,0" VerticalAlignment="Center" FontWeight="Bold" TextDecorations="{x:Null}" Height="23" Width="450">تنظیمات</TextBlock>
                             <materialDesign:PackIcon DockPanel.Dock="Left" HorizontalAlignment="Left" Kind="Settings" Width="24" Height="24" VerticalAlignment="Center" />
                         </DockPanel>
                     </materialDesign:ColorZone>
-                    <StackPanel Orientation="Vertical" Grid.Row="1">
-                        <materialDesign:ColorZone
+                        <StackPanel Orientation="Vertical" Grid.Row="1">
+                            <materialDesign:ColorZone
                         Background="LightGray" Opacity=".7" Height="30">
-                            <TextBlock Margin="8,0,0,0" FontWeight="Bold" VerticalAlignment="Center">قیمت ها</TextBlock>
-                        </materialDesign:ColorZone>
-                        <materialDesign:ColorZone
+                                <TextBlock Margin="8,0,0,0" FontWeight="Bold" VerticalAlignment="Center">قیمت ها</TextBlock>
+                            </materialDesign:ColorZone>
+                            <materialDesign:ColorZone
                         Mode="Light" >
-                            <StackPanel Orientation="Vertical">
-                                <StackPanel Orientation="Horizontal" Height="26" Margin="10,2">
-                                    <materialDesign:PackIcon Kind="BellPlus" VerticalAlignment="Center"/>
-                                    <TextBlock Margin="8,0,0,0" Width="400" VerticalAlignment="Center">نرخ 1 سال بیمه ورزشکار (تومان)</TextBlock>
-                                    <Controls:NumberBox x:Name="txtInsurancePrice" materialDesign:HintAssist.Hint=""
+                                <StackPanel Orientation="Vertical">
+                                    <StackPanel Orientation="Horizontal" Height="26" Margin="10,2">
+                                        <materialDesign:PackIcon Kind="BellPlus" VerticalAlignment="Center"/>
+                                        <TextBlock Margin="8,0,0,0" Width="400" VerticalAlignment="Center">نرخ سالیانه بیمه ورزشکار (تومان)</TextBlock>
+                                        <Controls:NumberBox x:Name="txtInsurancePrice" materialDesign:HintAssist.Hint=""
                                                 IsReadOnly="False" FlowDirection="LeftToRight" VerticalAlignment="Center"
                                                 Width="50" Margin="0,-14,0,4"
                                                 ThousandSeparate="True"
 	                                            Style="{StaticResource MaterialDesignFloatingHintTextBox}">
-                                    </Controls:NumberBox>
-                                </StackPanel>
-                                <Border BorderThickness="0,0,0,1" BorderBrush="Gray" Opacity=".5" Margin="4,0,4,0"></Border>
-                                <StackPanel Orientation="Horizontal" Height="26" Margin="10,2">
-                                    <materialDesign:PackIcon Kind="CurrencyUsd"  VerticalAlignment="Center"/>
-                                    <TextBlock Margin="8,0,0,0" Width="400" VerticalAlignment="Center">نرخ تک جلسه (تومان)</TextBlock>
-                                    <Controls:NumberBox x:Name="txtSingleSessionPrice" materialDesign:HintAssist.Hint=""
+                                        </Controls:NumberBox>
+                                    </StackPanel>
+                                    <Border BorderThickness="0,0,0,1" BorderBrush="Gray" Opacity=".5" Margin="4,0,4,0"></Border>
+                                    <StackPanel Orientation="Horizontal" Height="26" Margin="10,2">
+                                        <materialDesign:PackIcon Kind="CurrencyUsd"  VerticalAlignment="Center"/>
+                                        <TextBlock Margin="8,0,0,0" Width="400" VerticalAlignment="Center">نرخ تک جلسه (تومان)</TextBlock>
+                                        <Controls:NumberBox x:Name="txtSingleSessionPrice" materialDesign:HintAssist.Hint=""
                                                 FlowDirection="LeftToRight" VerticalAlignment="Center"
                                                 Width="50"
                                                 ThousandSeparate="True" 
                                                  Margin="0,-14,0,4" 
 	                                            Style="{StaticResource MaterialDesignFloatingHintTextBox}">
-                                    </Controls:NumberBox>
+                                        </Controls:NumberBox>
+                                    </StackPanel>
                                 </StackPanel>
-                            </StackPanel>
-                        </materialDesign:ColorZone>
-                        
-                        <materialDesign:ColorZone
+                            </materialDesign:ColorZone>
+
+                            <materialDesign:ColorZone
                         Background="LightGray" Opacity=".7" Height="30">
-                            <TextBlock Margin="8,0,0,0" FontWeight="Bold" VerticalAlignment="Center">زمان بندی</TextBlock>
-                        </materialDesign:ColorZone>
-                        <materialDesign:ColorZone
+                                <TextBlock Margin="8,0,0,0" FontWeight="Bold" VerticalAlignment="Center">زمان بندی</TextBlock>
+                            </materialDesign:ColorZone>
+                            <materialDesign:ColorZone
                         Mode="Light">
-                            <StackPanel Orientation="Vertical">
-                                <StackPanel Orientation="Horizontal" Height="26" Margin="10,2">
-                                    <materialDesign:PackIcon Kind="ClockOut"  VerticalAlignment="Center" />
-                                    <TextBlock Margin="8,0,0,0" Width="400" VerticalAlignment="Center">نمایش تردد تا چند ساعت قبل</TextBlock>
-                                    <Controls:NumberBox x:Name="txtTransitHours" materialDesign:HintAssist.Hint=""
+                                <StackPanel Orientation="Vertical">
+                                    <StackPanel Orientation="Horizontal" Height="26" Margin="10,2">
+                                        <materialDesign:PackIcon Kind="ClockOut"  VerticalAlignment="Center" />
+                                        <TextBlock Margin="8,0,0,0" Width="400" VerticalAlignment="Center">نمایش تردد تا چند ساعت قبل</TextBlock>
+                                        <Controls:NumberBox x:Name="txtTransitHours" materialDesign:HintAssist.Hint=""
                                                 Width="50" VerticalAlignment="Center"
                                                 ThousandSeparate="True" FlowDirection="LeftToRight"
                                                 Margin="0,-14,0,4"
 	                                            Style="{StaticResource MaterialDesignFloatingHintTextBox}">
-                                    </Controls:NumberBox>
-                                </StackPanel>
-                                <Border BorderThickness="0,0,0,1" BorderBrush="Gray" Opacity=".5" Margin="4,0,4,0"></Border>
-                                <StackPanel Orientation="Horizontal" Height="26" Margin="10,2">
-                                    <materialDesign:PackIcon Kind="CalendarClock" VerticalAlignment="Center" />
-                                    <TextBlock Margin="8,0,0,0" Width="400">یادآور نزدیک به تمدید چند روز قبل</TextBlock>
-                                    <Controls:NumberBox x:Name="txtExtendDays" materialDesign:HintAssist.Hint=""
+                                        </Controls:NumberBox>
+                                    </StackPanel>
+                                    <Border BorderThickness="0,0,0,1" BorderBrush="Gray" Opacity=".5" Margin="4,0,4,0"></Border>
+                                    <StackPanel Orientation="Horizontal" Height="26" Margin="10,2">
+                                        <materialDesign:PackIcon Kind="CalendarClock" VerticalAlignment="Center" />
+                                        <TextBlock Margin="8,0,0,0" Width="400">یادآور نزدیک به تمدید دوره ورزشکار (روز)</TextBlock>
+                                        <Controls:NumberBox x:Name="txtExtendDays" materialDesign:HintAssist.Hint=""
                                                  HorizontalAlignment="Left"
                                                 ThousandSeparate="True"  Width="50"
                                                 Margin="0,-14,0,4" FlowDirection="LeftToRight"
 	                                            Style="{StaticResource MaterialDesignFloatingHintTextBox}">
-                                    </Controls:NumberBox>
+                                        </Controls:NumberBox>
+                                    </StackPanel>
+                                    <Border BorderThickness="0,0,0,1" BorderBrush="Gray" Opacity=".5" Margin="4,0,4,0"></Border>
+                                    <StackPanel Orientation="Horizontal" Height="26" Margin="10,2">
+                                        <materialDesign:PackIcon Kind="CalendarClock" VerticalAlignment="Center" />
+                                        <TextBlock Margin="8,0,0,0" Width="400">ثانیه شمار اعلان تردد</TextBlock>
+                                        <Controls:NumberBox x:Name="txtInfoTimeout" materialDesign:HintAssist.Hint=""
+                                                 HorizontalAlignment="Left"
+                                                ThousandSeparate="True"  Width="50"
+                                                Margin="0,-14,0,4" FlowDirection="LeftToRight"
+	                                            Style="{StaticResource MaterialDesignFloatingHintTextBox}">
+                                        </Controls:NumberBox>
+                                    </StackPanel>
                                 </StackPanel>
-                            </StackPanel>
-                        </materialDesign:ColorZone>
+                            </materialDesign:ColorZone>
 
 
-                        <materialDesign:ColorZone
+                            <materialDesign:ColorZone
                         Background="LightGray" Opacity=".7" Height="30">
-                            <TextBlock Margin="8,0,0,0" FontWeight="Bold" VerticalAlignment="Center">صفحه اصلی</TextBlock>
-                        </materialDesign:ColorZone>
-                        <materialDesign:ColorZone
+                                <TextBlock Margin="8,0,0,0" FontWeight="Bold" VerticalAlignment="Center">عمومی</TextBlock>
+                            </materialDesign:ColorZone>
+                            <materialDesign:ColorZone
                         Mode="Light">
-                            <StackPanel Orientation="Vertical">
-                                <StackPanel Orientation="Horizontal" Height="26" Margin="10,2">
-                                    <materialDesign:PackIcon Kind="ClockOut"  VerticalAlignment="Center" />
-                                    <TextBlock Margin="8,0,0,0" Width="150" VerticalAlignment="Center">عنوان</TextBlock>
-                                    <TextBox x:Name="txtTitle" materialDesign:HintAssist.Hint=""
+                                <StackPanel Orientation="Vertical">
+                                    <StackPanel Orientation="Horizontal" Height="26" Margin="10,2">
+                                        <materialDesign:PackIcon Kind="ClockOut"  VerticalAlignment="Center" />
+                                        <TextBlock Margin="8,0,0,0" Width="150" VerticalAlignment="Center">عنوان</TextBlock>
+                                        <TextBox x:Name="txtTitle" materialDesign:HintAssist.Hint=""
                                                 Width="300" VerticalAlignment="Center"
                                                 FlowDirection="LeftToRight"
                                                 Margin="0,-14,0,4"
 	                                            Style="{StaticResource MaterialDesignFloatingHintTextBox}">
-                                    </TextBox>
-                                </StackPanel>
-                                <Border BorderThickness="0,0,0,1" BorderBrush="Gray" Opacity=".5" Margin="4,0,4,0"></Border>
-                                <StackPanel Orientation="Horizontal" Height="26" Margin="10,2">
-                                    <materialDesign:PackIcon Kind="ClockOut"  VerticalAlignment="Center" />
-                                    <TextBlock Margin="8,0,0,0" Width="400" VerticalAlignment="Center">عرض لیست کمدها</TextBlock>
-                                    <Controls:NumberBox x:Name="txtClosetsWidth" materialDesign:HintAssist.Hint=""
+                                        </TextBox>
+                                    </StackPanel>
+                                    <Border BorderThickness="0,0,0,1" BorderBrush="Gray" Opacity=".5" Margin="4,0,4,0"></Border>
+                                    <StackPanel Orientation="Horizontal" Height="26" Margin="10,2">
+                                        <materialDesign:PackIcon Kind="ClockOut"  VerticalAlignment="Center" />
+                                        <TextBlock Margin="8,0,0,0" Width="400" VerticalAlignment="Center">نسبت عرض لیست کمدها به صفحه (%)</TextBlock>
+                                        <Controls:NumberBox x:Name="txtClosetsWidth" materialDesign:HintAssist.Hint=""
                                                 VerticalAlignment="Center" 
                                                         Width="50"
                                                 ThousandSeparate="True" 
                                                  Margin="0,-14,0,4" 
                                                 FlowDirection="LeftToRight"
 	                                            Style="{StaticResource MaterialDesignFloatingHintTextBox}">
-                                    </Controls:NumberBox>
+                                        </Controls:NumberBox>
+                                    </StackPanel>
+                                    <Border BorderThickness="0,0,0,1" BorderBrush="Gray" Opacity=".5" Margin="4,0,4,0"></Border>
+                                    <StackPanel Orientation="Horizontal" Height="26" Margin="10,2">
+                                        <materialDesign:PackIcon Kind="ClockOut"  VerticalAlignment="Center" />
+                                        <TextBlock Margin="8,0,0,0" Width="400" VerticalAlignment="Center">کد دستگاه مهمان (عمومی)</TextBlock>
+                                        <Controls:NumberBox x:Name="txtGuestFinger" materialDesign:HintAssist.Hint=""
+                                                VerticalAlignment="Center" 
+                                                        Width="50"
+                                                ThousandSeparate="True" 
+                                                 Margin="0,-14,0,4" 
+                                                FlowDirection="LeftToRight"
+	                                            Style="{StaticResource MaterialDesignFloatingHintTextBox}">
+                                        </Controls:NumberBox>
+                                    </StackPanel>
+                                    <Border BorderThickness="0,0,0,1" BorderBrush="Gray" Opacity=".5" Margin="4,0,4,0"></Border>
+                                    <StackPanel Orientation="Horizontal" Height="26" Margin="10,2">
+                                        <materialDesign:PackIcon Kind="ImageArea"  VerticalAlignment="Center" />
+
+                                        <Button Grid.Row="1" 
+                        VerticalAlignment="Top"
+                        HorizontalAlignment="Right"
+                        Margin="0,-5,10,0"
+	Background="Transparent" Foreground="Gray" BorderThickness="0"
+	ToolTip="می خواهید پس زمینه دیگری را انتخاب کنید؟ کلیک کنید"
+                        Click="ChangeBackground_Click">
+                                            تغییر تصویر پس زمینه
+                                        </Button>
+                                        <Button Grid.Row="1" 
+                        VerticalAlignment="Top"
+                        HorizontalAlignment="Right"
+                        Margin="0,-5,10,0"
+	Background="Transparent" Foreground="Gray" BorderThickness="0"
+	ToolTip="می خواهید به پس زمینه پیش فرض برگردید؟ کلیک کنید"
+                        Click="ResetBackground_Click">
+                                            بازگشت به تصویر پیشفرض
+                                        </Button>
+                                    </StackPanel>
+                                    <Border BorderThickness="0,0,0,1" BorderBrush="Gray" Opacity=".5" Margin="4,0,4,0"></Border>
+                                    <StackPanel Orientation="Horizontal" Height="26" Margin="10,2">
+                                        <Button Background="Black"
+						HorizontalAlignment="Left" Click="Button_Click" Foreground="DodgerBlue"
+						Style="{StaticResource MaterialDesignToolForegroundButton}">
+                                            <StackPanel Orientation="Horizontal">
+                                                <materialDesign:PackIcon HorizontalAlignment="Right" 
+                                                             Kind="ContentSave" FlowDirection="RightToLeft" 
+                                                             Width="24" Height="24"/>
+                                                <Label Content="ذخیره" Margin="0,-4,0,0" Foreground="DodgerBlue"/>
+                                            </StackPanel>
+                                        </Button>
+                                        <Button Background="Black"
+						HorizontalAlignment="Left" Click="Close_Click" Foreground="DodgerBlue"
+						Style="{StaticResource MaterialDesignToolForegroundButton}">
+                                            <StackPanel Orientation="Horizontal">
+                                                <materialDesign:PackIcon HorizontalAlignment="Right" 
+                                                             Kind="Undo" FlowDirection="RightToLeft" 
+                                                             Width="24" Height="24"/>
+                                                <Label Content="انصراف" Margin="0,-4,0,0" Foreground="DodgerBlue"/>
+                                            </StackPanel>
+                                        </Button>
+                                    </StackPanel>
                                 </StackPanel>
-                            </StackPanel>
-                        </materialDesign:ColorZone>
-                    </StackPanel>
+                            </materialDesign:ColorZone>
+                        </StackPanel>
                 </Grid>
             </materialDesign:ColorZone>
         </materialDesign:ColorZone>
@@ -261,5 +331,4 @@
             </materialDesign:Flipper.FrontContent>
         </materialDesign:Flipper>-->
     </Grid>
-
 </Window>

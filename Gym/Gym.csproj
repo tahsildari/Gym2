@@ -92,8 +92,7 @@
       <HintPath>..\packages\MaterialDesignThemes.2.3.1.953\lib\net45\MaterialDesignThemes.Wpf.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Expression.Encoder, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\Program Files (x86)\Microsoft Expression\Encoder 4\SDK\Microsoft.Expression.Encoder.dll</HintPath>
+      <HintPath>..\packages\Microsoft.Expression.Encoder.4.0.4276.3\lib\net45\Microsoft.Expression.Encoder.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Office.Interop.Excel">
       <HintPath>..\..\..\..\..\..\Workspace\Gym\Bashgah.v1\Microsoft.Office.Interop.Excel.dll</HintPath>
@@ -123,6 +122,9 @@
       <HintPath>..\packages\Microsoft.SqlServer.Compact.4.0.8876.1\lib\net40\System.Data.SqlServerCe.dll</HintPath>
     </Reference>
     <Reference Include="System.Drawing" />
+    <Reference Include="System.ServiceModel">
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Windows.Controls.DataVisualization.Toolkit">
       <HintPath>..\..\..\..\..\..\Program Files (x86)\Microsoft SQL Server\140\Tools\Binn\ManagementStudio\Extensions\Application\System.Windows.Controls.DataVisualization.Toolkit.dll</HintPath>
     </Reference>
@@ -196,6 +198,7 @@
       <DependentUpon>GymContext.dbml</DependentUpon>
     </Compile>
     <Compile Include="Domain\BeANumberValidationRule.cs" />
+    <Compile Include="Domain\GymService.cs" />
     <Compile Include="Domain\Enums.cs" />
     <Compile Include="Domain\Extensions.cs" />
     <Compile Include="Domain\MultiValueConverter.cs" />
@@ -203,9 +206,11 @@
     <Compile Include="Domain\NotEmptyValidationRule.cs" />
     <Compile Include="Domain\Dynamics.cs" />
     <Compile Include="Domain\TelegramAPI.cs" />
+    <Compile Include="Domain\Utilities.cs" />
     <Compile Include="ViewModels\ClosetVM.cs" />
     <Compile Include="ViewModels\CourseVM.cs" />
     <Compile Include="ViewModels\EnrollVM.cs" />
+    <Compile Include="ViewModels\PosVM.cs" />
     <Compile Include="ViewModels\MemberVM.cs" />
     <Compile Include="ViewModels\ClosetRangeVM.cs" />
     <Compile Include="ViewModels\CostVM.cs" />
@@ -284,6 +289,9 @@
     </Compile>
     <Compile Include="Windows\PayCosts.xaml.cs">
       <DependentUpon>PayCosts.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\POS.xaml.cs">
+      <DependentUpon>POS.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\RoleManager.xaml.cs">
       <DependentUpon>RoleManager.xaml</DependentUpon>
@@ -369,10 +377,13 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <DependentUpon>GymDb.mdf</DependentUpon>
     </Content>
+    <Resource Include="Resources\defaultUser.png" />
     <Resource Include="Resources\Muscle.ico" />
     <Resource Include="Images\body.png" />
     <Resource Include="Resources\ProfilePic.jpg" />
-    <Resource Include="Resources\CamelBackground.jpg" />
+    <Resource Include="Resources\CamelBackground.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Resources\NormalCloset.png" />
     <Resource Include="Resources\VipCloset.png" />
     <Resource Include="Resources\background_3.jpg" />
@@ -525,6 +536,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\PayCosts.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\POS.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

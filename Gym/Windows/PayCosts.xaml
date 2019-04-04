@@ -9,7 +9,7 @@
         xmlns:Controls="clr-namespace:Gym.Controls"
         mc:Ignorable="d"
         Loaded="Window_Loaded"
-        Title="ثبت هزینه ها" Height="400" Width="800">
+        Title="ثبت هزینه ها" Height="400" Width="850">
     <materialDesign:DialogHost x:Name="PaymentDialogHost" DialogClosing="UserDialog_Closing">
         <materialDesign:DialogHost.DialogContent>
             <StackPanel  Margin="16" FlowDirection="RightToLeft">

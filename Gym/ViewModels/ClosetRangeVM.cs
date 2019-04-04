@@ -53,12 +53,22 @@ namespace Gym.ViewModels
             }
         }
 
+        bool _IsCoach;
+        public bool IsCoach
+        {
+            get { return _IsCoach; }
+            set
+            {
+                _IsCoach = value;
+                RaisePropertyChanged("IsCoach");
+            }
+        }
         public List<Data.Closet> GetClosets()
         {
             List<Data.Closet> result = new List<Data.Closet>();
-            for (int i = FromLabel; i < ToLabel; i++)
+            for (int i = FromLabel; i <= ToLabel; i++)
             {
-                result.Add(new Data.Closet { Id = i, IsVip = IsVIP, IsFree = true });
+                result.Add(new Data.Closet { Id = i, IsVip = IsVIP, IsFree = true, IsCoach = IsCoach });
             }
             return result;
         }

@@ -10,7 +10,7 @@
         WindowStartupLocation="CenterScreen"  Icon="/Resources/Muscle.ico"
         mc:Ignorable="d"
         Loaded="Window_Loaded"
-        Title="دوره ها" Height="300" Width="350">
+        Title="دوره ها" Height="600" Width="350">
     <Window.Resources>
         <!--<BooleanToVisibilityConverter x:Key="BoolToVis" />
         <domain:MultiValueConverter x:Key="MultiValueConverter" />

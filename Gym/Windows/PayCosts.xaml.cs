@@ -30,7 +30,11 @@ namespace Gym.Windows
         private void Window_PreviewKeyUp(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Escape)
-                this.Close();
+            {
+                var escTime = (DateTime)(Dynamics.LastEscapeTime ?? DateTime.Now.AddDays(-1));
+                if ((DateTime.Now - escTime) > TimeSpan.FromMilliseconds(100))
+                    this.Close();
+            }
         }
 
 
@@ -125,6 +129,7 @@ namespace Gym.Windows
         {
             var confirmed = (bool)eventArgs.Parameter;
             if (confirmed)
+            {
                 if (txtAmount.Value > 0)
                 {
                     byte method = (byte)(rdCash.IsChecked == true ? 0 : (rdPos.IsChecked == true ? 1 : (rdCard.IsChecked == true ? 2 : 3)));
@@ -162,6 +167,11 @@ namespace Gym.Windows
                             break;
                     }
                 }
+            }
+            else
+            {
+                Dynamics.LastEscapeTime = DateTime.Now;
+            }
         }
     }
 }

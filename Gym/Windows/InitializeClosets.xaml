@@ -27,6 +27,7 @@
                     <ComboBox.Items>
                         <ComboBoxItem>عادی</ComboBoxItem>
                         <ComboBoxItem>VIP</ComboBoxItem>
+                        <ComboBoxItem>مربیان</ComboBoxItem>
                     </ComboBox.Items>
                 </ComboBox>
                 <TextBox

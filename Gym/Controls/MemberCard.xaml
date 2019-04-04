@@ -47,5 +47,22 @@
                 <Image  Source="{Binding Image}"  Stretch="UniformToFill" HorizontalAlignment="Center" VerticalAlignment="Center"/>
             </materialDesign:Chip.Icon>
         </materialDesign:Chip>
+        <StackPanel x:Name="Grid"
+            Orientation="Horizontal" 
+            FlowDirection="RightToLeft"
+            Visibility="Collapsed" Width="450">
+            <Label Foreground="WhiteSmoke" Content="{Binding Id}" Width="25"></Label>
+            <Label Foreground="WhiteSmoke" Content="{Binding Fullname}"  Width="150"></Label>
+            <Label Foreground="WhiteSmoke"  Width="80">1397/12/27</Label>
+            <Label Foreground="WhiteSmoke"  Width="80" Content="{Binding Debtor}"></Label>
+            <Button 
+                    x:Name="BigButton2"
+                    IsEnabled="{Binding IsInteractive}"
+					Margin="0,0,0,0" Width="100"
+                    Click="btnSelect_Click" Foreground="White"
+					>
+                انتخاب
+            </Button>
+        </StackPanel>
     </StackPanel>
 </UserControl>

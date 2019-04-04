@@ -86,6 +86,7 @@ namespace Gym.Controls
                         IsVIP = closet.IsVip,
                         IsRented = closet.Rentor != null,
                         IsFree = closet.IsFree,
+                        IsCoach = closet.IsCoach,
                         Rentor = closet.Rentor,
                         User = closet.User
                         //closet.ClosetUsages.Any(u => u.ClosetId == closet.Id && u.ToTime == null) ?

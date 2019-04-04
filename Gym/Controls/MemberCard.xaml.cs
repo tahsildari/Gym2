@@ -45,6 +45,9 @@ namespace Gym.Controls
                 Id = m.Id,
                 Firstname = m.Firstname,
                 Lastname = m.Lastname,
+                ImagePath = m.Image,
+                Debtor = m.Debtor,
+                
                 //Address = m.Address,
                 //BirthDate = m.Birthdate?.ToEn(),
                 //Description = m.Description,
@@ -60,6 +63,17 @@ namespace Gym.Controls
                 //InsuranceExpireDate = m.InsuranceExpiry.ToEn(),
                 //ClosetId = db.Closets.Where(c=>c.RentorId == m.Id).FirstOrDefault()?.Id
             };
+            if (!string.IsNullOrEmpty(Member.ImagePath)) {
+                try
+                {
+                    var _Image = new BitmapImage();
+                    _Image.BeginInit();
+                    _Image.StreamSource = System.IO.File.OpenRead($@".\Images\{Member.ImagePath}.jpg");
+                    _Image.EndInit();
+                    Member.Image = _Image;
+                }
+                catch { }
+            }
             if (Member.Image == null)
             {
                 ImageBox.Visibility = Visibility.Collapsed;
@@ -72,7 +86,7 @@ namespace Gym.Controls
         public MemberVM Member;
 
         public enum MemberGraphics {
-            Card, Chip
+            Card, Chip, Grid
         }
         private MemberGraphics MemberGraphic = MemberGraphics.Card;
         public void SetGraphics(MemberGraphics graphics)
@@ -83,10 +97,17 @@ namespace Gym.Controls
                 case MemberGraphics.Card:
                     Card.Visibility = Visibility.Visible;
                     Chip.Visibility = Visibility.Collapsed;
+                    Grid.Visibility = Visibility.Collapsed;
                     break;
                 case MemberGraphics.Chip:
                     Card.Visibility = Visibility.Collapsed;
                     Chip.Visibility = Visibility.Visible;
+                    Grid.Visibility = Visibility.Collapsed;
+                    break;
+                case MemberGraphics.Grid:
+                    Card.Visibility = Visibility.Collapsed;
+                    Chip.Visibility = Visibility.Collapsed;
+                    Grid.Visibility = Visibility.Visible;
                     break;
                 default:
                     break;
@@ -106,6 +127,7 @@ namespace Gym.Controls
                 Member = new MemberVM
                 {
                     Id = m.Id,
+                    FingerId = m.FingerId,
                     Firstname = m.Firstname,
                     Lastname = m.Lastname,
                     Address = m.Address,
@@ -120,6 +142,7 @@ namespace Gym.Controls
                     Credit = m.Credit,
                     Debtor = m.Debtor,
                     InsuranceNo = m.InsuranceNo,
+                    ImagePath = m.Image,
                     InsuranceExpireDate = m.InsuranceExpiry.ToEn(),
                     ClosetId = db.Closets.Where(c => c.RentorId == m.Id).FirstOrDefault()?.Id
                 };

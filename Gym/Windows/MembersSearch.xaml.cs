@@ -85,10 +85,13 @@ namespace Gym.Windows
                 {
                     MembersArea.Children.Cast<MemberCard>().ToList().ForEach(c => c.SetGraphics(MemberCard.MemberGraphics.Chip));
                 }
-                else //card
+                else if (ViewType.SelectedIndex == 1)//card
                 {
                     MembersArea.Children.Cast<MemberCard>().ToList().ForEach(c => c.SetGraphics(MemberCard.MemberGraphics.Card));
-
+                }
+                else //grid
+                {
+                    MembersArea.Children.Cast<MemberCard>().ToList().ForEach(c => c.SetGraphics(MemberCard.MemberGraphics.Grid));
                 }
         }
 
@@ -107,6 +110,12 @@ namespace Gym.Windows
         public List<MemberCourse> PayedCourses = new List<MemberCourse>();
         MemberInformation Info = new MemberInformation() { Owner = Main.Home };
 
+        //public void PreSelect(ViewModels.MemberVM member)
+        //{
+        //    automatic = true;
+        //    Card_MemberSelected(member);
+        //}
+        bool automatic = false;
         private void Card_MemberSelected(ViewModels.MemberVM member)
         {
             if (Type == MemberSelectionCategory.SelectionOnly)
@@ -134,12 +143,26 @@ namespace Gym.Windows
                     Alert.Content = $"در حال حاضر {member.Fullname} هیچ دوره فعالی ندارند";
                     MessageSnackBar.IsActive = true;
                     Info.SetMember(member.Id, "غیر مجاز: دوره فعال ندارد", null);
+                    (Application.Current.MainWindow as Main).Focus();
                     Info.Show();
+                    Info.Focus();
                     return;
                 }
 
                 var nc = nrols.SelectMany(n => n.EnrollCourses).ToList();
+                var todayTransits = db.Passages.Where(p => p.MemberId == member.Id &&
+                p.IsEntrance && p.Time >= DateTime.Today && p.Time < DateTime.Today.AddDays(1)).Count();
 
+                if (isEntrance && nrols.Count == 1 && todayTransits >= nrols.FirstOrDefault().DailyPasses)
+                {
+
+                    Alert.Content = $" تجاوز از تعداد تردد مجاز روزانه";
+                    MessageSnackBar.IsActive = true;
+                    Info.SetMember(member.Id, "غیر مجاز: تردد بیش از حد مجاز روزانه", null);
+                    Info.Show();
+                    Info.Focus();
+                    return;
+                }
 
                 if (!nc.Any(c => c.SessionsLeft > 0))
                 {
@@ -237,16 +260,22 @@ namespace Gym.Windows
                 PersonnelTransitDialog.Visibility = Visibility.Collapsed;
                 MemberDeleteDialog.Visibility = Visibility.Collapsed;
                 MembersTransitDialog.Visibility = Visibility.Visible;
-                TransitDialogHost.IsOpen = true;
-                txtMemberName.Text = member.Fullname;
-
+                SelectedMember = member;
                 rdIn.IsChecked = isEntrance;
                 rdOut.IsChecked = !isEntrance;
+                if (oneCourseAvailable)
+                    ProcessTransit(null);
+                else
+                {
+                    TransitDialogHost.IsOpen = true;
+                    txtMemberName.Text = member.Fullname;
+
+                    
+
+                }
 
 
-
-
-                SelectedMember = member;
+                //Close();
                 //TransitDialogHost.IsEnabled = true;
                 //TransitDialogHost.Visibility = Visibility.Visible;
             }
@@ -288,6 +317,12 @@ namespace Gym.Windows
                 enroll.Show();
                 enroll.LoadMember(member.Id);
             }
+            if (Info.IsVisible)
+            {
+                Info.Focus();
+                Info.BringIntoView();
+            }
+            //Close();
         }
         private void TransitDialog_Closing(object sender, MaterialDesignThemes.Wpf.DialogClosingEventArgs eventArgs)
         {
@@ -296,140 +331,148 @@ namespace Gym.Windows
             var confirmed = (bool)eventArgs.Parameter;
             if (confirmed)
             {
-                if (Type == MemberSelectionCategory.PersonnelTransit)
-                {
-                    Data.Passage pass = new Data.Passage();
-                    pass.MemberId = SelectedMember.Id;
-                    pass.IsEntrance = prdIn.IsChecked == true;
-                    pass.Time = DateTime.Now;
-                    db.Passages.InsertOnSubmit(pass);
-
-                    db.SubmitChanges();
-                    Main.Home.TransitList.UpdatePassages();
-
-                    if (SelectedMember != null)
-                    {
-                        this.Close();
-                    }
-                }
-                else if (Type == MemberSelectionCategory.MembersTransit)
-                {
-                    if (rdIn.IsChecked == true)
-                    {
-                        var usedCoursesCount = CoursesBox.Children.Cast<CheckBox>().Where(c => c.IsChecked == true).Count();
-                        if (usedCoursesCount == 0)
-                        {
-                            Alert.Content = $"هیچ دوره ای انتخاب نشده بنابراین ورود ثبت نشد، مجددا تلاش فرمایید";
-                            MessageSnackBar.IsActive = true;
-                            eventArgs.Cancel();
-                            return;
-                        }
-
-                        CoursesBox.Children.Cast<CheckBox>().Where(c => c.IsChecked == true).ToList().ForEach(check =>
-                        {
-                            //if (!needsSave) needsSave = true;
-                            var item = check.Tag as MemberCourse;
-
-                            var courseUsage = db.EnrollCourses.Where(ec =>
-                                ec.CourseId == item.CId &&
-                                ec.EnrollId == item.EId
-                            ).FirstOrDefault();
-
-                            courseUsage.SessionsLeft -= 1;
-                        });
-                    }
-
-                    //bool needsSave = false;
-
-                    //if (needsSave) db.SubmitChanges();
-
-                    Data.Passage pass = new Data.Passage();
-                    pass.MemberId = SelectedMember.Id;
-                    pass.IsEntrance = Type == MemberSelectionCategory.MembersTransit ? rdIn.IsChecked == true : prdIn.IsChecked == true;
-                    pass.Time = DateTime.Now;
-                    db.Passages.InsertOnSubmit(pass);
-
-
-                    if (rdOut.IsChecked == true)
-                    {
-                        var mmbr = db.Members.Where(m => m.Id == SelectedMember.Id).FirstOrDefault();
-                        var nrols = mmbr.Enrolls.Where(e => e.StartDate <= DateTime.Today
-                                            && (e.ExpireDate == null || e.ExpireDate >= DateTime.Today)).ToList();
-                        var nc = nrols.SelectMany(n => n.EnrollCourses).ToList();
-
-
-                        if (!nc.Any(c => c.SessionsLeft > 0))
-                        {
-                            nrols.SelectMany(n => n.EnrollFacilities).ToList().ForEach(f => f.SessionsLeft = 0);
-                            nrols.ForEach(n => n.IsActive = false);
-                        }
-                        else
-                        {
-                            FacilitiesBox.Children.Cast<CheckBox>().Where(c => c.IsChecked == true).ToList().ForEach(check =>
-                            {
-                                var item = check.Tag as MemberFacility;
-
-                                var facilityUsage = db.EnrollFacilities.Where(ef =>
-                                    ef.FacilityId == item.FId &&
-                                    ef.EnrollId == item.EId
-                                ).FirstOrDefault();
-
-                                facilityUsage.SessionsLeft -= 1;
-                            });
-                        }
-                    }
-
-                    db.SubmitChanges();
-                    Info.SetMember(SelectedMember.Id, pass.IsEntrance ? "ورود" : "خروج", PayedFacilities.Select(f => f.Name).ToList());
-                    Info.Show();
-
-
-                    if (pass.IsEntrance)
-                        SelectedMember.UseCloset(db);
-                    else
-                        SelectedMember.FreeUpCloset(db);
-
-                    Main.Home.Closets.LoadClosets();
-                    Main.Home.TransitList.UpdatePassages();
-
-                    //Reduce one Session from Course Sessions & Facility Sessions
-
-                    //bool needsSave = false;
-                    //FacilitiesBox.Children.Cast<CheckBox>().Where(c => c.IsChecked == true).ToList().ForEach(check =>
-                    //  {
-                    //      if (!needsSave) needsSave = true;
-                    //      var item = check.Tag as MemberFacility;
-
-                    //      var facilityUsage = db.EnrollFacilities.Where(ef =>
-                    //          ef.FacilityId == item.FId &&
-                    //          ef.EnrollId == item.EId
-                    //      ).FirstOrDefault();
-
-                    //      facilityUsage.SessionsLeft -= 1;
-                    //  });
-                    //if (needsSave) db.SubmitChanges();
-
-
-                    //if (SelectedMember != null)
-                    //{
-                    //    this.Close();
-                    //}
-                }
-                else if (Type == MemberSelectionCategory.DeleteMembers)
-                {
-                    db = new Data.GymContextDataContext();
-                    db.Members.Where(m => m.Id == SelectedMember.Id).FirstOrDefault().IsDeleted = true;
-
-                    if (tglGetCardBack.IsChecked == true)
-                        ;//Make Card Clear to be used by other members
-
-                    db.SubmitChanges();
-
-                    ListMembers(txtSearchBox.Text);
-                }
+                ProcessTransit(eventArgs);
             }
         }
-        void ListMembers(string text)
+
+        void ProcessTransit(MaterialDesignThemes.Wpf.DialogClosingEventArgs eventArgs)
+        {
+            if (Type == MemberSelectionCategory.PersonnelTransit)
+            {
+                Data.Passage pass = new Data.Passage();
+                pass.MemberId = SelectedMember.Id;
+                pass.IsEntrance = prdIn.IsChecked == true;
+                pass.Time = DateTime.Now;
+                db.Passages.InsertOnSubmit(pass);
+
+                db.SubmitChanges();
+                Main.Home.TransitList.UpdatePassages();
+
+                if (SelectedMember != null)
+                {
+                    this.Close();
+                }
+            }
+            else if (Type == MemberSelectionCategory.MembersTransit)
+            {
+                if (rdIn.IsChecked == true)
+                {
+                    var usedCoursesCount = CoursesBox.Children.Cast<CheckBox>().Where(c => c.IsChecked == true).Count();
+                    if (usedCoursesCount == 0)
+                    {
+                        Alert.Content = $"هیچ دوره ای انتخاب نشده بنابراین ورود ثبت نشد، مجددا تلاش فرمایید";
+                        MessageSnackBar.IsActive = true;
+                        eventArgs.Cancel();
+                        return;
+                    }
+
+                    CoursesBox.Children.Cast<CheckBox>().Where(c => c.IsChecked == true).ToList().ForEach(check =>
+                    {
+                        //if (!needsSave) needsSave = true;
+                        var item = check.Tag as MemberCourse;
+
+                        var courseUsage = db.EnrollCourses.Where(ec =>
+                            ec.CourseId == item.CId &&
+                            ec.EnrollId == item.EId
+                        ).FirstOrDefault();
+
+                        if(courseUsage.Enroll.Frequency != 2) //2 = جلسه ای
+                        courseUsage.SessionsLeft -= 1;
+                    });
+                }
+
+                //bool needsSave = false;
+
+                //if (needsSave) db.SubmitChanges();
+
+                Data.Passage pass = new Data.Passage();
+                pass.MemberId = SelectedMember.Id;
+                pass.IsEntrance = Type == MemberSelectionCategory.MembersTransit ? rdIn.IsChecked == true : prdIn.IsChecked == true;
+                pass.Time = DateTime.Now;
+                db.Passages.InsertOnSubmit(pass);
+
+
+                if (rdOut.IsChecked == true)
+                {
+                    var mmbr = db.Members.Where(m => m.Id == SelectedMember.Id).FirstOrDefault();
+                    var nrols = mmbr.Enrolls.Where(e => e.StartDate <= DateTime.Today
+                                        && (e.ExpireDate == null || e.ExpireDate >= DateTime.Today)).ToList();
+                    var nc = nrols.SelectMany(n => n.EnrollCourses).ToList();
+
+
+                    if (!nc.Any(c => c.SessionsLeft > 0))
+                    {
+                        nrols.SelectMany(n => n.EnrollFacilities).ToList().ForEach(f => f.SessionsLeft = 0);
+                        nrols.ForEach(n => n.IsActive = false);
+                    }
+                    else
+                    {
+                        FacilitiesBox.Children.Cast<CheckBox>().Where(c => c.IsChecked == true).ToList().ForEach(check =>
+                        {
+                            var item = check.Tag as MemberFacility;
+
+                            var facilityUsage = db.EnrollFacilities.Where(ef =>
+                                ef.FacilityId == item.FId &&
+                                ef.EnrollId == item.EId
+                            ).FirstOrDefault();
+
+                            facilityUsage.SessionsLeft -= 1;
+                        });
+                    }
+                }
+
+                db.SubmitChanges();
+                Info.SetMember(SelectedMember.Id, pass.IsEntrance ? "ورود" : "خروج", PayedFacilities.Select(f => f.Name).ToList());
+                Info.Show();
+                Info.Focus();
+                Close();
+
+                if (pass.IsEntrance)
+                    SelectedMember.UseCloset(db);
+                else
+                    SelectedMember.FreeUpCloset(db);
+
+                Main.Home.Closets.LoadClosets();
+                Main.Home.TransitList.UpdatePassages();
+
+                //Reduce one Session from Course Sessions & Facility Sessions
+
+                //bool needsSave = false;
+                //FacilitiesBox.Children.Cast<CheckBox>().Where(c => c.IsChecked == true).ToList().ForEach(check =>
+                //  {
+                //      if (!needsSave) needsSave = true;
+                //      var item = check.Tag as MemberFacility;
+
+                //      var facilityUsage = db.EnrollFacilities.Where(ef =>
+                //          ef.FacilityId == item.FId &&
+                //          ef.EnrollId == item.EId
+                //      ).FirstOrDefault();
+
+                //      facilityUsage.SessionsLeft -= 1;
+                //  });
+                //if (needsSave) db.SubmitChanges();
+
+
+                //if (SelectedMember != null)
+                //{
+                //    this.Close();
+                //}
+            }
+            else if (Type == MemberSelectionCategory.DeleteMembers)
+            {
+                db = new Data.GymContextDataContext();
+                db.Members.Where(m => m.Id == SelectedMember.Id).FirstOrDefault().IsDeleted = true;
+
+                if (tglGetCardBack.IsChecked == true)
+                    ;//Make Card Clear to be used by other members
+
+                db.SubmitChanges();
+
+                ListMembers(txtSearchBox.Text);
+            }
+        }
+
+        public void ListMembers(string text)
         {
             text = text ?? "";
             MembersArea.Children.Clear();
@@ -466,7 +509,7 @@ namespace Gym.Windows
                     && e.ExpireDate < DateTime.Today.AddDays(4)
                     && e.IsActive).Count() > 0);
 
-            list = queryable.Select(q=>q.Id).ToList();
+            list = queryable.Select(q => q.Id).ToList();
 
             list.ForEach(m =>
             {
@@ -478,7 +521,16 @@ namespace Gym.Windows
             });
 
         }
-
+        public void LoadSingleMember(Data.Member member)
+        {
+            MemberCard card = new MemberCard(member.Id);
+            card.IsInteractive = Type != MemberSelectionCategory.None;
+            card.SetGraphics(ViewType.SelectedIndex == 0 ? MemberCard.MemberGraphics.Chip : MemberCard.MemberGraphics.Card);
+            MembersArea.Children.Add(card);
+            card.MemberSelected += Card_MemberSelected;
+            automatic = true;
+            Card_MemberSelected(card.Member);
+        }
 
         private void txtSearchBox_KeyDown(object sender, KeyEventArgs e)
         {
@@ -495,7 +547,7 @@ namespace Gym.Windows
                 ea.Cancel = true;
                 Info.Hide();
             };
-
+            txtSearchBox.TextChanged += (x, y) => { btnSearch_Click(null, null); };
             btnRegular.IsChecked = showIrregularMembers;
             btnPresentOnly.IsChecked = showOnlyPresentMembers;
             ListMembers("");
@@ -506,6 +558,15 @@ namespace Gym.Windows
                 btnRegular.IsEnabled = false;
             }
             SetHint();
+            //txtSearchBox.Focus();
+
+            var timer = new System.Windows.Threading.DispatcherTimer { Interval = TimeSpan.FromMilliseconds(100) };
+            timer.Start();
+            timer.Tick += (s, e2) =>
+            {
+                txtSearchBox.Focus();
+                timer.Stop();
+            };
         }
 
         private void SetHint()
@@ -620,6 +681,7 @@ namespace Gym.Windows
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
+            return;
             if (Info != null)
                 Info.Close();
         }

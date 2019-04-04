@@ -26,7 +26,8 @@ namespace Gym.Windows
         {
             InitializeComponent();
             this.PreviewKeyUp += Window_PreviewKeyUp;
-            this.KeyDown += (s,e)=> {
+            this.KeyDown += (s, e) =>
+            {
                 if (e.Key == Key.Enter && !PaymentDialogHost.IsOpen)
                 {
                     PaymentDialogHost.IsOpen = true;
@@ -36,7 +37,11 @@ namespace Gym.Windows
         private void Window_PreviewKeyUp(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Escape)
-                this.Close();
+            {
+                var escTime = (DateTime)(Dynamics.LastEscapeTime ?? DateTime.Now.AddDays(-1));
+                if ((DateTime.Now - escTime) > TimeSpan.FromMilliseconds(100))
+                    this.Close();
+            }
         }
 
         ObservableCollection<SellItem> SellList;
@@ -46,7 +51,7 @@ namespace Gym.Windows
         {
             var query =
             from t in db.Trades
-            //where t. == (int)TransactionType.BuyStuff
+                //where t. == (int)TransactionType.BuyStuff
             select t;
 
             if (txtAmount1.Value > 0) query = query.Where(t => t.Price >= txtAmount1.Value);
@@ -100,6 +105,7 @@ namespace Gym.Windows
                     RefreshGrid();
                     break;
                 case "cancel":
+                    Dynamics.LastEscapeTime = DateTime.Now;
                     break;
                 default:
                     break;
@@ -109,6 +115,8 @@ namespace Gym.Windows
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            Date1.SetToday();
+            Date2.SetToday();
 
             RefreshGrid();
             var list = new List<Data.Good>();

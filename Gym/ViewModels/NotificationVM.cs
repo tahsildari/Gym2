@@ -53,6 +53,17 @@ namespace Gym.ViewModels
             }
         }
 
+        string _Tresspasses = "0";
+        public string Tresspasses
+        {
+            get { return _Tresspasses; }
+            set
+            {
+                _Tresspasses = value;
+                RaisePropertyChanged(nameof(Tresspasses));
+            }
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         private void RaisePropertyChanged(string propertyName)

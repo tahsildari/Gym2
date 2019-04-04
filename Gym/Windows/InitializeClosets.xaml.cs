@@ -1,4 +1,5 @@
 ﻿using Gym.Controls;
+using Gym.Domain;
 using Gym.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -33,7 +34,11 @@ namespace Gym.Windows
         private void Window_PreviewKeyUp(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Escape)
-                this.Close();
+            {
+                var escTime = (DateTime)(Dynamics.LastEscapeTime ?? DateTime.Now.AddDays(-1));
+                if ((DateTime.Now - escTime) > TimeSpan.FromMilliseconds(100))
+                    this.Close();
+            }
         }
 
         Data.GymContextDataContext db = new Data.GymContextDataContext();
@@ -74,27 +79,36 @@ namespace Gym.Windows
 
         public delegate void ClosetEvent(int closetId);
         public event ClosetEvent ClosetSelected;
-        
+
 
         private void UserDialog_Closing(object sender, MaterialDesignThemes.Wpf.DialogClosingEventArgs eventArgs)
         {
-            ClosetRangeVM Closet = new ClosetRangeVM();
-            int from, to;
-            if (int.TryParse(txtFrom.Text, out from) && int.TryParse(txtTo.Text, out to))
+            var confirmed = (bool)eventArgs.Parameter;
+            if (confirmed)
             {
-                Closet.FromLabel = from;
-                Closet.ToLabel = to;
-                Closet.IsVIP = cmbType.SelectedIndex == 1;
-
-                var closetsList = Closet.GetClosets();
-                if (!db.Closets.Any(c => closetsList.Select(l => l.Id).Contains(c.Id)))
+                ClosetRangeVM Closet = new ClosetRangeVM();
+                int from, to;
+                if (int.TryParse(txtFrom.Text, out from) && int.TryParse(txtTo.Text, out to))
                 {
-                    db.Closets.InsertAllOnSubmit(closetsList);
-                    db.SubmitChanges();
+                    Closet.FromLabel = from;
+                    Closet.ToLabel = to;
+                    Closet.IsVIP = cmbType.SelectedIndex == 1;
+                    Closet.IsCoach = cmbType.SelectedIndex == 2;
 
-                    Main.Home.Closets.LoadClosets();
-                    this.Closets.LoadClosets();
+                    var closetsList = Closet.GetClosets();
+                    if (!db.Closets.Any(c => closetsList.Select(l => l.Id).Contains(c.Id)))
+                    {
+                        db.Closets.InsertAllOnSubmit(closetsList);
+                        db.SubmitChanges();
+
+                        Main.Home.Closets.LoadClosets();
+                        this.Closets.LoadClosets();
+                    }
                 }
+            }
+            else
+            {
+                Dynamics.LastEscapeTime = DateTime.Now;
             }
         }
     }

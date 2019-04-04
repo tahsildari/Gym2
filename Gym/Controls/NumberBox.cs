@@ -19,7 +19,6 @@ namespace Gym.Controls
             LostFocus += NumberBox_LostFocus;
             //Loaded += NumberBox_Loaded;
             TextChanged += NumberBox_TextChanged;
-            
 
         }
 

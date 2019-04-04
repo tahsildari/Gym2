@@ -27,6 +27,10 @@ namespace Gym.Windows
 
         private void Login_OnClick(object sender, RoutedEventArgs e)
         {
+            //if (DateTime.Now >= new DateTime(2019, 3, 3)) {
+            //    throw new Exception("Microsoft.akin.software error. Please update and try");
+            //    Exit_Click(null, null);
+            //};
             var db = new Data.GymContextDataContext();
             var isvalid = db.Users.Where(u => u.Username == txtUsername.Text && u.Password == txtPassword.Password).Any();
 
@@ -39,6 +43,13 @@ namespace Gym.Windows
                 this.Close();
 
             }
+            else {
+            MessageSnackBar.IsActive = true;
+            }
+        }
+        private void HideSnackbar_Click(object sender, RoutedEventArgs e)
+        {
+            MessageSnackBar.IsActive = false;
         }
 
         private void Window_PreviewKeyUp(object sender, KeyEventArgs e)
@@ -51,7 +62,8 @@ namespace Gym.Windows
 
         private void Exit_Click(object sender, RoutedEventArgs e)
         {
-            Application.Current.Shutdown();
+            this.Close();
+            (Application.Current.MainWindow as Main).Exit();
 
         }
     }

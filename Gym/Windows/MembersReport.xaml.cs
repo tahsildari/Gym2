@@ -38,7 +38,8 @@ namespace Gym.Windows
             //txtFirstname.Text = "مهدی";
             //txtLastname.Text = "تحصیلداری";
             //txtMobile.Text = "09156606004";
-
+            fromDate.SetToday();
+            toDate.SetToday();
             //Transactions.SetFilters(null, null, 1, Domain.Enums.TransactionType.Tuition);
         }
 

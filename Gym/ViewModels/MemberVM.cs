@@ -29,6 +29,8 @@ namespace Gym.ViewModels
         int _Debtor;
         DateTime? _InsuranceExpireDate;
         int? _ClosetId;
+        int? _FingerId;
+        string _ImagePath;
 
         public int Id
         {
@@ -36,13 +38,13 @@ namespace Gym.ViewModels
             set
             {
                 _Id = value;
-                if (System.IO.File.Exists(AppDomain.CurrentDomain.BaseDirectory + $"/Images/{value}.jpg"))
-                {
-                    _Image = new BitmapImage();
-                    _Image.BeginInit();
-                    _Image.StreamSource = System.IO.File.OpenRead(AppDomain.CurrentDomain.BaseDirectory + $"/Images/{value}.jpg");
-                    _Image.EndInit();
-                }
+                //if (System.IO.File.Exists(AppDomain.CurrentDomain.BaseDirectory + $"/Images/{value}.jpg"))
+                //{
+                //    _Image = new BitmapImage();
+                //    _Image.BeginInit();
+                //    _Image.StreamSource = System.IO.File.OpenRead(AppDomain.CurrentDomain.BaseDirectory + $"/Images/{value}.jpg");
+                //    _Image.EndInit();
+                //}
                 RaisePropertyChanged(nameof(Id));
                 //RaisePropertyChanged(nameof(Image));
             }
@@ -229,6 +231,38 @@ namespace Gym.ViewModels
             }
         public bool IsRegular = true;
 
+        public int? FingerId
+        {
+            get
+            {
+                return _FingerId;
+            }
+            set
+            {
+                _FingerId = value;
+                RaisePropertyChanged(nameof(FingerId));
+            }
+        }
+
+        public string ImagePath
+        {
+            get { return _ImagePath; }
+            set
+            {
+                if (System.IO.File.Exists(AppDomain.CurrentDomain.BaseDirectory + $"/Images/{value}.jpg"))
+                {
+                    try
+                    {
+                        _Image = new BitmapImage();
+                        _Image.BeginInit();
+                        _Image.StreamSource = System.IO.File.OpenRead(AppDomain.CurrentDomain.BaseDirectory + $"/Images/{value}.jpg");
+                        _Image.EndInit();
+                    }
+                    catch { }
+                }
+                _ImagePath = value;
+            }
+        }
 
         #region INotifyPropertyChanged Members
 

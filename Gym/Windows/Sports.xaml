@@ -8,7 +8,7 @@
         xmlns:domain="clr-namespace:Gym.Domain"
         WindowStartupLocation="CenterScreen"  Icon="/Resources/Muscle.ico"
         mc:Ignorable="d" Loaded="Window_Loaded"
-        Title="رشته های ورزشی" Height="485" Width="300">
+        Title="رشته های ورزشی" Height="485" Width="330">
     <materialDesign:DialogHost x:Name="DialogHost" DialogClosing="Dialog_Closing">
         <materialDesign:DialogHost.DialogContent>
             <StackPanel  Margin="16" FlowDirection="RightToLeft">
@@ -82,12 +82,19 @@
                     <DataGridTemplateColumn>
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-
-                                <Button
+                                <StackPanel Orientation="Horizontal">
+                                    <Button
 	                        Content="{materialDesign:PackIcon Kind=BorderColor}"
                             Command=""
                             Click="Edit_Click"
-	                        ToolTip="Icon" />
+	                        ToolTip="ویرایش" />
+
+                                    <Button
+	                        Content="{materialDesign:PackIcon Kind=Delete}"
+                            Command=""
+                            Click="Delete_Click"
+	                        ToolTip="حذف" />
+                                </StackPanel>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
@@ -107,18 +114,39 @@
                     </Canvas>
                 </Viewbox>
             </Button>
+
+            <Popup Margin="0" Name="Popup1" Height="150" Width="220"
+ VerticalAlignment="Stretch" HorizontalAlignment="Stretch" IsOpen="False" Placement="Center" OpacityMask="#FF262626" >
+
+                <StackPanel Orientation="Vertical"  Background="WhiteSmoke" >
+                    <TextBlock Name="McTextBlock" materialDesign:ColorZoneAssist.Mode="Light" Foreground="#FFF32B21" FontSize="14" Margin="10,20,10,0" >  
+        از حذف این رشته اطمینان دارید؟"
+                    </TextBlock>
+                    <StackPanel Orientation="Horizontal" Margin="40,10,40,0" VerticalAlignment="Center" HorizontalAlignment="Center">
+                        <Button
+	                        Content="خیر"
+                            Command=""
+                            Click="CancelDelete_Click"
+	                        ToolTip="انصراف" Background="#FF6E6E6E" />
+                        <Button Margin="5"
+	                        Content="بلی"
+                            Command=""
+                            Click="ConfirmDelete_Click"
+	                        ToolTip="تایید" Background="#FFF32B21" />
+                    </StackPanel>
+                </StackPanel>
+            </Popup>
             <materialDesign:Snackbar x:Name="DuplicateUsernameSnackBar"
 			HorizontalAlignment="Stretch"
                                      ActionButtonStyle="{StaticResource MaterialDesignRaisedAccentButton}"
                 Margin="5,5,5,5" 
 			    FlowDirection="RightToLeft">
                 <materialDesign:SnackbarMessage 
-                    ActionContent="خب" 
+                    ActionContent="خب" x:Name="Message"
                     ActionClick="HideSnackbar_Click"
                     Content="عنوان رشته ورزشی تکراری است، عنوان دیگری انتخاب کنید" 
                                          ActionCommand=""       />
             </materialDesign:Snackbar>
         </Grid>
-
     </materialDesign:DialogHost>
 </Window>

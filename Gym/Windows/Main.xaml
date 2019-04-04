@@ -13,10 +13,12 @@
      TextElement.FontSize="13" WindowState="Maximized"
      TextOptions.TextFormattingMode="Ideal"
      TextOptions.TextRenderingMode="Auto"
-    WindowStyle="None"
+    WindowStyle="None" 
     Loaded="Window_Loaded"
+    SizeChanged="Window_SizeChanged"
      Background="{DynamicResource MaterialDesignPaper}"
-     FontFamily="{DynamicResource MaterialDesignFont}" KeyDown="Window_KeyDown" PreviewKeyDown="Window_PreviewKeyDown">
+     FontFamily="{DynamicResource MaterialDesignFont}"
+    KeyDown="Window_KeyDown" PreviewKeyDown="Window_PreviewKeyDown">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -33,7 +35,7 @@
             <materialDesign:DrawerHost.RightDrawerContent>
                 <DockPanel MinWidth="100" Width="210">
                     <ToggleButton Style="{StaticResource MaterialDesignHamburgerToggleButton}" 
-                                    DockPanel.Dock="Top"
+                                    DockPanel.Dock="Top" x:Name="MenuShortcut"
                                     HorizontalAlignment="Left" Margin="16"
                                     IsChecked="{Binding IsChecked, ElementName=MenuToggleButton, Mode=TwoWay}"/>
                     <ScrollViewer>
@@ -265,6 +267,12 @@
                                             <Label Content="حساب های هزینه" FontSize="12" FontWeight="Normal" Padding="0,7,0,0"/>
                                         </StackPanel>
                                     </Button>
+                                    <Button Style="{StaticResource MaterialDesignFlatButton}" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Click="PosesMenuItem_Click" x:Name="poses">
+                                        <StackPanel FlowDirection="RightToLeft"  Orientation="Horizontal">
+                                            <materialDesign:PackIcon Kind="CreditCardScan"  Width="24" Height="24" Margin="0,0,5,0"/>
+                                            <Label Content="کارتخوان" FontSize="12" FontWeight="Normal" Padding="0,7,0,0"/>
+                                        </StackPanel>
+                                    </Button>
                                     <Button Style="{StaticResource MaterialDesignFlatButton}" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Click="UsersMenuItem_Click" x:Name="users">
                                         <StackPanel FlowDirection="RightToLeft"  Orientation="Horizontal">
                                             <materialDesign:PackIcon Kind="AccountSettings" Width="24" Height="24"  Margin="0,0,5,0" />
@@ -310,13 +318,13 @@
                                     </StackPanel>
                                 </Button>
                                 <!--<Button Content="پشتیبان گیری"/>-->
-                                <Button Click="Users_Click">
+                                <!--<Button Click="Users_Click">
                                     <StackPanel Orientation="Horizontal" FlowDirection="LeftToRight">
                                         <Label>کاربران</Label>
                                         <materialDesign:PackIcon Kind="AccountSettings" VerticalAlignment="Center" Margin="0,0,0,-10"></materialDesign:PackIcon>
 
                                     </StackPanel>
-                                </Button>
+                                </Button>-->
                                 <Button  Click="Minimize_Click">
                                     <StackPanel Orientation="Horizontal" FlowDirection="LeftToRight">
                                         <Label>مینیمایز</Label>
@@ -405,11 +413,30 @@
                                 Foreground="White"
                                 Kind="FoodOff"></materialDesign:PackIcon>
                         </materialDesign:Badged>
+                        <materialDesign:Badged 
+                            Badge="{Binding Tresspasses}"
+                            FlowDirection="LeftToRight"
+                            DockPanel.Dock="Right" 
+                            BadgeBackground="Orange"
+                            BadgeForeground="White"
+                            VerticalAlignment="Center"
+                            MouseDown="TresspassesBadged_MouseDoubleClick"
+                            Margin="0,0,10,0"
+                            Cursor="Hand">
+                            <materialDesign:PackIcon 
+                                ToolTip="تردد های غیر مجاز" Cursor="Hand"
+                                Width="24"
+                                Height="24"
+                                Foreground="White"
+                                Kind="Backburger"></materialDesign:PackIcon>
+                        </materialDesign:Badged>
 
                         <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="22" FontFamily="Calibri"><Run Text="باشگاه بدنسازی تخصصی &quot;علی تبریزی&quot;" x:Name="lblTitle"/></TextBlock>
+
+                        
                     </DockPanel>
                 </materialDesign:ColorZone>
-                <Button Grid.Row="1" 
+                <!--<Button Grid.Row="1" 
                         VerticalAlignment="Top"
                         HorizontalAlignment="Right"
                         Margin="0,5,10,0"
@@ -417,7 +444,21 @@
 	ToolTip="می خواهید پس زمینه دیگری را انتخاب کنید؟ کلیک کنید"
                         Click="ChangeBackground_Click">
                     تغییر تصویر پس زمینه
-                </Button>
+                </Button>-->
+                <!--<StackPanel Orientation="Vertical" x:Name="messageHolder">
+                    
+                </StackPanel>-->
+                <materialDesign:Snackbar x:Name="MessageSnackBar" 
+			HorizontalAlignment="Center" Grid.Row="1" VerticalAlignment="Top"
+                                     ActionButtonStyle="{StaticResource MaterialDesignRaisedAccentButton}"
+                Margin="5,5,5,5" 
+			    FlowDirection="RightToLeft">
+                    <materialDesign:SnackbarMessage x:Name="Alert"
+                    ActionContent="خب" 
+                    ActionClick="HideSnackbar_Click"
+                    Content="پیام تستی" 
+                                         ActionCommand=""       />
+                </materialDesign:Snackbar>
                 <Expander x:Name="PassagesExpander" ExpandDirection="Left" 
                           Margin="0,60,15,0"
                           HorizontalAlignment="Left"  VerticalAlignment="Top" 
@@ -468,7 +509,7 @@
 	Style="{StaticResource MaterialDesignMultiFloatingActionPopupBox}"
 	ToolTip="ورود و خروج اعضا"
 	ToolTipService.Placement="Right" 
-	UnfurlOrientation="Vertical" HorizontalAlignment="Center" Grid.RowSpan="3" DockPanel.Dock="Right" Margin="10,0,1,10" IsPopupOpen="True" IsHitTestVisible="True" IsTabStop="False">
+	UnfurlOrientation="Vertical" HorizontalAlignment="Center" Grid.RowSpan="3" DockPanel.Dock="Right" Margin="10,0,1,10" IsPopupOpen="False" IsHitTestVisible="True" IsTabStop="False">
                         <StackPanel >
                             <Button ToolTip="تردد پرسنل" Background="#FFC107" Foreground="White" BorderBrush="#EEEEEE" Click="btnPersonnelTransit_Click">
                                 <materialDesign:PackIcon Kind="Worker" Height="20" Width="20" />
@@ -511,7 +552,7 @@
                             <materialDesign:PackIcon Kind="TrafficLight" Foreground="Black"></materialDesign:PackIcon>
                         </Button>
                         <Button Background="Transparent" Width="32" Height="32" Opacity=".6" Margin="10,0,0,0"
-                                ToolTip="بستن در کمد"
+                                ToolTip="بستن در کمد" Click="CloseClosetDoor_Click"
                                 Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}" RenderTransformOrigin="0.5,0.5">
                             <Button.RenderTransform>
                                 <TransformGroup>
@@ -537,7 +578,7 @@
                             </materialDesign:HintAssist.Hint>
                         </TextBox>
                         <Button Background="Transparent"  Width="32" Height="32" Opacity=".6" Margin="10,0,0,0"
-                                ToolTip="باز کردن در کمد"
+                                ToolTip="باز کردن در کمد" Click="TestOpen_Click"
                                 Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}" RenderTransformOrigin="0.5,0.5">
                             <Button.RenderTransform>
                                 <TransformGroup>

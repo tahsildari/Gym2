@@ -1,4 +1,5 @@
-﻿using Gym.ViewModels;
+﻿using Gym.Domain;
+using Gym.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -30,7 +31,11 @@ namespace Gym.Windows
         private void Window_PreviewKeyUp(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Escape)
-                this.Close();
+            {
+                var escTime = (DateTime)(Dynamics.LastEscapeTime ?? DateTime.Now.AddDays(-1));
+                if ((DateTime.Now - escTime) > TimeSpan.FromMilliseconds(100))
+                    this.Close();
+            }
         }
 
         ObservableCollection<Data.Sport> SportsList;
@@ -55,10 +60,11 @@ namespace Gym.Windows
             DataGrid.DataContext = SportsList;
         }
 
-        private void Dialog_Closing(object sender, MaterialDesignThemes.Wpf.DialogClosingEventArgs eventArgs)
+        async private void Dialog_Closing(object sender, MaterialDesignThemes.Wpf.DialogClosingEventArgs eventArgs)
         {
             var confirmed = (bool)eventArgs.Parameter;
             if (confirmed)
+            {
                 if (!string.IsNullOrEmpty(SportModel.Name))
                 {
                     switch (action)
@@ -77,6 +83,7 @@ namespace Gym.Windows
                             }
                             else
                             {
+                                Message.Content = "عنوان رشته ورزشی تکراری است، عنوان دیگری انتخاب کنید";
                                 DuplicateUsernameSnackBar.IsActive = true;
 
 
@@ -100,7 +107,11 @@ namespace Gym.Windows
                             break;
                     }
                 }
-
+            }
+            else
+            {
+                Dynamics.LastEscapeTime = DateTime.Now;
+            }
         }
 
         private void Edit_Click(object sender, RoutedEventArgs e)
@@ -112,7 +123,47 @@ namespace Gym.Windows
 
             DialogHost.IsOpen = true;
         }
+        private void Delete_Click(object sender, RoutedEventArgs e)
+        {
+            var sport = ((FrameworkElement)sender).DataContext as Data.Sport;
+            //SportModel.Name = sport.Name;
+            SportModel.Id = sport.Id;
+            //action = Actions.Editing;
 
+            Popup1.IsOpen = true;
+        }
+        private void ConfirmDelete_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                //var c = db.Sports.FirstOrDefault(s => s.Id == SportModel.Id).Courses.ToList();
+                if (!db.Sports.FirstOrDefault(s => s.Id == SportModel.Id).Courses.Any())
+                {
+                    db.Sports.DeleteOnSubmit(db.Sports.Single(s => s.Id == SportModel.Id));
+                    db.SubmitChanges();
+                    RefreshGrid();
+                }
+                else
+                {
+
+                    Message.Content = "برای این رشته، دوره ثبت شده است. ابتدا دوره های مرتبط را حذف کنید";
+                    DuplicateUsernameSnackBar.IsActive = true;
+                }
+            }
+            catch
+            {
+                ;
+            }
+            finally
+            {
+                Popup1.IsOpen = false;
+            }
+        }
+        private void CancelDelete_Click(object sender, RoutedEventArgs e)
+        {
+            ;
+            Popup1.IsOpen = false;
+        }
         private void NewSport_Click(object sender, RoutedEventArgs e)
         {
             this.DataContext = SportModel = new SportVM();

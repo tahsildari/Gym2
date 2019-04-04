@@ -124,7 +124,15 @@ namespace Gym.Controls
         public ClosetVM ClosetModel;
         private void ClosetModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            Icon.Foreground = new SolidColorBrush { Color = (Color)ColorConverter.ConvertFromString(ClosetModel.IsVIP ? "#1E90FF" : "#505050") };
+            string color;
+            if (ClosetModel.IsVIP)
+                color = "#1E90FF";
+            else if (ClosetModel.IsCoach)
+                color = Colors.Orange.ToString();
+            else
+                color = "#505050";
+            //var color = ClosetModel.IsVIP ? "#1E90FF" : "#505050";
+            Icon.Foreground = new SolidColorBrush { Color = (Color)ColorConverter.ConvertFromString(color) };
             brokenBadge.Visibility = ClosetModel.IsBroken ? Visibility.Visible : Visibility.Hidden;
             Icon.Opacity = numberBadge.Opacity = ClosetModel.IsRented ? .4 : 1;
             Icon.Kind = ClosetModel.IsFree ? MaterialDesignThemes.Wpf.PackIconKind.Fridge : MaterialDesignThemes.Wpf.PackIconKind.FridgeFilled;

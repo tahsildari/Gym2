@@ -48,7 +48,7 @@ namespace Gym.Controls
                     activeEnrolls.ForEach(a =>
                     {
                         if (a.ExpireDate.HasValue)
-                            expire += a.ExpireDate.Value.ToFa() + " - ";
+                            expire += a.ExpireDate.Value.ToFa() + " ["+ a.EnrollCourses.FirstOrDefault().SessionsLeft +" جلسه مانده]" + " - ";
                         else
                             expire += "";
                     });
@@ -75,18 +75,28 @@ namespace Gym.Controls
                 txtFacilities.Text = facs;
             }
 
+            //{
+            var _Image = new BitmapImage();
+            _Image.BeginInit();
             if (System.IO.File.Exists(AppDomain.CurrentDomain.BaseDirectory + $"/Images/{member.Id}.jpg"))
-            {
-                var _Image = new BitmapImage();
-                _Image.BeginInit();
                 _Image.StreamSource = System.IO.File.OpenRead(AppDomain.CurrentDomain.BaseDirectory + $"/Images/{member.Id}.jpg");
-                _Image.EndInit();
-                Image.ImageSource = _Image;
+            else
+                _Image.StreamSource = System.IO.File.OpenRead(AppDomain.CurrentDomain.BaseDirectory + $"/Images/defaultUser.png");
+            _Image.EndInit();
+            Image.ImageSource = _Image;
+
+
+            if (transitStat == "ورود" || transitStat == "خروج")
+            {
+                txtTransit.Foreground = Brushes.DodgerBlue;
             }
             else
-            {
-                Image.ImageSource = null;
-            }
+                txtTransit.Foreground = Brushes.Red;
+
+            //}
+            //{
+            //    Image.ImageSource = Resources..;
+            //}
         }
     }
 }

@@ -1,5 +1,9 @@
-﻿using System;
+﻿using Gym.Data;
+using Gym.Domain;
+using Gym.ViewModels;
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,20 +15,16 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-using Gym.Data;
-using System.Collections.ObjectModel;
-using Gym.ViewModels;
 using static Gym.Domain.Enums;
-using Gym.Domain;
 
 namespace Gym.Windows
 {
     /// <summary>
-    /// Interaction logic for Goods.xaml
+    /// Interaction logic for POS.xaml
     /// </summary>
-    public partial class Goods : Window
+    public partial class POS : Window
     {
-        public Goods()
+        public POS()
         {
             InitializeComponent();
             this.PreviewKeyUp += Window_PreviewKeyUp;
@@ -38,11 +38,10 @@ namespace Gym.Windows
                     this.Close();
             }
         }
-        string Count { get; set; }
         Data.GymContextDataContext db = new Data.GymContextDataContext();
 
-        public ObservableCollection<Good> DataList { get; private set; }
-        GoodVM Model = new GoodVM();
+        public ObservableCollection<Data.POS> DataList { get; private set; }
+        PosVM Model = new PosVM();
 
         Actions action = Actions.Inserting;
         bool IsNew() => action == Actions.Inserting;
@@ -55,10 +54,8 @@ namespace Gym.Windows
 
         private void NewGoods_Click(object sender, RoutedEventArgs e)
         {
-            this.DataContext = Model = new GoodVM();
+            this.DataContext = Model = new PosVM();
             action = Actions.Inserting;
-            txtCount.IsReadOnly = false;
-            BuyGoods.Visibility = Visibility.Collapsed;
             DefineGoods.Visibility = Visibility.Visible;
         }
 
@@ -76,12 +73,10 @@ namespace Gym.Windows
                             case Actions.Inserting:
                                 if (!db.Goods.Any(g => g.Name == Model.Name))
                                 {
-                                    db.Goods.InsertOnSubmit(
-                                        new Data.Good
+                                    db.POS.InsertOnSubmit(
+                                        new Data.POS
                                         {
-                                            Name = Model.Name,
-                                            Count = Model.Count,
-                                            OrderPoint = Model.OrderPoint
+                                            Name = Model.Name
                                         });
                                     db.SubmitChanges();
 
@@ -103,10 +98,8 @@ namespace Gym.Windows
                                 }
                                 break;
                             case Actions.Editing:
-                                var good = db.Goods.Where(g => g.Id == Model.Id).FirstOrDefault();
-                                good.Name = Model.Name;
-                                good.OrderPoint = Model.OrderPoint;
-                                good.Count = Model.Count;
+                                var item = db.POS.Where(p => p.Id == Model.Id).FirstOrDefault();
+                                item.Name = Model.Name;
 
                                 db.SubmitChanges();
                                 RefreshGrid();
@@ -116,25 +109,7 @@ namespace Gym.Windows
                         }
                     }
 
-                    Main.Home.CheckupOrderPoints();
-
-                }
-                else if (BuyGoods.Visibility == Visibility.Visible)
-                {
-                    if (txtBuyCount.Value > 0 && txtBuyPrice.Value > 0)
-                    {
-                        db.Trades.InsertOnSubmit(new Trade
-                        {
-                            GoodId = BuyingGoodId,
-                            Count = txtBuyCount.Value,
-                            IsSold = false,
-                            Price = txtBuyPrice.Value
-                        });
-                        db.Goods.Where(g => g.Id == BuyingGoodId).FirstOrDefault().Count += txtBuyCount.Value;
-                        db.SubmitChanges();
-                        RefreshGrid();
-                        Main.Home.CheckupOrderPoints();
-                    }
+                    
 
                 }
             }
@@ -148,26 +123,20 @@ namespace Gym.Windows
         private void RefreshGrid()
         {
             db = new GymContextDataContext();
-            IQueryable<Good> query = db.Goods;
-            if (FilterGoodsBelowOrderPoint)
-                query = query.Where(g => g.Count <= g.OrderPoint);
-            var goods = query.ToList();
-            DataList = new ObservableCollection<Data.Good>(goods);
+            List<Data.POS> poses = db.POS.ToList();
+            DataList = new ObservableCollection<Data.POS>(poses);
 
-            GoodsGrid.DataContext = goods;
+            GoodsGrid.DataContext = poses;
         }
 
         private void EditGood_Click(object sender, RoutedEventArgs e)
         {
-            var good = ((FrameworkElement)sender).DataContext as Data.Good;
-            Model.Name = good.Name;
-            Model.Count = good.Count;
-            Model.OrderPoint = good.OrderPoint;
-            Model.Id = good.Id;
+            var pos = ((FrameworkElement)sender).DataContext as Data.POS;
+            Model.Name = pos.Name;
+            Model.Id = pos.Id;
             action = Actions.Editing;
             //txtCount.IsReadOnly = true;
 
-            BuyGoods.Visibility = Visibility.Collapsed;
             DefineGoods.Visibility = Visibility.Visible;
 
             DialogHost.IsOpen = true;
@@ -179,27 +148,5 @@ namespace Gym.Windows
         }
 
         int BuyingGoodId = 0;
-        private void BuyGood_Click(object sender, RoutedEventArgs e)
-        {
-            BuyGoods.Visibility = Visibility.Visible;
-            DefineGoods.Visibility = Visibility.Collapsed;
-
-            db = new GymContextDataContext();
-
-            var good = ((FrameworkElement)sender).DataContext as Data.Good;
-            good = db.Goods.Where(g => g.Id == good.Id).FirstOrDefault();
-            BuyingGoodId = good.Id;
-            txtBuyName.Text = good.Name;
-            txtBuyCount.Value = 0;
-            if (good.Trades.Any(t => !t.IsSold))
-                txtBuyPrice.Value = good.Trades.Where(t => !t.IsSold).OrderByDescending(t => t.Id)
-                    .FirstOrDefault().Price;
-            else
-                txtBuyPrice.Value = 0;
-
-            DialogHost.IsOpen = true;
-            Main.Home.CheckupOrderPoints();
-        }
-
     }
 }
