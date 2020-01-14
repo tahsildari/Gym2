@@ -376,7 +376,7 @@ namespace Gym.Windows
                             ec.EnrollId == item.EId
                         ).FirstOrDefault();
 
-                        if(courseUsage.Enroll.Frequency != 2) //2 = جلسه ای
+                        if(courseUsage.Enroll.Frequency == 2) //2 = جلسه ای
                         courseUsage.SessionsLeft -= 1;
                     });
                 }
